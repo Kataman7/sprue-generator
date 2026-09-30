@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://picokeebs.github.io/sprue-generator/sitemap.xml
+Sitemap: https://kataman7.github.io/sprue-generator/sitemap.xml
