@@ -202,28 +202,17 @@
         </div>
       </div>
 
-      <!-- WIDGET VIEWCUBE 3D (SÉLECTEUR DE VUES D'ORIENTATION) -->
-      <div id="viewCubeWrapper" class="absolute top-4 right-4 z-10 flex flex-col items-center select-none bg-slate-900/60 backdrop-blur-md p-2 rounded-xl border border-slate-800/80 shadow-2xl">
-        <!-- Cube 3D interactif -->
-        <div class="cube-scene w-20 h-20 flex items-center justify-center my-1">
+      <!-- WIDGET VIEWCUBE 3D (ORIENTATION CAMÉRA) -->
+      <div id="viewCubeWrapper" class="absolute top-4 right-4 z-10 flex flex-col items-center select-none bg-slate-900/60 backdrop-blur-md p-1.5 rounded-xl border border-slate-800/80 shadow-2xl">
+        <div class="cube-scene w-20 h-20 flex items-center justify-center">
           <div id="viewCube" class="w-full h-full relative">
             <div class="cube-face cube-front" data-view="front" title="Vue de Face (Z+)">FACE</div>
-            <div class="cube-face cube-back" data-view="back" title="Vue Arrière / Dos (Z-)">DOS</div>
+            <div class="cube-face cube-back" data-view="back" title="Vue Arrière (Z-)">DOS</div>
             <div class="cube-face cube-top" data-view="top" title="Vue de Dessus (Y+)">DESSUS</div>
             <div class="cube-face cube-bottom" data-view="bottom" title="Vue de Dessous (Y-)">DESSOUS</div>
             <div class="cube-face cube-left" data-view="left" title="Vue Gauche (X-)">GAUCHE</div>
             <div class="cube-face cube-right" data-view="right" title="Vue Droite (X+)">DROITE</div>
           </div>
-        </div>
-
-        <!-- Boutons de raccourcis de vues rapides -->
-        <div class="grid grid-cols-3 gap-1 w-full pt-1.5 border-t border-slate-800/80 text-[9px] text-center font-bold">
-          <button data-view="top" class="btn-quick-view py-1 rounded bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition">Haut</button>
-          <button data-view="front" class="btn-quick-view py-1 rounded bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition">Face</button>
-          <button data-view="right" class="btn-quick-view py-1 rounded bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition">Droit</button>
-          <button data-view="bottom" class="btn-quick-view py-1 rounded bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition">Bas</button>
-          <button data-view="left" class="btn-quick-view py-1 rounded bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition">Gauche</button>
-          <button data-view="iso" class="btn-quick-view py-1 rounded bg-indigo-600/30 hover:bg-indigo-600 text-indigo-300 hover:text-white transition border border-indigo-500/20">Iso</button>
         </div>
       </div>
 
@@ -1663,7 +1652,7 @@ ${bounds.rowPositions.map((rp, rIdx) => `
       cameraAnimId = requestAnimationFrame(step);
     }
 
-    // Clic sur n'importe quelle face du ViewCube ou bouton de vue rapide
+    // Clic sur les faces du ViewCube 3D
     document.querySelectorAll('[data-view]').forEach(elem => {
       elem.addEventListener('click', (e) => {
         e.stopPropagation();
