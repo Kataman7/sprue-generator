@@ -1429,6 +1429,7 @@ ${bounds.rowPositions.map((rp, rIdx) => `
         attache_double([pt2[0], ${rp.railExtY.toFixed(2)}, z_att], pt2);
     }`).join('\n')}
 }
+`;
       triggerDownload(new Blob([scad], { type: 'text/plain;charset=utf-8' }), `grappe_${state.rows}x${state.cols}_${baseName}_cage.scad`);
     }
 
