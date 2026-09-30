@@ -78,7 +78,14 @@
     </div>
 
     <!-- Actions globales & Toggles de vue -->
-    <div class="flex items-center space-x-3 text-xs">
+    <div class="flex items-center space-x-2.5 text-xs">
+      
+      <!-- Bouton Cacher / Afficher la grille -->
+      <button id="btnToggleGrid" title="Afficher ou masquer la grille au sol" class="px-2.5 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-indigo-400 font-medium transition flex items-center gap-1.5 border border-slate-700">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16M9 4v16m6-16v16"></path></svg>
+        <span id="labelToggleGrid">Grille : On</span>
+      </button>
+
       <!-- Toggle Mode de Vue -->
       <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800">
         <button id="btnViewFocus" class="px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1">
@@ -175,7 +182,6 @@
             </span>
             <span class="text-[10px] text-indigo-400 font-semibold bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">Double support</span>
           </div>
-          <p class="text-[11px] text-slate-400">Chaque touche est tenue des deux côtés opposés (vers le rail central et vers le cadre extérieur).</p>
 
           <!-- Sélecteur du point actif pour le clic -->
           <div class="grid grid-cols-2 gap-2 bg-slate-900 p-1 rounded-lg border border-slate-800">
@@ -222,30 +228,54 @@
           </button>
         </div>
 
-        <!-- SECTION 2 : CAGE DE PROTECTION EXTÉRIEURE -->
+        <!-- SECTION 2 : LONGUEURS SÉPARÉES DES ATTACHES (ÉLOIGNEMENT) -->
+        <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800 space-y-3.5">
+          <h3 class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+            Longueurs des Attaches (Ajustement Séparé)
+          </h3>
+
+          <!-- Longueur Attache 1 (Rail Central) -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <label for="rangeGate1Length" class="text-emerald-400 font-semibold flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                Longueur Attache 1 (vers Rail Central)
+              </label>
+              <span class="font-mono text-emerald-400 font-bold"><span id="valGate1Length">5.0</span> mm</span>
+            </div>
+            <input id="rangeGate1Length" type="range" min="1.5" max="30" step="0.5" value="5.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            <p class="text-[10px] text-slate-400">Écarte ou rapproche la touche du rail central au milieu.</p>
+          </div>
+
+          <!-- Longueur Attache 2 (Cadre Extérieur) -->
+          <div class="space-y-1.5 pt-2 border-t border-slate-800">
+            <div class="flex justify-between items-center">
+              <label for="rangeGate2Length" class="text-rose-400 font-semibold flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                Longueur Attache 2 (vers Cadre Extérieur)
+              </label>
+              <span class="font-mono text-rose-400 font-bold"><span id="valGate2Length">6.0</span> mm</span>
+            </div>
+            <input id="rangeGate2Length" type="range" min="1.5" max="30" step="0.5" value="6.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            <p class="text-[10px] text-slate-400">Écarte ou rapproche le cadre extérieur de protection.</p>
+          </div>
+        </div>
+
+        <!-- SECTION 3 : CAGE DE PROTECTION EXTÉRIEURE -->
         <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800 space-y-3">
           <div class="flex items-center justify-between">
             <span class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
               <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-              Cage de Protection (JLCPCB)
+              Cadre & Rails (JLCPCB)
             </span>
             <label class="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" id="checkEnableFrame" checked class="sr-only peer">
               <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
             </label>
           </div>
-          <p class="text-[11px] text-slate-400">Cadre rectangulaire complet autour des pièces pour éviter la casse lors du sablage/nettoyage.</p>
 
-          <div id="frameSettingsContainer" class="space-y-3 pt-2">
-            <!-- Marge pièces <-> cadre -->
-            <div class="space-y-1">
-              <div class="flex justify-between items-center">
-                <label for="rangeFrameMargin" class="text-slate-300 font-medium">Marge de protection (vide)</label>
-                <span class="font-mono text-indigo-400 font-bold"><span id="valFrameMargin">6.0</span> mm</span>
-              </div>
-              <input id="rangeFrameMargin" type="range" min="3" max="15" step="0.5" value="6.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-            </div>
-
+          <div id="frameSettingsContainer" class="space-y-3 pt-1">
             <!-- Diamètre du cadre extérieur -->
             <div class="space-y-1">
               <div class="flex justify-between items-center">
@@ -253,15 +283,16 @@
                 <span class="font-mono text-indigo-400 font-bold"><span id="valFrameWidth">3.0</span> mm</span>
               </div>
               <input id="rangeFrameWidth" type="range" min="2.0" max="5.0" step="0.2" value="3.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+              <p class="text-[10px] text-slate-400">Standard recommandé : 3.0 mm min pour rigidité MJF</p>
             </div>
           </div>
         </div>
 
-        <!-- SECTION 3 : ATTACHES & COLS DE RUPTURE -->
+        <!-- SECTION 4 : SECTIONS DES ATTACHES (COLS DE RUPTURE) -->
         <div class="space-y-3 pt-2 border-t border-slate-800">
           <h3 class="font-semibold text-slate-300 uppercase tracking-wider text-[11px] flex items-center gap-2">
             <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-            Cols de Rupture (Attaches Séparables)
+            Profil de Rupture
           </h3>
 
           <!-- Diamètre col fin de rupture -->
@@ -271,7 +302,6 @@
               <span class="font-mono text-rose-400 font-bold">Ø <span id="valNeckDiameter">1.2</span> mm</span>
             </div>
             <input id="rangeNeckDiameter" type="range" min="0.8" max="2.0" step="0.1" value="1.2" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-            <p class="text-[10px] text-slate-400">Zone de casse facile sans abîmer la pièce (longueur 1.0 mm).</p>
           </div>
 
           <!-- Diamètre corps de l'attache -->
@@ -284,7 +314,7 @@
           </div>
         </div>
 
-        <!-- SECTION 4 : AGENCEMENT & QUANTITÉ -->
+        <!-- SECTION 5 : GRILLE & DISPOSITION -->
         <div class="space-y-3 pt-3 border-t border-slate-800">
           <h3 class="font-semibold text-slate-300 uppercase tracking-wider text-[11px] flex items-center gap-2">
             <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -377,6 +407,7 @@
       
       // Mode de vue : 'sprue' (grappe complète) | 'focus' (pièce seule)
       viewMode: 'sprue',
+      showGrid: true,
 
       // 2 Points d'attache par pièce
       activeGateSlot: 1, // 1: intérieur (rail), 2: extérieur (cadre)
@@ -388,10 +419,13 @@
       gate2Point: new THREE.Vector3(0, 0, 0),
       gate2Normal: new THREE.Vector3(0, -1, 0),
 
-      // Paramètres Cage & Support
+      // Longueurs séparées des attaches 1 et 2
+      gate1Length: 5.0,         // Longueur attache 1 (vers rail central)
+      gate2Length: 6.0,         // Longueur attache 2 (vers cadre extérieur)
+
+      // Paramètres Cage & Profils
       enableFrame: true,
       frameWidth: 3.0,          // Ø du cadre rectangulaire et du rail central
-      frameMargin: 6.0,         // Espace libre entre le bord de la pièce et le cadre
       neckDiameter: 1.2,        // Ø du col fin de rupture (au contact de la pièce)
       neckLength: 1.0,          // Longueur du col fin
       bodyDiameter: 2.8,        // Ø du corps de l'attache côté cadre
@@ -483,6 +517,23 @@
       camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+
+    // ──────────────────────────────────────────────────────────────
+    // BOUTON TOGGLE GRILLE
+    // ──────────────────────────────────────────────────────────────
+    const btnToggleGrid = document.getElementById('btnToggleGrid');
+    const labelToggleGrid = document.getElementById('labelToggleGrid');
+    btnToggleGrid.addEventListener('click', () => {
+      state.showGrid = !state.showGrid;
+      gridHelper.visible = state.showGrid;
+      if (state.showGrid) {
+        btnToggleGrid.className = 'px-2.5 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-indigo-400 font-medium transition flex items-center gap-1.5 border border-slate-700';
+        labelToggleGrid.textContent = 'Grille : On';
+      } else {
+        btnToggleGrid.className = 'px-2.5 py-1.5 rounded-md bg-slate-900 hover:bg-slate-800 text-slate-400 font-medium transition flex items-center gap-1.5 border border-slate-800';
+        labelToggleGrid.textContent = 'Grille : Off';
+      }
     });
 
     // ──────────────────────────────────────────────────────────────
@@ -627,18 +678,16 @@
     }
 
     // ──────────────────────────────────────────────────────────────
-    // RAYCASTING & GATE PICKING (SURVOL + CLIC FIABLE)
+    // RAYCASTING & GATE PICKING
     // ──────────────────────────────────────────────────────────────
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     let pointerDownCoord = { x: 0, y: 0 };
 
-    // Obtenir la liste de tous les maillages de pièces cliquables
     function getClickableMeshes() {
       if (state.viewMode === 'focus') {
         return focusGroup.children;
       } else {
-        // En mode grappe, on peut cliquer sur n'importe quel mesh de pièce !
         return sprueGroup.children.filter(c => c.name.startsWith('spruePiece_'));
       }
     }
@@ -670,7 +719,6 @@
     renderer.domElement.addEventListener('pointerup', (e) => {
       const dx = Math.abs(e.clientX - pointerDownCoord.x);
       const dy = Math.abs(e.clientY - pointerDownCoord.y);
-      // Seuil tolérant pour distinguer un clic d'un drag caméra
       if (dx < 5 && dy < 5 && state.loadedGeometry) {
         handlePickingClick(e);
       }
@@ -687,13 +735,11 @@
 
       if (intersects.length > 0) {
         const hit = intersects[0];
-        // Convertir le point d'impact dans le repère local de la pièce maîtresse
         const localPoint = hit.object.worldToLocal(hit.point.clone());
         const localNormal = hit.face.normal.clone();
 
         if (state.activeGateSlot === 1) {
           setGate1(localPoint, localNormal);
-          // Bascule automatique vers le point 2 pour faciliter le flux
           selectGateSlot(2);
         } else {
           setGate2(localPoint, localNormal);
@@ -758,30 +804,22 @@
     function autoDetectOppositeGates() {
       if (!state.loadedGeometry) return;
       const box = state.originalBBox;
-      const size = state.dimensions;
 
-      // On choisit l'axe transversal naturel (Y de préférence, ou X si la pièce est plus large en X)
-      // Point 1 : sur la face Y+
-      // Point 2 : sur la face Y-
       const p1 = new THREE.Vector3(0, box.max.y, 0);
       const n1 = new THREE.Vector3(0, 1, 0);
-
       const p2 = new THREE.Vector3(0, box.min.y, 0);
       const n2 = new THREE.Vector3(0, -1, 0);
 
-      // Ajuster par raycast pour trouver la surface exacte
       const testRay = new THREE.Raycaster();
       const focusMesh = focusGroup.getObjectByName('focusPiece');
 
       if (focusMesh) {
-        // Test Y+
         testRay.set(new THREE.Vector3(0, box.max.y + 10, 0), new THREE.Vector3(0, -1, 0));
         const hits1 = testRay.intersectObject(focusMesh, false);
         if (hits1.length > 0) {
           p1.copy(hits1[0].point);
           n1.copy(hits1[0].face.normal);
         }
-        // Test Y-
         testRay.set(new THREE.Vector3(0, box.min.y - 10, 0), new THREE.Vector3(0, 1, 0));
         const hits2 = testRay.intersectObject(focusMesh, false);
         if (hits2.length > 0) {
@@ -799,7 +837,7 @@
       autoDetectOppositeGates();
     });
 
-    // Marqueurs visuels des 2 points d'attache
+    // Marqueurs visuels
     function updateMarkers() {
       while (markersGroup.children.length > 0) {
         const obj = markersGroup.children[0];
@@ -807,12 +845,10 @@
         if (obj.geometry) obj.geometry.dispose();
       }
 
-      // Si mode focus, afficher les marqueurs sur la pièce maîtresse
-      // Si mode sprue, afficher aussi les repères
       if (state.gate1Picked) {
         const s1 = new THREE.Mesh(
           new THREE.SphereGeometry(0.7, 16, 16),
-          new THREE.MeshBasicMaterial({ color: 0x10b981 }) // Vert émeraude
+          new THREE.MeshBasicMaterial({ color: 0x10b981 })
         );
         s1.position.copy(state.gate1Point);
         markersGroup.add(s1);
@@ -824,7 +860,7 @@
       if (state.gate2Picked) {
         const s2 = new THREE.Mesh(
           new THREE.SphereGeometry(0.7, 16, 16),
-          new THREE.MeshBasicMaterial({ color: 0xf43f5e }) // Rose/Rouge néon
+          new THREE.MeshBasicMaterial({ color: 0xf43f5e })
         );
         s2.position.copy(state.gate2Point);
         markersGroup.add(s2);
@@ -835,7 +871,7 @@
     }
 
     // ──────────────────────────────────────────────────────────────
-    // MOTEUR DE GRAPPE INDUSTRIELLE & CAGE DE PROTECTION
+    // CALCUL GÉOMÉTRIQUE BASÉ SUR LES LONGUEURS INDÉPENDANTES 1 & 2
     // ──────────────────────────────────────────────────────────────
     function computeSprueBounds() {
       const isDouble = (state.layout === 'double');
@@ -844,36 +880,50 @@
       const countRow2 = isDouble ? Math.floor(totalCount / 2) : 0;
       const cols = Math.max(countRow1, countRow2);
 
-      // Calcul des dimensions de la grille
-      const halfSizeX = state.dimensions.x / 2;
-      const halfSizeY = state.dimensions.y / 2;
-
-      // Espacement longitudinal (axe X)
       const spanX = (cols - 1) * state.spacing;
+      const halfSizeX = state.dimensions.x / 2;
 
-      // Espacement transversal (axe Y) entre les 2 rangées
-      // Les pièces ont une dimension Y. On laisse de la place pour le rail central
-      const rowSpacingY = Math.max(state.dimensions.y + 12.0, 24.0);
+      // ── Calcul précis des Y basé sur gate1Length et gate2Length ──
+      // Pour une pièce à Y_row :
+      // Point 1 (intérieur) est à Y_row + g1.y.
+      // Le rail central est à distance gate1Length du point 1 :
+      // Donc Y_railCentral = (Y_row0 + g1.y) + gate1Length.
+      // Pour placer le rail central à Y = 0 (symétrie centrale) :
+      // Y_row0 = - (gate1Point.y + state.gate1Length);
+      // Et pour la rangée 1 (tournée de 180°) :
+      // Son point intérieur tourne à -g1.y, donc son point d'attache est à Y_row1 - g1.y.
+      // Il doit aussi être à distance gate1Length du rail central Y=0 :
+      // Donc Y_row1 = (gate1Point.y + state.gate1Length) = -Y_row0 !
+      const g1y = state.gate1Point.y;
+      const g2y = state.gate2Point.y;
 
-      // Positions Y des rangées
-      const yRow0 = isDouble ? -rowSpacingY / 2 : 0;
-      const yRow1 = isDouble ? rowSpacingY / 2 : 0;
-      const yRailCentral = 0; // Rail central à Y = 0
+      let yRow0, yRow1, yRailCentral, yMin, yMax;
 
-      // Limites extérieures du cadre rectangulaire
-      const xMin = - (spanX / 2 + halfSizeX + state.frameMargin);
-      const xMax = (spanX / 2 + halfSizeX + state.frameMargin);
-
-      let yMin, yMax;
       if (isDouble) {
-        yMin = yRow0 - (halfSizeY + state.frameMargin);
-        yMax = yRow1 + (halfSizeY + state.frameMargin);
+        yRailCentral = 0;
+        yRow0 = - (Math.abs(g1y) + state.gate1Length);
+        yRow1 = (Math.abs(g1y) + state.gate1Length);
+
+        // Le cadre extérieur est à distance gate2Length du point 2 de chaque rangée :
+        // Rangée 0 : point 2 est à yRow0 + g2y. Le cadre bas est à (yRow0 + g2y) - gate2Length.
+        // Rangée 1 : point 2 est à yRow1 - g2y. Le cadre haut est à (yRow1 - g2y) + gate2Length.
+        yMin = (yRow0 - Math.abs(g2y)) - state.gate2Length;
+        yMax = (yRow1 + Math.abs(g2y)) + state.gate2Length;
       } else {
-        yMin = - (halfSizeY + state.frameMargin);
-        yMax = (halfSizeY + state.frameMargin);
+        // Rangée simple (1x10) :
+        yRow0 = 0;
+        yRow1 = 0;
+        yRailCentral = Math.abs(g1y) + state.gate1Length;
+        yMax = yRailCentral;
+        yMin = - (Math.abs(g2y) + state.gate2Length);
       }
 
-      // Hauteur d'ancrage Z (au niveau des points d'attache)
+      // Limites X du cadre : couvre toutes les pièces avec une marge de sécurité
+      const xMargin = Math.max(state.gate2Length, 6.0);
+      const xMin = - (spanX / 2 + halfSizeX + xMargin);
+      const xMax = (spanX / 2 + halfSizeX + xMargin);
+
+      // Hauteur d'ancrage Z
       const zAttach = (state.gate1Picked && state.gate2Picked)
         ? (state.gate1Point.z + state.gate2Point.z) / 2
         : 0;
@@ -884,7 +934,6 @@
         countRow2,
         isDouble,
         spanX,
-        rowSpacingY,
         yRow0,
         yRow1,
         yRailCentral,
@@ -907,29 +956,27 @@
 
       const bounds = computeSprueBounds();
       const { cols, countRow1, countRow2, isDouble, yRow0, yRow1, yRailCentral, xMin, xMax, yMin, yMax, zAttach } = bounds;
-
       const halfFrameD = state.frameWidth / 2;
 
-      // ── 1. PLACEMENT DES PIÈCES & ATTACHES DOUBLES ─────────────
+      // ── 1. PLACEMENT DES PIÈCES & DOUBLES ATTACHES ─────────────
       // Rangée 1 (bas ou unique)
       for (let c = 0; c < countRow1; c++) {
         const posX = (c - (countRow1 - 1) / 2) * state.spacing;
         const posY = yRow0;
 
-        // Mesh de la pièce
         const pieceMesh = new THREE.Mesh(state.loadedGeometry, pieceMaterial);
         pieceMesh.name = `spruePiece_0_${c}`;
         pieceMesh.position.set(posX, posY, 0);
         sprueGroup.add(pieceMesh);
 
-        // Attache 1 (côté intérieur -> vers rail central ou barre de support)
+        // Attache 1 (Intérieure -> vers rail central)
         if (state.gate1Picked) {
           const pTouch = state.gate1Point.clone().add(new THREE.Vector3(posX, posY, 0));
-          const pSupport = new THREE.Vector3(pTouch.x, isDouble ? yRailCentral : yMax, zAttach);
+          const pSupport = new THREE.Vector3(pTouch.x, yRailCentral, zAttach);
           createSubdividedAttache(pSupport, pTouch, sprueGroup);
         }
 
-        // Attache 2 (côté extérieur -> vers le cadre extérieur bas)
+        // Attache 2 (Extérieure -> vers cadre extérieur bas)
         if (state.gate2Picked && state.enableFrame) {
           const pTouch = state.gate2Point.clone().add(new THREE.Vector3(posX, posY, 0));
           const pSupport = new THREE.Vector3(pTouch.x, yMin, zAttach);
@@ -946,20 +993,18 @@
           const pieceMesh = new THREE.Mesh(state.loadedGeometry, pieceMaterial);
           pieceMesh.name = `spruePiece_1_${c}`;
           pieceMesh.position.set(posX, posY, 0);
-          // Rotation 180° pour faire face au rail central sans inverser la chiralité
-          pieceMesh.rotation.z = Math.PI;
+          pieceMesh.rotation.z = Math.PI; // 180° rotation pour faire face au rail central
           sprueGroup.add(pieceMesh);
 
           // Attache 1 (Intérieure -> vers rail central)
           if (state.gate1Picked) {
-            // Le point tourne avec la pièce
             const pLocalRot = state.gate1Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
             const pTouch = pLocalRot.add(new THREE.Vector3(posX, posY, 0));
             const pSupport = new THREE.Vector3(pTouch.x, yRailCentral, zAttach);
             createSubdividedAttache(pSupport, pTouch, sprueGroup);
           }
 
-          // Attache 2 (Extérieure -> vers le cadre extérieur haut)
+          // Attache 2 (Extérieure -> vers cadre extérieur haut)
           if (state.gate2Picked && state.enableFrame) {
             const pLocalRot = state.gate2Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
             const pTouch = pLocalRot.add(new THREE.Vector3(posX, posY, 0));
@@ -969,7 +1014,7 @@
         }
       }
 
-      // ── 2. CADRE DE PROTECTION EXTÉRIEUR & RAIL CENTRAL ────────
+      // ── 2. CADRE DE PROTECTION & RAIL CENTRAL ──────────────────
       if (state.enableFrame) {
         // Barre bas
         sprueGroup.add(createPoutreMesh(new THREE.Vector3(xMin, yMin, zAttach), new THREE.Vector3(xMax, yMin, zAttach), halfFrameD));
@@ -981,16 +1026,15 @@
         sprueGroup.add(createPoutreMesh(new THREE.Vector3(xMax, yMin, zAttach), new THREE.Vector3(xMax, yMax, zAttach), halfFrameD));
       }
 
-      // Rail central le long de X (entre les 2 rangées)
+      // Rail central (entre les 2 rangées)
       if (isDouble) {
         sprueGroup.add(createPoutreMesh(new THREE.Vector3(xMin, yRailCentral, zAttach), new THREE.Vector3(xMax, yRailCentral, zAttach), halfFrameD));
       }
 
-      // Visibilité selon le mode
       updateViewModeVisibility();
     }
 
-    // Helper : Création d'une attache avec col de rupture (section épaisse + col fin de casse)
+    // Helper : Attache avec col fin sécable
     function createSubdividedAttache(pSupport, pTouch, targetGroup) {
       const v = pTouch.clone().sub(pSupport);
       const dist = v.length();
@@ -998,7 +1042,6 @@
 
       const dir = v.clone().normalize();
       const neckLen = Math.min(state.neckLength, dist * 0.4);
-      const bodyLen = dist - neckLen + state.embedDepth;
 
       // 1. Partie corps épais (côté cadre/rail)
       const pBodyStart = pSupport.clone();
@@ -1007,7 +1050,7 @@
 
       // 2. Col fin sécable (au contact de la pièce)
       const pNeckStart = pBodyEnd.clone();
-      const pNeckEnd = pTouch.clone().addScaledVector(dir, state.embedDepth); // Légère pénétration
+      const pNeckEnd = pTouch.clone().addScaledVector(dir, state.embedDepth);
       targetGroup.add(createPoutreMesh(pNeckStart, pNeckEnd, state.neckDiameter / 2, tabMaterial));
     }
 
@@ -1030,7 +1073,7 @@
     }
 
     // ──────────────────────────────────────────────────────────────
-    // GESTION DU MODE DE VUE (FOCUS PIÈCE VS GRAPPE COMPLÈTE)
+    // GESTION DU MODE DE VUE (FOCUS VS GRAPPE)
     // ──────────────────────────────────────────────────────────────
     const btnViewFocus = document.getElementById('btnViewFocus');
     const btnViewSprue = document.getElementById('btnViewSprue');
@@ -1098,7 +1141,7 @@
 
           if (state.gate1Picked) {
             const pTouch = state.gate1Point.clone().add(new THREE.Vector3(posX, posY, 0));
-            const pSupport = new THREE.Vector3(pTouch.x, isDouble ? yRailCentral : yMax, zAttach);
+            const pSupport = new THREE.Vector3(pTouch.x, yRailCentral, zAttach);
             addSubdividedAttacheGeoms(pSupport, pTouch, geomsToMerge);
           }
           if (state.gate2Picked && state.enableFrame) {
@@ -1213,7 +1256,8 @@ stl_file       = "${state.rawFileName}";
 total_count    = ${state.count};
 spacing_x      = ${state.spacing.toFixed(2)};
 frame_w        = ${state.frameWidth.toFixed(2)};
-frame_margin   = ${state.frameMargin.toFixed(2)};
+gate1_length   = ${state.gate1Length.toFixed(2)};
+gate2_length   = ${state.gate2Length.toFixed(2)};
 neck_diam      = ${state.neckDiameter.toFixed(2)};
 body_diam      = ${state.bodyDiameter.toFixed(2)};
 neck_length    = ${state.neckLength.toFixed(2)};
@@ -1312,19 +1356,28 @@ union() {
       if (state.loadedGeometry) fitCameraToObject(state.loadedGeometry);
     });
 
+    // Sliders de longueur séparés Attache 1 et Attache 2
+    const rangeGate1Length = document.getElementById('rangeGate1Length');
+    const valGate1Length = document.getElementById('valGate1Length');
+    rangeGate1Length.addEventListener('input', (e) => {
+      state.gate1Length = parseFloat(e.target.value);
+      valGate1Length.textContent = state.gate1Length.toFixed(1);
+      rebuildSprue();
+    });
+
+    const rangeGate2Length = document.getElementById('rangeGate2Length');
+    const valGate2Length = document.getElementById('valGate2Length');
+    rangeGate2Length.addEventListener('input', (e) => {
+      state.gate2Length = parseFloat(e.target.value);
+      valGate2Length.textContent = state.gate2Length.toFixed(1);
+      rebuildSprue();
+    });
+
     const checkEnableFrame = document.getElementById('checkEnableFrame');
     const frameSettings = document.getElementById('frameSettingsContainer');
     checkEnableFrame.addEventListener('change', (e) => {
       state.enableFrame = e.target.checked;
       frameSettings.style.opacity = state.enableFrame ? '1' : '0.4';
-      rebuildSprue();
-    });
-
-    const rangeFrameMargin = document.getElementById('rangeFrameMargin');
-    const valFrameMargin = document.getElementById('valFrameMargin');
-    rangeFrameMargin.addEventListener('input', (e) => {
-      state.frameMargin = parseFloat(e.target.value);
-      valFrameMargin.textContent = state.frameMargin.toFixed(1);
       rebuildSprue();
     });
 
