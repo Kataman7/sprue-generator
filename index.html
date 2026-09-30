@@ -470,11 +470,21 @@
             </div>
           </div>
 
-          <!-- Bouton détection automatique du point opposé -->
-          <button id="btnAutoOpposite" class="w-full py-2 px-3 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 font-medium transition border border-indigo-500/30 flex items-center justify-center gap-2">
-            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-            Auto-détecter les 2 points opposés
-          </button>
+          <!-- Actions sur les points d'attache -->
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <button id="btnSwapGates" title="Inverser la position du Point 1 et du Point 2" class="py-2 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white font-medium transition border border-slate-800 hover:border-indigo-500/50 flex items-center justify-center gap-1.5 text-[11px] shadow-sm">
+              <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+              </svg>
+              <span>Inverser P1 ⇄ P2</span>
+            </button>
+            <button id="btnAutoOpposite" title="Calculer automatiquement 2 points opposés sur la pièce" class="py-2 px-2 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 font-medium transition border border-indigo-500/30 flex items-center justify-center gap-1.5 text-[11px] shadow-sm">
+              <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+              </svg>
+              <span>Auto-détecter</span>
+            </button>
+          </div>
         </div>
 
         <!-- SECTION 2 : TIGES D'ATTACHE & PROFIL SÉCABLE -->
@@ -1143,6 +1153,58 @@
     document.getElementById('btnAutoOpposite').addEventListener('click', () => {
       autoDetectOppositeGates();
     });
+
+    // Inversion des deux points d'attache (Point 1 ⇄ Point 2)
+    function swapGatePoints() {
+      if (!state.gate1Picked && !state.gate2Picked) return;
+
+      // Échange des coordonnées
+      const tempP = state.gate1Point.clone();
+      state.gate1Point.copy(state.gate2Point);
+      state.gate2Point.copy(tempP);
+
+      // Échange des normales
+      const tempN = state.gate1Normal.clone();
+      state.gate1Normal.copy(state.gate2Normal);
+      state.gate2Normal.copy(tempN);
+
+      // Échange de l'état défini
+      const tempPicked = state.gate1Picked;
+      state.gate1Picked = state.gate2Picked;
+      state.gate2Picked = tempPicked;
+
+      // Synchronisation des champs numériques
+      inputG1X.value = state.gate1Point.x.toFixed(2);
+      inputG1Y.value = state.gate1Point.y.toFixed(2);
+      inputG1Z.value = state.gate1Point.z.toFixed(2);
+      inputG2X.value = state.gate2Point.x.toFixed(2);
+      inputG2Y.value = state.gate2Point.y.toFixed(2);
+      inputG2Z.value = state.gate2Point.z.toFixed(2);
+
+      // Mise à jour des statuts
+      const s1 = document.getElementById('statusGate1');
+      const s2 = document.getElementById('statusGate2');
+      if (state.gate1Picked) {
+        s1.textContent = 'Défini ✓';
+        s1.className = 'text-emerald-400 font-mono text-[10px] font-bold';
+      } else {
+        s1.textContent = 'Non défini';
+        s1.className = 'text-slate-400 font-mono text-[10px]';
+      }
+
+      if (state.gate2Picked) {
+        s2.textContent = 'Défini ✓';
+        s2.className = 'text-rose-400 font-mono text-[10px] font-bold';
+      } else {
+        s2.textContent = 'Non défini';
+        s2.className = 'text-slate-400 font-mono text-[10px]';
+      }
+
+      updateMarkers();
+      rebuildSprue();
+    }
+
+    document.getElementById('btnSwapGates').addEventListener('click', swapGatePoints);
 
     // Marqueurs visuels
     function updateMarkers() {
