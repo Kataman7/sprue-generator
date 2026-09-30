@@ -218,6 +218,18 @@
         <span id="labelToggleGrid">Grille : On</span>
       </button>
 
+      <!-- Toggle Mode Caméra (Perspective vs Isométrique / Orthographique) -->
+      <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800" title="Mode de projection : Perspective ou Isométrique (Ortho CAD)">
+        <button id="btnCamPersp" class="px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm transition flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+          <span>Persp</span>
+        </button>
+        <button id="btnCamOrtho" class="px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+          <span>Iso (Ortho)</span>
+        </button>
+      </div>
+
       <!-- Toggle Mode de Vue -->
       <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800">
         <button id="btnViewFocus" class="px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1">
@@ -686,6 +698,7 @@
       // Mode de vue : 'sprue' (grappe complète) | 'focus' (pièce seule)
       viewMode: 'sprue',
       showGrid: true,
+      cameraMode: 'perspective', // 'perspective' | 'orthographic'
 
       // 2 Points d'attache par pièce
       activeGateSlot: 1, // 1: intérieur (rail), 2: extérieur (cadre)
@@ -724,8 +737,22 @@
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x090d16);
 
-    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 2000);
-    camera.position.set(40, 70, 90);
+    const aspect = container.clientWidth / container.clientHeight;
+    const perspCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 2000);
+    perspCamera.position.set(40, 70, 90);
+
+    const initialOrthoHeight = 120;
+    const orthoCamera = new THREE.OrthographicCamera(
+      -initialOrthoHeight * aspect / 2,
+      initialOrthoHeight * aspect / 2,
+      initialOrthoHeight / 2,
+      -initialOrthoHeight / 2,
+      0.1,
+      2000
+    );
+    orthoCamera.position.set(40, 70, 90);
+
+    let camera = perspCamera;
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
     renderer.setSize(container.clientWidth, container.clientHeight);
@@ -792,10 +819,82 @@
 
     // Redimensionnement
     window.addEventListener('resize', () => {
-      camera.aspect = container.clientWidth / container.clientHeight;
-      camera.updateProjectionMatrix();
+      const aspect = container.clientWidth / container.clientHeight;
+      perspCamera.aspect = aspect;
+      perspCamera.updateProjectionMatrix();
+
+      const frustumHeight = (orthoCamera.top - orthoCamera.bottom);
+      const width = frustumHeight * aspect;
+      orthoCamera.left = -width / 2;
+      orthoCamera.right = width / 2;
+      orthoCamera.updateProjectionMatrix();
+
       renderer.setSize(container.clientWidth, container.clientHeight);
     });
+
+    // ──────────────────────────────────────────────────────────────
+    // SÉLECTION DU MODE DE CAMÉRA (PERSPECTIVE VS ISOMÉTRIQUE)
+    // ──────────────────────────────────────────────────────────────
+    const btnCamPersp = document.getElementById('btnCamPersp');
+    const btnCamOrtho = document.getElementById('btnCamOrtho');
+
+    function setCameraMode(mode) {
+      if (mode === state.cameraMode && camera) return;
+      state.cameraMode = mode;
+
+      const aspect = container.clientWidth / container.clientHeight;
+      const target = controls.target.clone();
+
+      if (mode === 'orthographic') {
+        // Perspective -> Isométrique (Orthographique CAD)
+        const dist = Math.max(perspCamera.position.distanceTo(target), 10);
+        const fovRad = THREE.MathUtils.degToRad(perspCamera.fov * 0.5);
+        const height = 2 * dist * Math.tan(fovRad);
+        const width = height * aspect;
+
+        orthoCamera.left = -width / 2;
+        orthoCamera.right = width / 2;
+        orthoCamera.top = height / 2;
+        orthoCamera.bottom = -height / 2;
+        orthoCamera.zoom = 1;
+        orthoCamera.position.copy(perspCamera.position);
+        orthoCamera.quaternion.copy(perspCamera.quaternion);
+        orthoCamera.up.copy(perspCamera.up);
+        orthoCamera.updateProjectionMatrix();
+
+        camera = orthoCamera;
+        controls.object = orthoCamera;
+
+        btnCamOrtho.className = 'px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm transition flex items-center gap-1';
+        btnCamPersp.className = 'px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1';
+      } else {
+        // Isométrique (Orthographique) -> Perspective
+        const orthoHeight = (orthoCamera.top - orthoCamera.bottom) / orthoCamera.zoom;
+        const fovRad = THREE.MathUtils.degToRad(perspCamera.fov * 0.5);
+        const targetDist = (orthoHeight / 2) / Math.tan(fovRad);
+
+        const dir = orthoCamera.position.clone().sub(target).normalize();
+        if (dir.lengthSq() < 0.0001) dir.set(0, 0.7, 0.7).normalize();
+        perspCamera.position.copy(target).addScaledVector(dir, Math.max(targetDist, 10));
+        perspCamera.quaternion.copy(orthoCamera.quaternion);
+        perspCamera.up.copy(orthoCamera.up);
+        perspCamera.aspect = aspect;
+        perspCamera.updateProjectionMatrix();
+
+        camera = perspCamera;
+        controls.object = perspCamera;
+
+        btnCamPersp.className = 'px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm transition flex items-center gap-1';
+        btnCamOrtho.className = 'px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1';
+      }
+
+      controls.target.copy(target);
+      controls.update();
+      updateViewCubeRotation();
+    }
+
+    btnCamPersp.addEventListener('click', () => setCameraMode('perspective'));
+    btnCamOrtho.addEventListener('click', () => setCameraMode('orthographic'));
 
     // ──────────────────────────────────────────────────────────────
     // BOUTON TOGGLE GRILLE
@@ -936,14 +1035,28 @@
     function fitCameraToObject(geom) {
       const size = state.dimensions;
       const maxDim = Math.max(size.x, size.y, size.z);
-      const fov = camera.fov * (Math.PI / 180);
+      const fov = perspCamera.fov * (Math.PI / 180);
       let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * (state.viewMode === 'focus' ? 2.2 : 3.5);
       cameraZ = Math.max(cameraZ, 40);
 
-      camera.position.set(cameraZ * 0.7, cameraZ * 0.9, cameraZ);
-      camera.lookAt(0, 0, 0);
+      perspCamera.position.set(cameraZ * 0.7, cameraZ * 0.9, cameraZ);
+      perspCamera.lookAt(0, 0, 0);
+
+      const aspect = container.clientWidth / container.clientHeight;
+      const height = cameraZ * 2 * Math.tan(fov / 2);
+      const width = height * aspect;
+      orthoCamera.left = -width / 2;
+      orthoCamera.right = width / 2;
+      orthoCamera.top = height / 2;
+      orthoCamera.bottom = -height / 2;
+      orthoCamera.zoom = 1;
+      orthoCamera.position.copy(perspCamera.position);
+      orthoCamera.lookAt(0, 0, 0);
+      orthoCamera.updateProjectionMatrix();
+
       controls.target.set(0, 0, 0);
       controls.update();
+      updateViewCubeRotation();
     }
 
     function updateStatsUI(geom) {
