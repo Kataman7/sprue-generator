@@ -173,33 +173,34 @@
       <!-- Contenu défilable -->
       <div class="flex-1 overflow-y-auto p-5 space-y-5 text-xs">
 
-        <!-- SECTION 1 : DOUBLE POINTS D'ATTACHE (INTÉRIEUR + EXTÉRIEUR) -->
+        <!-- SECTION 1 : POINTS D'ATTACHE SUR LA PIÈCE -->
         <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800 space-y-3">
           <div class="flex items-center justify-between">
             <span class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
-              2 Points d'Attache par Pièce
+              1. Points d'Attache sur la Pièce
             </span>
-            <span class="text-[10px] text-indigo-400 font-semibold bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">Double support</span>
+            <span class="text-[10px] text-indigo-400 font-semibold bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">Double contact</span>
           </div>
+          <p class="text-[11px] text-slate-400">Positionnez les 2 points de contact sur le modèle (au clic ou par saisie manuelle X, Y, Z).</p>
 
           <!-- Sélecteur du point actif pour le clic -->
           <div class="grid grid-cols-2 gap-2 bg-slate-900 p-1 rounded-lg border border-slate-800">
             <button id="btnSelectGate1" class="py-1.5 px-2 rounded-md font-medium text-center transition bg-emerald-600 text-white flex items-center justify-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-white"></span>
-              <span>1. Intérieur (Rail)</span>
+              <span>Point 1 (Intérieur / Rail)</span>
             </button>
             <button id="btnSelectGate2" class="py-1.5 px-2 rounded-md font-medium text-center transition text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-              <span>2. Extérieur (Cadre)</span>
+              <span>Point 2 (Extérieur / Cadre)</span>
             </button>
           </div>
 
           <!-- Coordonnées Point 1 -->
           <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80 space-y-1.5">
             <div class="flex justify-between text-[11px] items-center">
-              <span class="font-semibold text-emerald-400 flex items-center gap-1">● Attache 1 (Intérieure) :</span>
-              <span id="statusGate1" class="text-slate-400 font-mono text-[10px]">Non définie</span>
+              <span class="font-semibold text-emerald-400 flex items-center gap-1">● Point 1 (Intérieur / Rail) :</span>
+              <span id="statusGate1" class="text-slate-400 font-mono text-[10px]">Non défini</span>
             </div>
             <div class="grid grid-cols-3 gap-1.5 font-mono text-[11px] text-slate-300">
               <div class="bg-slate-950 px-2 py-1 rounded flex items-center gap-1 border border-slate-800 focus-within:border-emerald-500 transition" title="Coordonnée X">
@@ -220,8 +221,8 @@
           <!-- Coordonnées Point 2 -->
           <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80 space-y-1.5">
             <div class="flex justify-between text-[11px] items-center">
-              <span class="font-semibold text-rose-400 flex items-center gap-1">● Attache 2 (Extérieure) :</span>
-              <span id="statusGate2" class="text-slate-400 font-mono text-[10px]">Non définie</span>
+              <span class="font-semibold text-rose-400 flex items-center gap-1">● Point 2 (Extérieur / Cadre) :</span>
+              <span id="statusGate2" class="text-slate-400 font-mono text-[10px]">Non défini</span>
             </div>
             <div class="grid grid-cols-3 gap-1.5 font-mono text-[11px] text-slate-300">
               <div class="bg-slate-950 px-2 py-1 rounded flex items-center gap-1 border border-slate-800 focus-within:border-rose-500 transition" title="Coordonnée X">
@@ -246,135 +247,150 @@
           </button>
         </div>
 
-        <!-- SECTION 2 : LONGUEURS SÉPARÉES DES ATTACHES (ÉLOIGNEMENT) -->
-        <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800 space-y-3.5">
-          <h3 class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-            Longueurs des Attaches (Ajustement Séparé)
-          </h3>
-
-          <!-- Longueur Attache 1 (Rail Central) -->
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center">
-              <label for="rangeGate1Length" class="text-emerald-400 font-semibold flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                Longueur Attache 1 (vers Rail Central)
-              </label>
-              <span class="font-mono text-emerald-400 font-bold"><span id="valGate1Length">5.0</span> mm</span>
-            </div>
-            <input id="rangeGate1Length" type="range" min="1.5" max="30" step="0.5" value="5.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-            <p class="text-[10px] text-slate-400">Écarte ou rapproche la touche du rail central au milieu.</p>
-          </div>
-
-          <!-- Longueur Attache 2 (Cadre Extérieur) -->
-          <div class="space-y-1.5 pt-2 border-t border-slate-800">
-            <div class="flex justify-between items-center">
-              <label for="rangeGate2Length" class="text-rose-400 font-semibold flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                Longueur Attache 2 (vers Cadre Extérieur)
-              </label>
-              <span class="font-mono text-rose-400 font-bold"><span id="valGate2Length">6.0</span> mm</span>
-            </div>
-            <input id="rangeGate2Length" type="range" min="1.5" max="30" step="0.5" value="6.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-            <p class="text-[10px] text-slate-400">Écarte ou rapproche le cadre extérieur de protection.</p>
-          </div>
-        </div>
-
-        <!-- SECTION 3 : CAGE DE PROTECTION EXTÉRIEURE -->
-        <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800 space-y-3">
+        <!-- SECTION 2 : TIGES D'ATTACHE & PROFIL SÉCABLE -->
+        <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800 space-y-4">
           <div class="flex items-center justify-between">
-            <span class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-              <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-              Cadre & Rails (JLCPCB)
-            </span>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" id="checkEnableFrame" checked class="sr-only peer">
-              <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
-            </label>
+            <h3 class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+              2. Tiges d'Attache & Profil de Rupture
+            </h3>
           </div>
 
-          <div id="frameSettingsContainer" class="space-y-3 pt-1">
-            <!-- Diamètre du cadre extérieur -->
+          <!-- A. Longueurs des tiges (Éloignement) -->
+          <div class="space-y-3 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80">
+            <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">A. Longueurs des tiges (Éloignement)</span>
+            
+            <!-- Longueur Attache 1 (Rail Central) -->
             <div class="space-y-1">
               <div class="flex justify-between items-center">
-                <label for="rangeFrameWidth" class="text-slate-300 font-medium">Épaisseur du cadre & rail (Ø)</label>
-                <span class="font-mono text-indigo-400 font-bold"><span id="valFrameWidth">3.0</span> mm</span>
+                <label for="rangeGate1Length" class="text-emerald-400 font-medium flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  Longueur Attache 1 (vers Rail Central)
+                </label>
+                <span class="font-mono text-emerald-400 font-bold"><span id="valGate1Length">5.0</span> mm</span>
               </div>
-              <input id="rangeFrameWidth" type="range" min="2.0" max="5.0" step="0.2" value="3.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-              <p class="text-[10px] text-slate-400">Standard recommandé : 3.0 mm min pour rigidité MJF</p>
+              <input id="rangeGate1Length" type="range" min="1.5" max="30" step="0.5" value="5.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            </div>
+
+            <!-- Longueur Attache 2 (Cadre Extérieur) -->
+            <div class="space-y-1 pt-1 border-t border-slate-800">
+              <div class="flex justify-between items-center">
+                <label for="rangeGate2Length" class="text-rose-400 font-medium flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                  Longueur Attache 2 (vers Cadre Extérieur)
+                </label>
+                <span class="font-mono text-rose-400 font-bold"><span id="valGate2Length">6.0</span> mm</span>
+              </div>
+              <input id="rangeGate2Length" type="range" min="1.5" max="30" step="0.5" value="6.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            </div>
+          </div>
+
+          <!-- B. Dimensions du Col sécable & Corps de tige -->
+          <div class="space-y-3 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80">
+            <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">B. Col Sécable & Corps de Tige</span>
+            
+            <!-- Longueur du col fin -->
+            <div class="space-y-1">
+              <div class="flex justify-between items-center">
+                <label for="rangeNeckLength" class="text-slate-300 font-medium">Longueur du col fin (zone sécable)</label>
+                <span class="font-mono text-indigo-400 font-bold"><span id="valNeckLength">1.0</span> mm</span>
+              </div>
+              <input id="rangeNeckLength" type="range" min="0.4" max="4.0" step="0.1" value="1.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+              <p class="text-[10px] text-slate-400">Longueur du rétrécissement fragile au contact de la pièce (défaut: 1.0 mm).</p>
+            </div>
+
+            <!-- Diamètre col fin de rupture -->
+            <div class="space-y-1 pt-1 border-t border-slate-800">
+              <div class="flex justify-between items-center">
+                <label for="rangeNeckDiameter" class="text-slate-300 font-medium">Diamètre du col fin (Ø contact)</label>
+                <span class="font-mono text-rose-400 font-bold">Ø <span id="valNeckDiameter">1.2</span> mm</span>
+              </div>
+              <input id="rangeNeckDiameter" type="range" min="0.8" max="2.0" step="0.1" value="1.2" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            </div>
+
+            <!-- Diamètre corps de l'attache -->
+            <div class="space-y-1 pt-1 border-t border-slate-800">
+              <div class="flex justify-between items-center">
+                <label for="rangeBodyDiameter" class="text-slate-300 font-medium">Diamètre du corps de tige (Ø cadre)</label>
+                <span class="font-mono text-indigo-400 font-bold">Ø <span id="valBodyDiameter">2.8</span> mm</span>
+              </div>
+              <input id="rangeBodyDiameter" type="range" min="1.5" max="4.5" step="0.1" value="2.8" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
             </div>
           </div>
         </div>
 
-        <!-- SECTION 4 : SECTIONS DES ATTACHES (COLS DE RUPTURE) -->
-        <div class="space-y-3 pt-2 border-t border-slate-800">
-          <h3 class="font-semibold text-slate-300 uppercase tracking-wider text-[11px] flex items-center gap-2">
-            <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-            Profil de Rupture
-          </h3>
-
-          <!-- Diamètre col fin de rupture -->
-          <div class="space-y-1">
-            <div class="flex justify-between items-center">
-              <label for="rangeNeckDiameter" class="text-slate-300 font-medium">Col fin sécable (contact touche)</label>
-              <span class="font-mono text-rose-400 font-bold">Ø <span id="valNeckDiameter">1.2</span> mm</span>
-            </div>
-            <input id="rangeNeckDiameter" type="range" min="0.8" max="2.0" step="0.1" value="1.2" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+        <!-- SECTION 3 : AGENCEMENT GRAPPE & CAGE DE PROTECTION -->
+        <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+              3. Agencement & Cage de Protection
+            </h3>
           </div>
 
-          <!-- Diamètre corps de l'attache -->
-          <div class="space-y-1">
-            <div class="flex justify-between items-center">
-              <label for="rangeBodyDiameter" class="text-slate-300 font-medium">Corps de l'attache (côté cadre)</label>
-              <span class="font-mono text-indigo-400 font-bold">Ø <span id="valBodyDiameter">2.8</span> mm</span>
+          <!-- Disposition & Quantité -->
+          <div class="space-y-3 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80">
+            <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">A. Disposition des Pièces</span>
+
+            <!-- Quantité de pièces -->
+            <div class="space-y-1">
+              <div class="flex justify-between items-center">
+                <label for="inputCount" class="text-slate-300 font-medium">Nombre total de pièces</label>
+                <div class="flex items-center gap-1 font-mono">
+                  <input id="inputCount" type="number" min="2" max="50" step="2" value="10" class="w-14 bg-slate-950 border border-slate-800 rounded px-2 py-0.5 text-right text-indigo-400 font-bold focus:border-indigo-500 focus:outline-none">
+                  <span class="text-slate-400">pcs</span>
+                </div>
+              </div>
+              <input id="rangeCount" type="range" min="2" max="50" step="2" value="10" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
             </div>
-            <input id="rangeBodyDiameter" type="range" min="1.5" max="4.0" step="0.1" value="2.8" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-          </div>
-        </div>
 
-        <!-- SECTION 5 : GRILLE & DISPOSITION -->
-        <div class="space-y-3 pt-3 border-t border-slate-800">
-          <h3 class="font-semibold text-slate-300 uppercase tracking-wider text-[11px] flex items-center gap-2">
-            <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            Grille & Disposition
-          </h3>
-
-          <!-- Quantité de pièces -->
-          <div class="space-y-1">
-            <div class="flex justify-between items-center">
-              <label for="inputCount" class="text-slate-300 font-medium">Nombre total de pièces</label>
-              <div class="flex items-center gap-1 font-mono">
-                <input id="inputCount" type="number" min="2" max="50" step="2" value="10" class="w-14 bg-slate-950 border border-slate-800 rounded px-2 py-0.5 text-right text-indigo-400 font-bold focus:border-indigo-500 focus:outline-none">
-                <span class="text-slate-400">pcs</span>
+            <!-- Configuration Grille -->
+            <div class="space-y-1">
+              <label class="text-slate-300 font-medium block">Configuration de la grille</label>
+              <div class="grid grid-cols-2 gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800">
+                <button id="btnLayoutDouble" class="py-1.5 rounded-md font-medium text-center transition bg-indigo-600 text-white shadow-sm">
+                  2 rangées (2×5)
+                </button>
+                <button id="btnLayoutSingle" class="py-1.5 rounded-md font-medium text-center transition text-slate-400 hover:text-white">
+                  1 rangée (1×10)
+                </button>
               </div>
             </div>
-            <input id="rangeCount" type="range" min="2" max="50" step="2" value="10" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-          </div>
 
-          <!-- Configuration Grille (Double 2x5 ou Simple 1x10) -->
-          <div class="space-y-1">
-            <label class="text-slate-300 font-medium block">Configuration de la cage</label>
-            <div class="grid grid-cols-2 gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800">
-              <button id="btnLayoutDouble" class="py-1.5 rounded-md font-medium text-center transition bg-indigo-600 text-white shadow-sm">
-                2 rangées (2×5)
-              </button>
-              <button id="btnLayoutSingle" class="py-1.5 rounded-md font-medium text-center transition text-slate-400 hover:text-white">
-                1 rangée (1×10)
-              </button>
+            <!-- Espacement entre pièces -->
+            <div class="space-y-1 pt-1">
+              <div class="flex justify-between items-center">
+                <label for="rangeSpacing" class="text-slate-300 font-medium">Espacement centre-à-centre</label>
+                <span class="font-mono text-indigo-400 font-bold"><span id="valSpacing">22.0</span> mm</span>
+              </div>
+              <input id="rangeSpacing" type="range" min="12" max="80" step="0.5" value="22" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+              <div class="flex justify-between text-[10px] text-slate-400">
+                <span>Serré</span>
+                <button id="btnAutoSpacing" class="text-indigo-400 hover:underline">Auto (Taille + 6mm)</button>
+                <span>Large</span>
+              </div>
             </div>
           </div>
 
-          <!-- Espacement entre pièces -->
-          <div class="space-y-1 pt-1">
-            <div class="flex justify-between items-center">
-              <label for="rangeSpacing" class="text-slate-300 font-medium">Espacement centre-à-centre</label>
-              <span class="font-mono text-indigo-400 font-bold"><span id="valSpacing">22.0</span> mm</span>
+          <!-- Cage de protection extérieure -->
+          <div class="space-y-3 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">B. Cadre Extérieur (Protection)</span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="checkEnableFrame" checked class="sr-only peer">
+                <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+              </label>
             </div>
-            <input id="rangeSpacing" type="range" min="12" max="80" step="0.5" value="22" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-            <div class="flex justify-between text-[10px] text-slate-400">
-              <span>Serré</span>
-              <button id="btnAutoSpacing" class="text-indigo-400 hover:underline">Auto (Taille + 6mm)</button>
-              <span>Large</span>
+
+            <div id="frameSettingsContainer" class="space-y-2 pt-1">
+              <div class="space-y-1">
+                <div class="flex justify-between items-center">
+                  <label for="rangeFrameWidth" class="text-slate-300 font-medium">Épaisseur cadre & rail (Ø)</label>
+                  <span class="font-mono text-indigo-400 font-bold"><span id="valFrameWidth">3.0</span> mm</span>
+                </div>
+                <input id="rangeFrameWidth" type="range" min="2.0" max="5.0" step="0.2" value="3.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+                <p class="text-[10px] text-slate-400">Cadre rigide protecteur (standard MJF: Ø 3.0 mm).</p>
+              </div>
             </div>
           </div>
         </div>
@@ -1098,7 +1114,7 @@
       if (dist <= 0.1) return;
 
       const dir = v.clone().normalize();
-      const neckLen = Math.min(state.neckLength, dist * 0.4);
+      const neckLen = Math.min(state.neckLength, Math.max(dist - 0.5, 0.2));
 
       // 1. Partie corps épais (côté cadre/rail)
       const pBodyStart = pSupport.clone();
@@ -1278,7 +1294,7 @@
       if (dist <= 0.1) return;
 
       const dir = v.clone().normalize();
-      const neckLen = Math.min(state.neckLength, dist * 0.4);
+      const neckLen = Math.min(state.neckLength, Math.max(dist - 0.5, 0.2));
 
       // Corps épais
       const pBodyStart = pSupport.clone();
@@ -1443,6 +1459,14 @@ union() {
     rangeFrameWidth.addEventListener('input', (e) => {
       state.frameWidth = parseFloat(e.target.value);
       valFrameWidth.textContent = state.frameWidth.toFixed(1);
+      rebuildSprue();
+    });
+
+    const rangeNeckLength = document.getElementById('rangeNeckLength');
+    const valNeckLength = document.getElementById('valNeckLength');
+    rangeNeckLength.addEventListener('input', (e) => {
+      state.neckLength = parseFloat(e.target.value);
+      valNeckLength.textContent = state.neckLength.toFixed(1);
       rebuildSprue();
     });
 
