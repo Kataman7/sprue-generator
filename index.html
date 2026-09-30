@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Sprue Generator — Grappes d'impression 3D (SLS / MJF)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    input[type=range] {
+      accent-color: #6366f1;
+    }
+  </style>
+
+  <!-- Import Map pour Three.js et ses addons officiels via unpkg -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 flex flex-col h-screen overflow-hidden font-sans select-none">
+
+  <!-- ============================================================== -->
+  <!-- BARRE SUPÉRIEURE (HEADER) -->
+  <!-- ============================================================== -->
+  <header class="h-14 bg-slate-900 border-b border-slate-800 px-5 flex items-center justify-between z-20 shrink-0">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold tracking-tight text-white flex items-center gap-2">
+          3D Sprue Generator
+          <span class="text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">SLS / MJF</span>
+        </h1>
+        <p class="text-[11px] text-slate-400">Générateur industriel de grappes STL avec attache sécable</p>
+      </div>
+    </div>
+
+    <!-- Actions globales -->
+    <div class="flex items-center space-x-3 text-xs">
+      <button id="btnResetCamera" title="Recentrer la caméra" class="px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition flex items-center gap-1.5 border border-slate-700">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+        Vue centrée
+      </button>
+      <label class="px-3 py-1.5 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white font-medium cursor-pointer transition flex items-center gap-1.5 shadow-sm shadow-indigo-600/30">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+        <span>Importer STL</span>
+        <input type="file" id="fileInput" accept=".stl" class="hidden">
+      </label>
+    </div>
+  </header>
+
+  <!-- ============================================================== -->
+  <!-- CORPS PRINCIPAL (VIEWER 3D + SIDEBAR) -->
+  <!-- ============================================================== -->
+  <div class="flex-1 flex overflow-hidden relative">
+
+    <!-- 1. ZONE 3D VIEWPORT -->
+    <div id="viewportContainer" class="flex-1 h-full relative bg-radial from-slate-900 to-slate-950 overflow-hidden">
+      <canvas id="webglCanvas" class="w-full h-full block"></canvas>
+
+      <!-- Overlay Drag & Drop -->
+      <div id="dropOverlay" class="absolute inset-4 rounded-xl border-2 border-dashed border-indigo-500/50 bg-indigo-950/40 backdrop-blur-sm hidden flex-col items-center justify-center z-30 transition pointer-events-none">
+        <div class="p-4 rounded-full bg-indigo-600/20 text-indigo-400 mb-3 animate-bounce">
+          <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+        </div>
+        <p class="text-base font-semibold text-white">Déposez votre fichier .STL ici</p>
+        <p class="text-xs text-indigo-300 mt-1">Le fichier sera analysé 100% localement dans votre navigateur</p>
+      </div>
+
+      <!-- Message initial d'attente (vide) -->
+      <div id="emptyNotice" class="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none p-6 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-center text-slate-500 mb-4 shadow-xl">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
+        </div>
+        <h2 class="text-base font-medium text-slate-200">Aucun modèle 3D chargé</h2>
+        <p class="text-xs text-slate-400 mt-1 max-w-sm">Glissez-déposez un fichier STL individuel dans cette zone ou utilisez le bouton "Importer STL".</p>
+      </div>
+
+      <!-- Badge Info Flottant (Dimensions & Statut) -->
+      <div id="floatingStats" class="absolute top-4 left-4 z-10 bg-slate-900/85 backdrop-blur border border-slate-800 rounded-lg p-3 text-xs shadow-xl hidden space-y-1.5 min-w-[200px]">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5 mb-1.5">
+          <span class="font-semibold text-slate-300" id="statFileName">piece.stl</span>
+          <span class="text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20" id="statTriangleCount">0 tri</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div class="bg-slate-950/60 p-1.5 rounded">
+            <span class="text-[10px] text-slate-400 block">X</span>
+            <span class="font-mono text-slate-200 font-bold" id="statDimX">0.0</span> <span class="text-[9px] text-slate-400">mm</span>
+          </div>
+          <div class="bg-slate-950/60 p-1.5 rounded">
+            <span class="text-[10px] text-slate-400 block">Y</span>
+            <span class="font-mono text-slate-200 font-bold" id="statDimY">0.0</span> <span class="text-[9px] text-slate-400">mm</span>
+          </div>
+          <div class="bg-slate-950/60 p-1.5 rounded">
+            <span class="text-[10px] text-slate-400 block">Z</span>
+            <span class="font-mono text-slate-200 font-bold" id="statDimZ">0.0</span> <span class="text-[9px] text-slate-400">mm</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barre d'aide / picking en bas du canvas -->
+      <div id="pickingNotice" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-slate-900/90 backdrop-blur border border-slate-700/80 rounded-full px-4 py-2 text-xs shadow-xl flex items-center gap-2.5 text-slate-300">
+        <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+        <span><strong>Point d'attache :</strong> <span id="pickingStatusText">Cliquez sur une surface du modèle pour placer la tige</span></span>
+      </div>
+    </div>
+
+    <!-- 2. PANNEAU LATÉRAL (SIDEBAR CONFIGURATION) -->
+    <aside class="w-96 h-full bg-slate-900 border-l border-slate-800 flex flex-col z-20 shrink-0">
+      
+      <!-- Contenu défilable -->
+      <div class="flex-1 overflow-y-auto p-5 space-y-6 text-xs">
+
+        <!-- SECTION 1 : POINT D'ATTACHEMENT (GATE) -->
+        <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+              Point de contact (Gate)
+            </span>
+            <span id="gateBadge" class="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">Non défini</span>
+          </div>
+          
+          <div class="grid grid-cols-3 gap-2 font-mono text-[11px] text-slate-300">
+            <div class="bg-slate-900 p-2 rounded border border-slate-800 text-center">
+              <span class="text-[10px] text-slate-400 block font-sans">Px</span>
+              <span id="gateX">0.0</span>
+            </div>
+            <div class="bg-slate-900 p-2 rounded border border-slate-800 text-center">
+              <span class="text-[10px] text-slate-400 block font-sans">Py</span>
+              <span id="gateY">0.0</span>
+            </div>
+            <div class="bg-slate-900 p-2 rounded border border-slate-800 text-center">
+              <span class="text-[10px] text-slate-400 block font-sans">Pz</span>
+              <span id="gateZ">0.0</span>
+            </div>
+          </div>
+
+          <div class="flex gap-2 pt-1">
+            <button id="btnAutoGate" class="flex-1 py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition font-medium border border-slate-700 flex items-center justify-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              Auto-détecter latéral
+            </button>
+          </div>
+        </div>
+
+        <!-- SECTION 2 : CONFIGURATION DE LA GRAPPE -->
+        <div class="space-y-4">
+          <h3 class="font-semibold text-slate-300 uppercase tracking-wider text-[11px] flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            Agencement de la Grappe
+          </h3>
+
+          <!-- Quantité de pièces -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <label for="inputCount" class="text-slate-300 font-medium">Nombre de pièces</label>
+              <div class="flex items-center gap-1 font-mono">
+                <input id="inputCount" type="number" min="2" max="50" step="2" value="10" class="w-14 bg-slate-950 border border-slate-800 rounded px-2 py-0.5 text-right text-indigo-400 font-bold focus:border-indigo-500 focus:outline-none">
+                <span class="text-slate-400">pcs</span>
+              </div>
+            </div>
+            <input id="rangeCount" type="range" min="2" max="50" step="2" value="10" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+          </div>
+
+          <!-- Disposition (Double rangée / Simple rangée) -->
+          <div class="space-y-1.5">
+            <label class="text-slate-300 font-medium block">Disposition</label>
+            <div class="grid grid-cols-2 gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800">
+              <button id="btnLayoutDouble" class="py-1.5 rounded-md font-medium text-center transition bg-indigo-600 text-white shadow-sm">
+                Double (2×5)
+              </button>
+              <button id="btnLayoutSingle" class="py-1.5 rounded-md font-medium text-center transition text-slate-400 hover:text-white">
+                Simple (1×10)
+              </button>
+            </div>
+          </div>
+
+          <!-- Orientation du Rail -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <label class="text-slate-300 font-medium">Axe du rail principal</label>
+              <span id="labelAutoAxis" class="text-[10px] text-indigo-400 font-mono">Auto</span>
+            </div>
+            <div class="grid grid-cols-3 gap-1.5 bg-slate-950 p-1 rounded-lg border border-slate-800 text-center">
+              <button id="btnAxisAuto" class="py-1 rounded font-medium bg-slate-800 text-white">Auto</button>
+              <button id="btnAxisX" class="py-1 rounded font-medium text-slate-400 hover:text-white">Axe X</button>
+              <button id="btnAxisY" class="py-1 rounded font-medium text-slate-400 hover:text-white">Axe Y</button>
+            </div>
+          </div>
+
+          <!-- Mode de symétrie pour rangée 2 (si double) -->
+          <div id="symmetryGroup" class="space-y-1.5">
+            <label class="text-slate-300 font-medium block">Rangée 2 (Vis-à-vis)</label>
+            <div class="grid grid-cols-2 gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800 text-center">
+              <button id="btnSymRotate" class="py-1.5 rounded-md font-medium transition bg-slate-800 text-white" title="Conserve la chiralité / pièces identiques">
+                Rotation 180°
+              </button>
+              <button id="btnSymMirror" class="py-1.5 rounded-md font-medium transition text-slate-400 hover:text-white" title="Effet miroir">
+                Miroir
+              </button>
+            </div>
+          </div>
+
+          <!-- Espacement longitudinal -->
+          <div class="space-y-1.5 pt-2 border-t border-slate-800">
+            <div class="flex justify-between items-center">
+              <label for="rangeSpacing" class="text-slate-300 font-medium">Espacement entre pièces</label>
+              <span class="font-mono text-indigo-400 font-bold"><span id="valSpacing">25.0</span> mm</span>
+            </div>
+            <input id="rangeSpacing" type="range" min="10" max="80" step="0.5" value="25" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            <div class="flex justify-between text-[10px] text-slate-400">
+              <span>Serré</span>
+              <button id="btnAutoSpacing" class="text-indigo-400 hover:underline">Auto (Taille + 6mm)</button>
+              <span>Large</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3 : DIMENSIONS DES TIGES & RUNNERS -->
+        <div class="space-y-4 pt-4 border-t border-slate-800">
+          <h3 class="font-semibold text-slate-300 uppercase tracking-wider text-[11px] flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+            Dimensions du Sprue
+          </h3>
+
+          <!-- Longueur tige / Éloignement du rail -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <label for="rangeGateLength" class="text-slate-300 font-medium">Éloignement du rail (Tige)</label>
+              <span class="font-mono text-indigo-400 font-bold"><span id="valGateLength">5.0</span> mm</span>
+            </div>
+            <input id="rangeGateLength" type="range" min="2" max="25" step="0.5" value="5.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+          </div>
+
+          <!-- Diamètre de la tige (Gate Ø) -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <label for="rangeGateDiameter" class="text-slate-300 font-medium">Diamètre d'attache (Gate)</label>
+              <span class="font-mono text-indigo-400 font-bold"><span id="valGateDiameter">1.2</span> mm</span>
+            </div>
+            <input id="rangeGateDiameter" type="range" min="0.6" max="3.0" step="0.1" value="1.2" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            <p class="text-[10px] text-slate-400">Section sécable recommandée : 1.0 à 1.4 mm en MJF/SLS</p>
+          </div>
+
+          <!-- Diamètre du canal principal (Runner Ø) -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <label for="rangeRunnerDiameter" class="text-slate-300 font-medium">Canal central (Runner)</label>
+              <span class="font-mono text-indigo-400 font-bold"><span id="valRunnerDiameter">3.5</span> mm</span>
+            </div>
+            <input id="rangeRunnerDiameter" type="range" min="2.0" max="6.0" step="0.1" value="3.5" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+          </div>
+        </div>
+
+        <!-- SECTION 4 : OPTIONS DE VISUALISATION -->
+        <div class="pt-4 border-t border-slate-800 space-y-2">
+          <label class="flex items-center gap-2 cursor-pointer text-slate-300">
+            <input id="checkShowAllPieces" type="checkbox" checked class="w-4 h-4 rounded text-indigo-600 bg-slate-950 border-slate-700">
+            <span>Prévisualiser toutes les pièces dupliquées</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer text-slate-300">
+            <input id="checkWireframe" type="checkbox" class="w-4 h-4 rounded text-indigo-600 bg-slate-950 border-slate-700">
+            <span>Mode filaire (Wireframe)</span>
+          </label>
+        </div>
+
+      </div>
+
+      <!-- PIED DU PANNEAU (BOUTONS D'EXPORT) -->
+      <div class="p-4 bg-slate-950 border-t border-slate-800 space-y-2.5 shrink-0">
+        
+        <!-- Bouton STL Principal -->
+        <button id="btnExportSTL" disabled class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 disabled:from-slate-800 disabled:to-slate-800 disabled:text-slate-600 text-white font-bold text-sm tracking-wide shadow-lg shadow-indigo-600/20 disabled:shadow-none transition flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          <span id="btnExportText">Télécharger le STL de la grappe</span>
+        </button>
+
+        <!-- Bouton OpenSCAD secondaire -->
+        <button id="btnExportSCAD" disabled class="w-full py-2 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-slate-300 hover:text-white transition font-medium text-xs border border-slate-800 flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed">
+          <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+          Exporter script OpenSCAD (.scad)
+        </button>
+
+        <!-- Notification de statut / téléchargement -->
+        <div id="exportStatus" class="hidden text-center text-[11px] text-indigo-400 animate-pulse font-medium">
+          Génération du maillage fusionné en cours...
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- SCRIPT LOGIQUE THREE.JS & GÉOMÉTRIE COMPUTATIONNELLE -->
+  <!-- ============================================================== -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+    import { STLExporter } from 'three/addons/exporters/STLExporter.js';
+    import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
+
+    // ──────────────────────────────────────────────────────────────
+    // ÉTAT GLOBAL DE L'APPLICATION
+    // ──────────────────────────────────────────────────────────────
+    const state = {
+      rawFileName: 'piece.stl',
+      loadedGeometry: null,       // THREE.BufferGeometry originale centrée
+      originalBBox: new THREE.Box3(),
+      dimensions: new THREE.Vector3(1, 1, 1),
+      
+      // Point d'attache (Gate)
+      gatePicked: false,
+      gatePoint: new THREE.Vector3(0, 0, 0),
+      gateNormal: new THREE.Vector3(0, 1, 0),
+
+      // Paramètres Grappe
+      count: 10,
+      layout: 'double',           // 'double' | 'single'
+      runnerAxisMode: 'auto',     // 'auto' | 'x' | 'y'
+      resolvedAxis: 'x',          // 'x' | 'y'
+      symmetry: 'rotate180',      // 'rotate180' | 'mirror'
+      gateLength: 5.0,
+      gateDiameter: 1.2,
+      runnerDiameter: 3.5,
+      spacing: 25.0,
+      embedDepth: 0.35,           // Pénétration dans la pièce pour fusion étanche
+      
+      // Affichage
+      showAllPieces: true,
+      wireframe: false
+    };
+
+    // ──────────────────────────────────────────────────────────────
+    // INITIALISATION DE LA SCÈNE THREE.JS
+    // ──────────────────────────────────────────────────────────────
+    const container = document.getElementById('viewportContainer');
+    const canvas = document.getElementById('webglCanvas');
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x090d16);
+
+    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 2000);
+    camera.position.set(40, 60, 90);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.maxDistance = 1200;
+    controls.minDistance = 2;
+
+    // Éclairage studio 3 points pour inspection précise
+    const ambLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambLight);
+
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.2);
+    dirLight1.position.set(80, 140, 100);
+    scene.add(dirLight1);
+
+    const dirLight2 = new THREE.DirectionalLight(0x818cf8, 0.7);
+    dirLight2.position.set(-80, -40, -100);
+    scene.add(dirLight2);
+
+    // Grille au sol
+    const gridHelper = new THREE.GridHelper(300, 60, 0x4f46e5, 0x1e293b);
+    gridHelper.position.y = -0.01;
+    scene.add(gridHelper);
+
+    // Groupes Three.js pour organisation hiérarchique
+    const modelGroup = new THREE.Group();    // Pièce maîtresse (sélection)
+    const sprueGroup = new THREE.Group();    // Rails, tiges et clones
+    const markerGroup = new THREE.Group();   // Sphère et flèche du point d'attache
+    scene.add(modelGroup);
+    scene.add(sprueGroup);
+    scene.add(markerGroup);
+
+    // Matériaux
+    const pieceMaterial = new THREE.MeshStandardMaterial({
+      color: 0x94a3b8,          // Gris matière type MJF PA12
+      roughness: 0.45,
+      metalness: 0.1,
+      flatShading: false
+    });
+
+    const runnerMaterial = new THREE.MeshStandardMaterial({
+      color: 0x4f46e5,          // Indigo élégant pour la grappe
+      roughness: 0.35,
+      metalness: 0.2
+    });
+
+    // ──────────────────────────────────────────────────────────────
+    // GESTION DU REDIMENSIONNEMENT FENÊTRE
+    // ──────────────────────────────────────────────────────────────
+    window.addEventListener('resize', () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+
+    // ──────────────────────────────────────────────────────────────
+    // DRAG & DROP & UPLOAD FICHIER STL
+    // ──────────────────────────────────────────────────────────────
+    const dropOverlay = document.getElementById('dropOverlay');
+    const fileInput = document.getElementById('fileInput');
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      window.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropOverlay.classList.remove('hidden');
+        dropOverlay.classList.add('flex');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      window.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.target === dropOverlay || eventName === 'drop') {
+          dropOverlay.classList.add('hidden');
+          dropOverlay.classList.remove('flex');
+        }
+      });
+    });
+
+    window.addEventListener('drop', (e) => {
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        handleFile(e.target.files[0]);
+      }
+    });
+
+    function handleFile(file) {
+      if (!file.name.toLowerCase().endsWith('.stl')) {
+        alert('Veuillez fournir un fichier .STL');
+        return;
+      }
+      state.rawFileName = file.name;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        loadSTLBuffer(event.target.result);
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // CHARGEMENT ET TRAITEMENT DU STL
+    // ──────────────────────────────────────────────────────────────
+    const stlLoader = new STLLoader();
+
+    function loadSTLBuffer(buffer) {
+      // 1. Nettoyage mémoire rigoureux
+      clearSceneMeshes();
+
+      // 2. Parsing du STL
+      const geometry = stlLoader.parse(buffer);
+      if (!geometry || !geometry.attributes.position || geometry.attributes.position.count === 0) {
+        alert('Erreur: Le fichier STL semble vide ou invalide.');
+        return;
+      }
+
+      // 3. Normalisation & Centrage géométrique
+      geometry.center();
+      geometry.computeVertexNormals();
+      geometry.computeBoundingBox();
+
+      state.loadedGeometry = geometry;
+      state.originalBBox.copy(geometry.boundingBox);
+      geometry.boundingBox.getSize(state.dimensions);
+
+      // Calcul espacement par défaut automatique
+      autoComputeSpacing();
+
+      // Création du mesh principal
+      const mainMesh = new THREE.Mesh(geometry, pieceMaterial);
+      mainMesh.name = 'masterPiece';
+      modelGroup.add(mainMesh);
+
+      // Mettre à jour l'UI
+      updateStatsUI(geometry);
+      document.getElementById('emptyNotice').classList.add('hidden');
+      document.getElementById('floatingStats').classList.remove('hidden');
+      document.getElementById('btnExportSTL').disabled = false;
+      document.getElementById('btnExportSCAD').disabled = false;
+
+      // Auto-détection initiale d'un point d'attache latéral
+      autoDetectGatePoint();
+
+      // Cadrer la caméra sur le modèle
+      fitCameraToObject(geometry);
+
+      // Générer la grappe complète
+      rebuildSprue();
+    }
+
+    function clearSceneMeshes() {
+      // Nettoyage modelGroup
+      while (modelGroup.children.length > 0) {
+        const obj = modelGroup.children[0];
+        modelGroup.remove(obj);
+        if (obj.geometry && obj.geometry !== state.loadedGeometry) obj.geometry.dispose();
+      }
+      // Nettoyage sprueGroup
+      while (sprueGroup.children.length > 0) {
+        const obj = sprueGroup.children[0];
+        sprueGroup.remove(obj);
+        if (obj.geometry) obj.geometry.dispose();
+      }
+      // Nettoyage markerGroup
+      while (markerGroup.children.length > 0) {
+        const obj = markerGroup.children[0];
+        markerGroup.remove(obj);
+        if (obj.geometry) obj.geometry.dispose();
+      }
+      if (state.loadedGeometry) {
+        state.loadedGeometry.dispose();
+        state.loadedGeometry = null;
+      }
+    }
+
+    function fitCameraToObject(geom) {
+      const box = geom.boundingBox;
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const fov = camera.fov * (Math.PI / 180);
+      let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 2.2;
+      cameraZ = Math.max(cameraZ, 30);
+
+      camera.position.set(cameraZ * 0.8, cameraZ * 0.9, cameraZ);
+      camera.lookAt(0, 0, 0);
+      controls.target.set(0, 0, 0);
+      controls.update();
+    }
+
+    function updateStatsUI(geom) {
+      document.getElementById('statFileName').textContent = state.rawFileName;
+      const triCount = (geom.attributes.position.count / 3).toLocaleString();
+      document.getElementById('statTriangleCount').textContent = `${triCount} tri`;
+      document.getElementById('statDimX').textContent = state.dimensions.x.toFixed(1);
+      document.getElementById('statDimY').textContent = state.dimensions.y.toFixed(1);
+      document.getElementById('statDimZ').textContent = state.dimensions.z.toFixed(1);
+    }
+
+    function autoComputeSpacing() {
+      // Déterminer l'axe de distribution pour l'espacement
+      const dimAlongAxis = (state.resolvedAxis === 'x') ? state.dimensions.x : state.dimensions.y;
+      const suggested = Math.round((dimAlongAxis + 6.0) * 2) / 2; // Arrondi à 0.5mm
+      state.spacing = Math.max(suggested, 10.0);
+      document.getElementById('rangeSpacing').value = state.spacing;
+      document.getElementById('valSpacing').textContent = state.spacing.toFixed(1);
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // SÉLECTION DU POINT D'ATTACHEMENT (GATE PICKING)
+    // ──────────────────────────────────────────────────────────────
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    let mouseDownPos = { x: 0, y: 0 };
+
+    renderer.domElement.addEventListener('pointerdown', (e) => {
+      mouseDownPos.x = e.clientX;
+      mouseDownPos.y = e.clientY;
+    });
+
+    renderer.domElement.addEventListener('pointerup', (e) => {
+      const dx = Math.abs(e.clientX - mouseDownPos.x);
+      const dy = Math.abs(e.clientX - mouseDownPos.y);
+      // Si la souris n'a pas glissé (ce n'est pas un drag OrbitControls), c'est un clic de picking
+      if (dx < 4 && dy < 4 && state.loadedGeometry) {
+        pickGatePoint(e);
+      }
+    });
+
+    function pickGatePoint(e) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const masterMesh = modelGroup.getObjectByName('masterPiece');
+      if (!masterMesh) return;
+
+      const intersects = raycaster.intersectObject(masterMesh, false);
+      if (intersects.length > 0) {
+        const hit = intersects[0];
+        setGatePoint(hit.point, hit.face.normal);
+      }
+    }
+
+    function setGatePoint(point, normal) {
+      state.gatePicked = true;
+      state.gatePoint.copy(point);
+      state.gateNormal.copy(normal).normalize();
+
+      // UI coordinates
+      document.getElementById('gateX').textContent = state.gatePoint.x.toFixed(2);
+      document.getElementById('gateY').textContent = state.gatePoint.y.toFixed(2);
+      document.getElementById('gateZ').textContent = state.gatePoint.z.toFixed(2);
+      document.getElementById('gateBadge').textContent = 'Sélectionné';
+      document.getElementById('gateBadge').className = 'text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium';
+      document.getElementById('pickingStatusText').textContent = 'Point défini. Cliquez pour déplacer à tout moment.';
+
+      // Mise à jour visuelle du marqueur
+      updateGateMarker();
+
+      // Reconstruire la grappe avec la nouvelle attache
+      rebuildSprue();
+    }
+
+    function updateGateMarker() {
+      while (markerGroup.children.length > 0) {
+        const obj = markerGroup.children[0];
+        markerGroup.remove(obj);
+        if (obj.geometry) obj.geometry.dispose();
+      }
+
+      if (!state.gatePicked) return;
+
+      // 1. Sphère d'impact
+      const sphereGeom = new THREE.SphereGeometry(0.7, 16, 16);
+      const sphereMat = new THREE.MeshBasicMaterial({ color: 0xf43f5e }); // Rose/Rouge néon
+      const sphereMesh = new THREE.Mesh(sphereGeom, sphereMat);
+      sphereMesh.position.copy(state.gatePoint);
+      markerGroup.add(sphereMesh);
+
+      // 2. Flèche le long de la normale
+      const arrowLen = Math.max(state.gateLength, 6.0);
+      const arrowHelper = new THREE.ArrowHelper(state.gateNormal, state.gatePoint, arrowLen, 0xf59e0b, 1.4, 0.8);
+      markerGroup.add(arrowHelper);
+    }
+
+    // Auto-détecter un point d'attache latéral optimal
+    function autoDetectGatePoint() {
+      if (!state.loadedGeometry) return;
+      const box = state.originalBBox;
+      // Choisir la face Y+ ou X+
+      const targetPoint = new THREE.Vector3(0, box.max.y, 0);
+      const targetNormal = new THREE.Vector3(0, 1, 0);
+
+      // On lance un rayon depuis l'extérieur vers le centre pour trouver un point réel sur la surface
+      const rayOrigin = new THREE.Vector3(0, box.max.y + 10, 0);
+      const rayDir = new THREE.Vector3(0, -1, 0);
+      raycaster.set(rayOrigin, rayDir);
+
+      const master = modelGroup.getObjectByName('masterPiece');
+      if (master) {
+        const hits = raycaster.intersectObject(master, false);
+        if (hits.length > 0) {
+          setGatePoint(hits[0].point, hits[0].face.normal);
+          return;
+        }
+      }
+      // Fallback
+      setGatePoint(targetPoint, targetNormal);
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // MOTEUR GÉOMÉTRIQUE DE GÉNÉRATION DE LA GRAPPE (SPRUE ENGINE)
+    // ──────────────────────────────────────────────────────────────
+    function computeSprueLayout() {
+      // 1. Résolution de l'axe du rail (X ou Y)
+      if (state.runnerAxisMode === 'auto') {
+        // Le rail doit être perpendiculaire à la direction de sortie de la tige
+        // Si la normale pointe surtout en Y, le rail est le long de X.
+        // Si la normale pointe surtout en X, le rail est le long de Y.
+        if (Math.abs(state.gateNormal.y) >= Math.abs(state.gateNormal.x)) {
+          state.resolvedAxis = 'x';
+        } else {
+          state.resolvedAxis = 'y';
+        }
+      } else {
+        state.resolvedAxis = state.runnerAxisMode;
+      }
+      document.getElementById('labelAutoAxis').textContent = (state.runnerAxisMode === 'auto' ? `Auto (${state.resolvedAxis.toUpperCase()})` : state.resolvedAxis.toUpperCase());
+
+      // 2. Vecteur directeur du rail & direction de la tige
+      const uRail = (state.resolvedAxis === 'x') ? new THREE.Vector3(1, 0, 0) : new THREE.Vector3(0, 1, 0);
+      
+      // La direction de la tige doit être dans le plan perpendiculaire au rail
+      // On projette la normale sur le plan orthogonal à uRail
+      const uGate = state.gateNormal.clone().projectOnPlane(uRail);
+      if (uGate.lengthSq() < 0.001) {
+        // Si la normale était strictement colinéaire au rail, fallback perpendiculaire
+        if (state.resolvedAxis === 'x') uGate.set(0, 1, 0);
+        else uGate.set(1, 0, 0);
+      } else {
+        uGate.normalize();
+      }
+
+      // 3. Calcul du centre du rail
+      // La tige part de gatePoint dans la direction uGate sur une longueur = gateLength + runnerRadius
+      const runnerRadius = state.runnerDiameter / 2;
+      const totalGateDist = state.gateLength + runnerRadius;
+      const railCenterAtP = state.gatePoint.clone().addScaledVector(uGate, totalGateDist);
+
+      return { uRail, uGate, runnerRadius, railCenterAtP };
+    }
+
+    function rebuildSprue() {
+      // Nettoyer l'ancien sprue
+      while (sprueGroup.children.length > 0) {
+        const obj = sprueGroup.children[0];
+        sprueGroup.remove(obj);
+        if (obj.geometry) obj.geometry.dispose();
+      }
+
+      if (!state.loadedGeometry || !state.gatePicked) return;
+
+      const layoutData = computeSprueLayout();
+      const { uRail, uGate, runnerRadius, railCenterAtP } = layoutData;
+
+      const isDouble = (state.layout === 'double');
+      const totalCount = state.count;
+      const countRow1 = isDouble ? Math.ceil(totalCount / 2) : totalCount;
+      const countRow2 = isDouble ? Math.floor(totalCount / 2) : 0;
+
+      // Calcul des coordonnées longitudinales (le long de uRail)
+      const offsetsRow1 = [];
+      for (let i = 0; i < countRow1; i++) {
+        offsetsRow1.push((i - (countRow1 - 1) / 2) * state.spacing);
+      }
+      const offsetsRow2 = [];
+      for (let i = 0; i < countRow2; i++) {
+        offsetsRow2.push((i - (countRow2 - 1) / 2) * state.spacing);
+      }
+
+      // ── A. TIGES & PIÈCES RANGÉE 1 ──────────────────────────────
+      offsetsRow1.forEach((offset, idx) => {
+        // Translation de cette pièce
+        const trans = uRail.clone().multiplyScalar(offset);
+        const P_i = state.gatePoint.clone().add(trans);
+        const gateStart = P_i.clone().addScaledVector(uGate, -state.embedDepth);
+        const gateEnd = P_i.clone().addScaledVector(uGate, state.gateLength + runnerRadius);
+
+        // Tige (cylindre)
+        const gateMesh = createCylinderMesh(gateStart, gateEnd, state.gateDiameter / 2, runnerMaterial);
+        sprueGroup.add(gateMesh);
+
+        // Pièce dupliquée (sauf si idx === 0 sur le masterPiece qui est déjà affiché)
+        if (state.showAllPieces) {
+          if (idx !== Math.floor((countRow1 - 1) / 2)) {
+            const cloneMesh = new THREE.Mesh(state.loadedGeometry, pieceMaterial);
+            cloneMesh.position.copy(trans);
+            sprueGroup.add(cloneMesh);
+          }
+        }
+      });
+
+      // ── B. TIGES & PIÈCES RANGÉE 2 (Si double rangée) ───────────
+      if (isDouble) {
+        offsetsRow2.forEach((offset) => {
+          const trans = uRail.clone().multiplyScalar(offset);
+
+          // Transformation pour la rangée 2 par rapport au rail central
+          // Le rail passe par railCenterAtP
+          const mat = new THREE.Matrix4();
+          if (state.symmetry === 'rotate180') {
+            // Rotation 180° autour de l'axe du rail passant par railCenterAtP
+            mat.makeTranslation(-railCenterAtP.x, -railCenterAtP.y, -railCenterAtP.z);
+            const rot = new THREE.Matrix4().makeRotationAxis(uRail, Math.PI);
+            mat.premultiply(rot);
+            mat.premultiply(new THREE.Matrix4().makeTranslation(railCenterAtP.x, railCenterAtP.y, railCenterAtP.z));
+            mat.premultiply(new THREE.Matrix4().makeTranslation(trans.x, trans.y, trans.z));
+          } else {
+            // Symétrie miroir par rapport au plan passant par le rail et uRail
+            // Le vecteur normal au plan miroir est uGate
+            const planeNormal = uGate.clone().normalize();
+            // Réflexion matricielle
+            const I = new THREE.Matrix4();
+            const reflection = new THREE.Matrix4().set(
+              1 - 2*planeNormal.x*planeNormal.x, -2*planeNormal.x*planeNormal.y, -2*planeNormal.x*planeNormal.z, 0,
+              -2*planeNormal.y*planeNormal.x, 1 - 2*planeNormal.y*planeNormal.y, -2*planeNormal.y*planeNormal.z, 0,
+              -2*planeNormal.z*planeNormal.x, -2*planeNormal.z*planeNormal.y, 1 - 2*planeNormal.z*planeNormal.z, 0,
+              0, 0, 0, 1
+            );
+            mat.makeTranslation(-railCenterAtP.x, -railCenterAtP.y, -railCenterAtP.z);
+            mat.premultiply(reflection);
+            mat.premultiply(new THREE.Matrix4().makeTranslation(railCenterAtP.x, railCenterAtP.y, railCenterAtP.z));
+            mat.premultiply(new THREE.Matrix4().makeTranslation(trans.x, trans.y, trans.z));
+          }
+
+          // Point d'attache transformé
+          const P2 = state.gatePoint.clone().applyMatrix4(mat);
+          const gateStart2 = P2.clone().addScaledVector(uGate.clone().negate(), -state.embedDepth);
+          // Point sur le rail
+          const railPoint2 = railCenterAtP.clone().add(trans);
+
+          const gateMesh2 = createCylinderMesh(gateStart2, railPoint2, state.gateDiameter / 2, runnerMaterial);
+          sprueGroup.add(gateMesh2);
+
+          if (state.showAllPieces) {
+            const cloneMesh2 = new THREE.Mesh(state.loadedGeometry, pieceMaterial);
+            cloneMesh2.applyMatrix4(mat);
+            sprueGroup.add(cloneMesh2);
+          }
+        });
+      }
+
+      // ── C. CANAL CENTRAL (RUNNER) ───────────────────────────────
+      // Longueur totale du runner : couvre toutes les pièces + débord de 5 mm à chaque extrémité
+      const maxCount = Math.max(countRow1, countRow2);
+      const span = (maxCount - 1) * state.spacing;
+      const runnerOverhang = Math.max(state.spacing / 2, 6.0);
+      const halfTotalLen = (span / 2) + runnerOverhang;
+
+      const runnerStart = railCenterAtP.clone().addScaledVector(uRail, -halfTotalLen);
+      const runnerEnd = railCenterAtP.clone().addScaledVector(uRail, halfTotalLen);
+
+      const runnerMesh = createCylinderMesh(runnerStart, runnerEnd, runnerRadius, runnerMaterial);
+      sprueGroup.add(runnerMesh);
+
+      // Mettre à jour le wireframe si activé
+      pieceMaterial.wireframe = state.wireframe;
+      runnerMaterial.wireframe = state.wireframe;
+    }
+
+    // Helper : Création d'un cylindre reliant deux points dans l'espace 3D
+    function createCylinderMesh(p1, p2, radius, material) {
+      const geom = createCylinderGeometryBetween(p1, p2, radius);
+      return new THREE.Mesh(geom, material);
+    }
+
+    function createCylinderGeometryBetween(p1, p2, radius) {
+      const v = p2.clone().sub(p1);
+      const length = v.length();
+      const geom = new THREE.CylinderGeometry(radius, radius, length, 24);
+      // Par défaut, le cylindre est aligné avec l'axe Y et centré en 0
+      geom.translate(0, length / 2, 0);
+      
+      const q = new THREE.Quaternion();
+      q.setFromUnitVectors(new THREE.Vector3(0, 1, 0), v.clone().normalize());
+      geom.applyQuaternion(q);
+      geom.translate(p1.x, p1.y, p1.z);
+      return geom;
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // GÉNÉRATION ET EXPORT STL DIRECT (FUSION PAR BUFFERGEOMETRYUTILS)
+    // ──────────────────────────────────────────────────────────────
+    document.getElementById('btnExportSTL').addEventListener('click', () => {
+      exportMergedSTL();
+    });
+
+    async function exportMergedSTL() {
+      if (!state.loadedGeometry || !state.gatePicked) return;
+
+      const statusEl = document.getElementById('exportStatus');
+      const btnText = document.getElementById('btnExportText');
+      statusEl.classList.remove('hidden');
+      btnText.textContent = 'Fusion en cours...';
+
+      // Laisser le temps au navigateur de rafraîchir l'UI avant le calcul intensif
+      await new Promise(r => setTimeout(r, 50));
+
+      try {
+        const layoutData = computeSprueLayout();
+        const { uRail, uGate, runnerRadius, railCenterAtP } = layoutData;
+
+        const isDouble = (state.layout === 'double');
+        const totalCount = state.count;
+        const countRow1 = isDouble ? Math.ceil(totalCount / 2) : totalCount;
+        const countRow2 = isDouble ? Math.floor(totalCount / 2) : 0;
+
+        const geometriesToMerge = [];
+
+        // 1. Ajouter les pièces et tiges de la Rangée 1
+        for (let i = 0; i < countRow1; i++) {
+          const offset = (i - (countRow1 - 1) / 2) * state.spacing;
+          const trans = uRail.clone().multiplyScalar(offset);
+
+          // Géométrie de la pièce transformée
+          const pieceGeom = state.loadedGeometry.clone();
+          pieceGeom.translate(trans.x, trans.y, trans.z);
+          geometriesToMerge.push(pieceGeom);
+
+          // Géométrie de la tige
+          const P_i = state.gatePoint.clone().add(trans);
+          const gateStart = P_i.clone().addScaledVector(uGate, -state.embedDepth);
+          const gateEnd = P_i.clone().addScaledVector(uGate, state.gateLength + runnerRadius);
+          const gateGeom = createCylinderGeometryBetween(gateStart, gateEnd, state.gateDiameter / 2);
+          geometriesToMerge.push(gateGeom);
+        }
+
+        // 2. Ajouter les pièces et tiges de la Rangée 2
+        if (isDouble) {
+          for (let i = 0; i < countRow2; i++) {
+            const offset = (i - (countRow2 - 1) / 2) * state.spacing;
+            const trans = uRail.clone().multiplyScalar(offset);
+
+            const mat = new THREE.Matrix4();
+            if (state.symmetry === 'rotate180') {
+              mat.makeTranslation(-railCenterAtP.x, -railCenterAtP.y, -railCenterAtP.z);
+              mat.premultiply(new THREE.Matrix4().makeRotationAxis(uRail, Math.PI));
+              mat.premultiply(new THREE.Matrix4().makeTranslation(railCenterAtP.x, railCenterAtP.y, railCenterAtP.z));
+              mat.premultiply(new THREE.Matrix4().makeTranslation(trans.x, trans.y, trans.z));
+            } else {
+              const planeNormal = uGate.clone().normalize();
+              const reflection = new THREE.Matrix4().set(
+                1 - 2*planeNormal.x*planeNormal.x, -2*planeNormal.x*planeNormal.y, -2*planeNormal.x*planeNormal.z, 0,
+                -2*planeNormal.y*planeNormal.x, 1 - 2*planeNormal.y*planeNormal.y, -2*planeNormal.y*planeNormal.z, 0,
+                -2*planeNormal.z*planeNormal.x, -2*planeNormal.z*planeNormal.y, 1 - 2*planeNormal.z*planeNormal.z, 0,
+                0, 0, 0, 1
+              );
+              mat.makeTranslation(-railCenterAtP.x, -railCenterAtP.y, -railCenterAtP.z);
+              mat.premultiply(reflection);
+              mat.premultiply(new THREE.Matrix4().makeTranslation(railCenterAtP.x, railCenterAtP.y, railCenterAtP.z));
+              mat.premultiply(new THREE.Matrix4().makeTranslation(trans.x, trans.y, trans.z));
+            }
+
+            // Pièce
+            const pieceGeom2 = state.loadedGeometry.clone();
+            pieceGeom2.applyMatrix4(mat);
+            geometriesToMerge.push(pieceGeom2);
+
+            // Tige
+            const P2 = state.gatePoint.clone().applyMatrix4(mat);
+            const gateStart2 = P2.clone().addScaledVector(uGate.clone().negate(), -state.embedDepth);
+            const railPoint2 = railCenterAtP.clone().add(trans);
+            const gateGeom2 = createCylinderGeometryBetween(gateStart2, railPoint2, state.gateDiameter / 2);
+            geometriesToMerge.push(gateGeom2);
+          }
+        }
+
+        // 3. Ajouter le canal central (Runner)
+        const maxCount = Math.max(countRow1, countRow2);
+        const span = (maxCount - 1) * state.spacing;
+        const runnerOverhang = Math.max(state.spacing / 2, 6.0);
+        const halfTotalLen = (span / 2) + runnerOverhang;
+
+        const runnerStart = railCenterAtP.clone().addScaledVector(uRail, -halfTotalLen);
+        const runnerEnd = railCenterAtP.clone().addScaledVector(uRail, halfTotalLen);
+        const runnerGeom = createCylinderGeometryBetween(runnerStart, runnerEnd, runnerRadius);
+        geometriesToMerge.push(runnerGeom);
+
+        // 4. Fusion des géométries en un seul BufferGeometry
+        const mergedGeometry = BufferGeometryUtils.mergeGeometries(geometriesToMerge, false);
+
+        // 5. Export en STL Binaire (compact et standard)
+        const exporter = new STLExporter();
+        const outputMesh = new THREE.Mesh(mergedGeometry);
+        const binaryStlData = exporter.parse(outputMesh, { binary: true });
+
+        // Nettoyage immédiat des géométries temporaires
+        geometriesToMerge.forEach(g => g.dispose());
+        mergedGeometry.dispose();
+
+        // 6. Déclenchement du téléchargement
+        const baseName = state.rawFileName.replace(/\.[^/.]+$/, '');
+        const exportFileName = `grappe_${state.count}x_${baseName}.stl`;
+        const blob = new Blob([binaryStlData], { type: 'application/octet-stream' });
+        triggerDownload(blob, exportFileName);
+
+      } catch (err) {
+        console.error('Erreur export STL:', err);
+        alert('Erreur lors de la génération du STL: ' + err.message);
+      } finally {
+        statusEl.classList.add('hidden');
+        btnText.textContent = 'Télécharger le STL de la grappe';
+      }
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // GÉNÉRATION SCRIPT OPENSCAD (.SCAD)
+    // ──────────────────────────────────────────────────────────────
+    document.getElementById('btnExportSCAD').addEventListener('click', () => {
+      exportOpenSCADScript();
+    });
+
+    function exportOpenSCADScript() {
+      if (!state.loadedGeometry || !state.gatePicked) return;
+
+      const layoutData = computeSprueLayout();
+      const { uRail, uGate, runnerRadius, railCenterAtP } = layoutData;
+      const isDouble = (state.layout === 'double');
+      const baseName = state.rawFileName.replace(/\.[^/.]+$/, '');
+
+      const scadContent = `// ============================================================
+// GRAPPE D'IMPRESSION 3D INDUSTRIELLE (SLS / MJF)
+// Généré automatiquement par 3D Sprue Generator
+// Fichier STL source : ${state.rawFileName}
+// ============================================================
+
+// ── PARAMÈTRES ÉDITABLES ────────────────────────────────────
+stl_file        = "${state.rawFileName}";
+total_count     = ${state.count};
+spacing         = ${state.spacing.toFixed(2)};
+gate_length     = ${state.gateLength.toFixed(2)};
+gate_diameter   = ${state.gateDiameter.toFixed(2)};
+runner_diameter = ${state.runnerDiameter.toFixed(2)};
+embed_depth     = ${state.embedDepth.toFixed(2)};
+$fn             = 32;
+
+// ── CONSTANTES GÉOMÉTRIQUES CALCULÉES ───────────────────────
+gate_px = ${state.gatePoint.x.toFixed(4)};
+gate_py = ${state.gatePoint.y.toFixed(4)};
+gate_pz = ${state.gatePoint.z.toFixed(4)};
+
+ugate_x = ${uGate.x.toFixed(4)};
+ugate_y = ${uGate.y.toFixed(4)};
+ugate_z = ${uGate.z.toFixed(4)};
+
+rail_cx = ${railCenterAtP.x.toFixed(4)};
+rail_cy = ${railCenterAtP.y.toFixed(4)};
+rail_cz = ${railCenterAtP.z.toFixed(4)};
+
+is_double   = ${isDouble ? "true" : "false"};
+count_row1  = is_double ? ceil(total_count / 2) : total_count;
+count_row2  = is_double ? floor(total_count / 2) : 0;
+axis_mode   = "${state.resolvedAxis}"; // "x" ou "y"
+
+// ── MODULE TIGE D'ATTACHE (CYLINDRE ORIENTÉ) ────────────────
+module attache_cylindre(p1, p2, r) {
+    v = p2 - p1;
+    len = norm(v);
+    if (len > 0.001) {
+        translate(p1)
+        rotate([0, acos(v[2] / len), atan2(v[1], v[0]) * 180 / 3.14159265])
+        cylinder(r = r, h = len);
+    }
+}
+
+// ── ASSEMBLAGE COMPLET DE LA GRAPPE ─────────────────────────
+union() {
+    // 1. Rangée 1 : Pièces et tiges
+    for (i = [0 : count_row1 - 1]) {
+        offset = (i - (count_row1 - 1) / 2) * spacing;
+        trans = (axis_mode == "x") ? [offset, 0, 0] : [0, offset, 0];
+        
+        // Pièce STL
+        translate(trans)
+            import(stl_file);
+
+        // Tige de liaison
+        p_gate  = [gate_px + trans[0], gate_py + trans[1], gate_pz + trans[2]];
+        p_start = p_gate - [ugate_x * embed_depth, ugate_y * embed_depth, ugate_z * embed_depth];
+        p_end   = p_gate + [ugate_x * (gate_length + runner_diameter/2), ugate_y * (gate_length + runner_diameter/2), ugate_z * (gate_length + runner_diameter/2)];
+        
+        attache_cylindre(p_start, p_end, gate_diameter / 2);
+    }
+
+    // 2. Rangée 2 (si double rangée)
+    if (is_double) {
+        for (i = [0 : count_row2 - 1]) {
+            offset = (i - (count_row2 - 1) / 2) * spacing;
+            trans = (axis_mode == "x") ? [offset, 0, 0] : [0, offset, 0];
+
+            // Pièce symétrique
+            translate(trans)
+            translate([rail_cx, rail_cy, rail_cz])
+            rotate((axis_mode == "x") ? [180, 0, 0] : [0, 180, 0])
+            translate([-rail_cx, -rail_cy, -rail_cz])
+                import(stl_file);
+
+            // Tige opposée
+            p_rail = [rail_cx + trans[0], rail_cy + trans[1], rail_cz + trans[2]];
+            p_end2 = p_rail - [ugate_x * (gate_length + runner_diameter/2), ugate_y * (gate_length + runner_diameter/2), ugate_z * (gate_length + runner_diameter/2)];
+            attache_cylindre(p_rail, p_end2, gate_diameter / 2);
+        }
+    }
+
+    // 3. Canal central (Runner)
+    max_c = is_double ? max(count_row1, count_row2) : count_row1;
+    total_len = (max_c - 1) * spacing + max(spacing, 12);
+    
+    if (axis_mode == "x") {
+        translate([rail_cx - total_len / 2, rail_cy, rail_cz])
+        rotate([0, 90, 0])
+        cylinder(r = runner_diameter / 2, h = total_len);
+    } else {
+        translate([rail_cx, rail_cy - total_len / 2, rail_cz])
+        rotate([-90, 0, 0])
+        cylinder(r = runner_diameter / 2, h = total_len);
+    }
+}
+`;
+
+      const blob = new Blob([scadContent], { type: 'text/plain;charset=utf-8' });
+      triggerDownload(blob, `grappe_${state.count}x_${baseName}.scad`);
+    }
+
+    function triggerDownload(blob, filename) {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // ÉVÉNEMENTS UI & SYNCHRONISATION DES CONTRÔLES
+    // ──────────────────────────────────────────────────────────────
+    
+    // Recentrer la vue
+    document.getElementById('btnResetCamera').addEventListener('click', () => {
+      if (state.loadedGeometry) fitCameraToObject(state.loadedGeometry);
+    });
+
+    // Auto-détecter point
+    document.getElementById('btnAutoGate').addEventListener('click', () => {
+      autoDetectGatePoint();
+    });
+
+    // Quantité
+    const inputCount = document.getElementById('inputCount');
+    const rangeCount = document.getElementById('rangeCount');
+    function updateCount(val) {
+      val = Math.max(2, Math.min(50, parseInt(val) || 10));
+      if (state.layout === 'double' && val % 2 !== 0) val += 1;
+      state.count = val;
+      inputCount.value = val;
+      rangeCount.value = val;
+      rebuildSprue();
+    }
+    inputCount.addEventListener('change', (e) => updateCount(e.target.value));
+    rangeCount.addEventListener('input', (e) => updateCount(e.target.value));
+
+    // Disposition (Double / Single)
+    const btnLayoutDouble = document.getElementById('btnLayoutDouble');
+    const btnLayoutSingle = document.getElementById('btnLayoutSingle');
+    const symmetryGroup = document.getElementById('symmetryGroup');
+
+    btnLayoutDouble.addEventListener('click', () => {
+      state.layout = 'double';
+      btnLayoutDouble.className = 'py-1.5 rounded-md font-medium text-center transition bg-indigo-600 text-white shadow-sm';
+      btnLayoutSingle.className = 'py-1.5 rounded-md font-medium text-center transition text-slate-400 hover:text-white';
+      symmetryGroup.classList.remove('hidden');
+      updateCount(state.count);
+    });
+
+    btnLayoutSingle.addEventListener('click', () => {
+      state.layout = 'single';
+      btnLayoutSingle.className = 'py-1.5 rounded-md font-medium text-center transition bg-indigo-600 text-white shadow-sm';
+      btnLayoutDouble.className = 'py-1.5 rounded-md font-medium text-center transition text-slate-400 hover:text-white';
+      symmetryGroup.classList.add('hidden');
+      rebuildSprue();
+    });
+
+    // Symétrie Rangée 2
+    const btnSymRotate = document.getElementById('btnSymRotate');
+    const btnSymMirror = document.getElementById('btnSymMirror');
+    btnSymRotate.addEventListener('click', () => {
+      state.symmetry = 'rotate180';
+      btnSymRotate.className = 'py-1.5 rounded-md font-medium transition bg-slate-800 text-white';
+      btnSymMirror.className = 'py-1.5 rounded-md font-medium transition text-slate-400 hover:text-white';
+      rebuildSprue();
+    });
+    btnSymMirror.addEventListener('click', () => {
+      state.symmetry = 'mirror';
+      btnSymMirror.className = 'py-1.5 rounded-md font-medium transition bg-slate-800 text-white';
+      btnSymRotate.className = 'py-1.5 rounded-md font-medium transition text-slate-400 hover:text-white';
+      rebuildSprue();
+    });
+
+    // Axe du Rail
+    const btnAxisAuto = document.getElementById('btnAxisAuto');
+    const btnAxisX = document.getElementById('btnAxisX');
+    const btnAxisY = document.getElementById('btnAxisY');
+    function setAxisMode(mode) {
+      state.runnerAxisMode = mode;
+      [btnAxisAuto, btnAxisX, btnAxisY].forEach(b => b.className = 'py-1 rounded font-medium text-slate-400 hover:text-white');
+      if (mode === 'auto') btnAxisAuto.className = 'py-1 rounded font-medium bg-slate-800 text-white';
+      if (mode === 'x') btnAxisX.className = 'py-1 rounded font-medium bg-slate-800 text-white';
+      if (mode === 'y') btnAxisY.className = 'py-1 rounded font-medium bg-slate-800 text-white';
+      autoComputeSpacing();
+      rebuildSprue();
+    }
+    btnAxisAuto.addEventListener('click', () => setAxisMode('auto'));
+    btnAxisX.addEventListener('click', () => setAxisMode('x'));
+    btnAxisY.addEventListener('click', () => setAxisMode('y'));
+
+    // Espacement
+    const rangeSpacing = document.getElementById('rangeSpacing');
+    const valSpacing = document.getElementById('valSpacing');
+    rangeSpacing.addEventListener('input', (e) => {
+      state.spacing = parseFloat(e.target.value);
+      valSpacing.textContent = state.spacing.toFixed(1);
+      rebuildSprue();
+    });
+    document.getElementById('btnAutoSpacing').addEventListener('click', () => {
+      autoComputeSpacing();
+      rebuildSprue();
+    });
+
+    // Dimensions Tige & Runner
+    const rangeGateLength = document.getElementById('rangeGateLength');
+    const valGateLength = document.getElementById('valGateLength');
+    rangeGateLength.addEventListener('input', (e) => {
+      state.gateLength = parseFloat(e.target.value);
+      valGateLength.textContent = state.gateLength.toFixed(1);
+      updateGateMarker();
+      rebuildSprue();
+    });
+
+    const rangeGateDiameter = document.getElementById('rangeGateDiameter');
+    const valGateDiameter = document.getElementById('valGateDiameter');
+    rangeGateDiameter.addEventListener('input', (e) => {
+      state.gateDiameter = parseFloat(e.target.value);
+      valGateDiameter.textContent = state.gateDiameter.toFixed(1);
+      rebuildSprue();
+    });
+
+    const rangeRunnerDiameter = document.getElementById('rangeRunnerDiameter');
+    const valRunnerDiameter = document.getElementById('valRunnerDiameter');
+    rangeRunnerDiameter.addEventListener('input', (e) => {
+      state.runnerDiameter = parseFloat(e.target.value);
+      valRunnerDiameter.textContent = state.runnerDiameter.toFixed(1);
+      rebuildSprue();
+    });
+
+    // Options affichage
+    document.getElementById('checkShowAllPieces').addEventListener('change', (e) => {
+      state.showAllPieces = e.target.checked;
+      rebuildSprue();
+    });
+    document.getElementById('checkWireframe').addEventListener('change', (e) => {
+      state.wireframe = e.target.checked;
+      pieceMaterial.wireframe = state.wireframe;
+      runnerMaterial.wireframe = state.wireframe;
+    });
+
+    // ──────────────────────────────────────────────────────────────
+    // BOUCLE D'ANIMATION DE RENDU (60 FPS)
+    // ──────────────────────────────────────────────────────────────
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+  </script>
+</body>
+</html>
