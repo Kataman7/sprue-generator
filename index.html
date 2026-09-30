@@ -1523,12 +1523,15 @@
 
     function createCylinderGeometryBetween(p1, p2, radius) {
       const v = p2.clone().sub(p1);
-      const len = v.length();
+      const len = Math.max(v.length(), 0.05);
       const geom = new THREE.CylinderGeometry(radius, radius, len, 20);
       geom.translate(0, len / 2, 0);
 
       const q = new THREE.Quaternion();
-      q.setFromUnitVectors(new THREE.Vector3(0, 1, 0), v.clone().normalize());
+      const dir = v.clone().normalize();
+      if (dir.lengthSq() > 0.0001) {
+        q.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+      }
       geom.applyQuaternion(q);
       geom.translate(p1.x, p1.y, p1.z);
       return geom;
@@ -1635,15 +1638,32 @@
           geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(bounds.xMin, rY, bounds.zAttach), new THREE.Vector3(bounds.xMax, rY, bounds.zAttach), halfFrameD));
         });
 
-        // 4. Fusion globale
-        const mergedGeometry = BufferGeometryUtils.mergeGeometries(geomsToMerge, false);
+        // 4. Normalisation de toutes les sous-géométries (conversion non-indexée et uniformisation des attributs pour mergeGeometries)
+        const normalizedGeoms = geomsToMerge.map(g => {
+          const clean = g.index ? g.toNonIndexed() : g;
+          const finalGeom = new THREE.BufferGeometry();
+          finalGeom.setAttribute('position', clean.attributes.position.clone());
+          if (clean.attributes.normal) {
+            finalGeom.setAttribute('normal', clean.attributes.normal.clone());
+          } else {
+            finalGeom.computeVertexNormals();
+          }
+          return finalGeom;
+        });
 
-        // 5. Export binaire STL
+        // 5. Fusion globale des maillages normalisés
+        const mergedGeometry = BufferGeometryUtils.mergeGeometries(normalizedGeoms, false);
+        if (!mergedGeometry) {
+          throw new Error("Impossible de fusionner les maillages de la grappe (incompatibilité d'attributs de géométrie).");
+        }
+
+        // 6. Export binaire STL
         const exporter = new STLExporter();
         const binaryStlData = exporter.parse(new THREE.Mesh(mergedGeometry), { binary: true });
 
-        // Nettoyage mémoire
+        // Nettoyage rigoureux de la mémoire GPU / RAM
         geomsToMerge.forEach(g => g.dispose());
+        normalizedGeoms.forEach(g => g.dispose());
         mergedGeometry.dispose();
 
         // Téléchargement
