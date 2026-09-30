@@ -71,7 +71,8 @@
       user-select: none;
       transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
       box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
-      border-radius: 4px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
     .cube-face:hover {
       background: rgba(99, 102, 241, 0.9);
@@ -1556,11 +1557,12 @@ ${bounds.rowPositions.map((rp, rIdx) => `
     function updateViewCubeRotation() {
       if (!viewCubeEl) return;
       const m = camera.matrixWorldInverse.elements;
-      // Synchronisation de la rotation 3D de la caméra avec le ViewCube
+      // Conversion Three.js -> CSS 3D (avec S = diag(1, -1, 1))
+      // M_css = S * V * S -> det = +1 (pure rotation, orientation du texte naturelle)
       viewCubeEl.style.transform = `matrix3d(
-        ${m[0]}, ${-m[1]}, ${m[2]}, 0,
-        ${m[4]}, ${-m[5]}, ${m[6]}, 0,
-        ${m[8]}, ${-m[9]}, ${m[10]}, 0,
+        ${m[0].toFixed(6)}, ${(-m[1]).toFixed(6)}, ${m[2].toFixed(6)}, 0,
+        ${(-m[4]).toFixed(6)}, ${m[5].toFixed(6)}, ${(-m[6]).toFixed(6)}, 0,
+        ${m[8].toFixed(6)}, ${(-m[9]).toFixed(6)}, ${m[10].toFixed(6)}, 0,
         0, 0, 0, 1
       )`;
     }
