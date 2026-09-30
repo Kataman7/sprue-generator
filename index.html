@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Sprue Generator — Grappes d'impression 3D (SLS / MJF)</title>
+  <title>3D Sprue & Frame Generator — Grappe Industrielle (SLS / MJF)</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -24,7 +24,6 @@
     }
   </script>
   <style>
-    /* Custom Scrollbars */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -41,6 +40,9 @@
     }
     input[type=range] {
       accent-color: #6366f1;
+    }
+    .crosshair-cursor {
+      cursor: crosshair !important;
     }
   </style>
 
@@ -68,22 +70,35 @@
       </div>
       <div>
         <h1 class="text-sm font-bold tracking-tight text-white flex items-center gap-2">
-          3D Sprue Generator
-          <span class="text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">SLS / MJF</span>
+          3D Sprue & Frame Generator
+          <span class="text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Cage MJF / SLS</span>
         </h1>
-        <p class="text-[11px] text-slate-400">Générateur industriel de grappes STL avec attache sécable</p>
+        <p class="text-[11px] text-slate-400">Double attache & cage protectrice industrielle pour pièces 3D</p>
       </div>
     </div>
 
-    <!-- Actions globales -->
+    <!-- Actions globales & Toggles de vue -->
     <div class="flex items-center space-x-3 text-xs">
+      <!-- Toggle Mode de Vue -->
+      <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800">
+        <button id="btnViewFocus" class="px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+          Pièce seule (Focus)
+        </button>
+        <button id="btnViewSprue" class="px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm transition flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          Grappe complète
+        </button>
+      </div>
+
       <button id="btnResetCamera" title="Recentrer la caméra" class="px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition flex items-center gap-1.5 border border-slate-700">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-        Vue centrée
+        Centrer
       </button>
+
       <label class="px-3 py-1.5 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white font-medium cursor-pointer transition flex items-center gap-1.5 shadow-sm shadow-indigo-600/30">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-        <span>Importer STL</span>
+        <span>Changer STL</span>
         <input type="file" id="fileInput" accept=".stl" class="hidden">
       </label>
     </div>
@@ -95,7 +110,7 @@
   <div class="flex-1 flex overflow-hidden relative">
 
     <!-- 1. ZONE 3D VIEWPORT -->
-    <div id="viewportContainer" class="flex-1 h-full relative bg-radial from-slate-900 to-slate-950 overflow-hidden">
+    <div id="viewportContainer" class="flex-1 h-full relative bg-radial from-slate-900 to-slate-950 overflow-hidden crosshair-cursor">
       <canvas id="webglCanvas" class="w-full h-full block"></canvas>
 
       <!-- Overlay Drag & Drop -->
@@ -104,7 +119,7 @@
           <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
         </div>
         <p class="text-base font-semibold text-white">Déposez votre fichier .STL ici</p>
-        <p class="text-xs text-indigo-300 mt-1">Le fichier sera analysé 100% localement dans votre navigateur</p>
+        <p class="text-xs text-indigo-300 mt-1">Traitement 100% local dans le navigateur</p>
       </div>
 
       <!-- Message initial d'attente (vide) -->
@@ -113,35 +128,35 @@
           <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
         </div>
         <h2 class="text-base font-medium text-slate-200">Aucun modèle 3D chargé</h2>
-        <p class="text-xs text-slate-400 mt-1 max-w-sm">Glissez-déposez un fichier STL individuel dans cette zone ou utilisez le bouton "Importer STL".</p>
+        <p class="text-xs text-slate-400 mt-1 max-w-sm">Glissez-déposez un fichier STL dans cette zone ou utilisez le bouton "Changer STL".</p>
       </div>
 
-      <!-- Badge Info Flottant (Dimensions & Statut) -->
+      <!-- Badge Info Dimensions -->
       <div id="floatingStats" class="absolute top-4 left-4 z-10 bg-slate-900/85 backdrop-blur border border-slate-800 rounded-lg p-3 text-xs shadow-xl hidden space-y-1.5 min-w-[200px]">
         <div class="flex items-center justify-between border-b border-slate-800 pb-1.5 mb-1.5">
-          <span class="font-semibold text-slate-300" id="statFileName">piece.stl</span>
+          <span class="font-semibold text-slate-300 truncate max-w-[120px]" id="statFileName">piece.stl</span>
           <span class="text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20" id="statTriangleCount">0 tri</span>
         </div>
-        <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="grid grid-cols-3 gap-2 text-center font-mono">
           <div class="bg-slate-950/60 p-1.5 rounded">
-            <span class="text-[10px] text-slate-400 block">X</span>
-            <span class="font-mono text-slate-200 font-bold" id="statDimX">0.0</span> <span class="text-[9px] text-slate-400">mm</span>
+            <span class="text-[10px] text-slate-400 block font-sans">X</span>
+            <span class="text-slate-200 font-bold" id="statDimX">0.0</span> <span class="text-[9px] text-slate-400">mm</span>
           </div>
           <div class="bg-slate-950/60 p-1.5 rounded">
-            <span class="text-[10px] text-slate-400 block">Y</span>
-            <span class="font-mono text-slate-200 font-bold" id="statDimY">0.0</span> <span class="text-[9px] text-slate-400">mm</span>
+            <span class="text-[10px] text-slate-400 block font-sans">Y</span>
+            <span class="text-slate-200 font-bold" id="statDimY">0.0</span> <span class="text-[9px] text-slate-400">mm</span>
           </div>
           <div class="bg-slate-950/60 p-1.5 rounded">
-            <span class="text-[10px] text-slate-400 block">Z</span>
-            <span class="font-mono text-slate-200 font-bold" id="statDimZ">0.0</span> <span class="text-[9px] text-slate-400">mm</span>
+            <span class="text-[10px] text-slate-400 block font-sans">Z</span>
+            <span class="text-slate-200 font-bold" id="statDimZ">0.0</span> <span class="text-[9px] text-slate-400">mm</span>
           </div>
         </div>
       </div>
 
       <!-- Barre d'aide / picking en bas du canvas -->
       <div id="pickingNotice" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-slate-900/90 backdrop-blur border border-slate-700/80 rounded-full px-4 py-2 text-xs shadow-xl flex items-center gap-2.5 text-slate-300">
-        <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
-        <span><strong>Point d'attache :</strong> <span id="pickingStatusText">Cliquez sur une surface du modèle pour placer la tige</span></span>
+        <span id="pickingPulseDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span id="pickingStatusText">Cliquez sur le modèle pour placer le point d'attache</span>
       </div>
     </div>
 
@@ -149,52 +164,137 @@
     <aside class="w-96 h-full bg-slate-900 border-l border-slate-800 flex flex-col z-20 shrink-0">
       
       <!-- Contenu défilable -->
-      <div class="flex-1 overflow-y-auto p-5 space-y-6 text-xs">
+      <div class="flex-1 overflow-y-auto p-5 space-y-5 text-xs">
 
-        <!-- SECTION 1 : POINT D'ATTACHEMENT (GATE) -->
-        <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800/80 space-y-3">
+        <!-- SECTION 1 : DOUBLE POINTS D'ATTACHE (INTÉRIEUR + EXTÉRIEUR) -->
+        <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800 space-y-3">
           <div class="flex items-center justify-between">
             <span class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-              Point de contact (Gate)
+              <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+              2 Points d'Attache par Pièce
             </span>
-            <span id="gateBadge" class="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">Non défini</span>
+            <span class="text-[10px] text-indigo-400 font-semibold bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">Double support</span>
           </div>
-          
-          <div class="grid grid-cols-3 gap-2 font-mono text-[11px] text-slate-300">
-            <div class="bg-slate-900 p-2 rounded border border-slate-800 text-center">
-              <span class="text-[10px] text-slate-400 block font-sans">Px</span>
-              <span id="gateX">0.0</span>
+          <p class="text-[11px] text-slate-400">Chaque touche est tenue des deux côtés opposés (vers le rail central et vers le cadre extérieur).</p>
+
+          <!-- Sélecteur du point actif pour le clic -->
+          <div class="grid grid-cols-2 gap-2 bg-slate-900 p-1 rounded-lg border border-slate-800">
+            <button id="btnSelectGate1" class="py-1.5 px-2 rounded-md font-medium text-center transition bg-emerald-600 text-white flex items-center justify-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-white"></span>
+              <span>1. Intérieur (Rail)</span>
+            </button>
+            <button id="btnSelectGate2" class="py-1.5 px-2 rounded-md font-medium text-center transition text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+              <span>2. Extérieur (Cadre)</span>
+            </button>
+          </div>
+
+          <!-- Coordonnées Point 1 -->
+          <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80 space-y-1">
+            <div class="flex justify-between text-[11px]">
+              <span class="font-semibold text-emerald-400 flex items-center gap-1">● Attache 1 (Intérieure) :</span>
+              <span id="statusGate1" class="text-slate-400 font-mono text-[10px]">Non définie</span>
             </div>
-            <div class="bg-slate-900 p-2 rounded border border-slate-800 text-center">
-              <span class="text-[10px] text-slate-400 block font-sans">Py</span>
-              <span id="gateY">0.0</span>
-            </div>
-            <div class="bg-slate-900 p-2 rounded border border-slate-800 text-center">
-              <span class="text-[10px] text-slate-400 block font-sans">Pz</span>
-              <span id="gateZ">0.0</span>
+            <div class="grid grid-cols-3 gap-1.5 font-mono text-[10px] text-slate-300 text-center">
+              <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400">X:</span> <span id="valG1X">0.0</span></div>
+              <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400">Y:</span> <span id="valG1Y">0.0</span></div>
+              <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400">Z:</span> <span id="valG1Z">0.0</span></div>
             </div>
           </div>
 
-          <div class="flex gap-2 pt-1">
-            <button id="btnAutoGate" class="flex-1 py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition font-medium border border-slate-700 flex items-center justify-center gap-1.5">
-              <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-              Auto-détecter latéral
-            </button>
+          <!-- Coordonnées Point 2 -->
+          <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80 space-y-1">
+            <div class="flex justify-between text-[11px]">
+              <span class="font-semibold text-rose-400 flex items-center gap-1">● Attache 2 (Extérieure) :</span>
+              <span id="statusGate2" class="text-slate-400 font-mono text-[10px]">Non définie</span>
+            </div>
+            <div class="grid grid-cols-3 gap-1.5 font-mono text-[10px] text-slate-300 text-center">
+              <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400">X:</span> <span id="valG2X">0.0</span></div>
+              <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400">Y:</span> <span id="valG2Y">0.0</span></div>
+              <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400">Z:</span> <span id="valG2Z">0.0</span></div>
+            </div>
+          </div>
+
+          <!-- Bouton détection automatique du point opposé -->
+          <button id="btnAutoOpposite" class="w-full py-2 px-3 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 font-medium transition border border-indigo-500/30 flex items-center justify-center gap-2">
+            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+            Auto-détecter les 2 points opposés
+          </button>
+        </div>
+
+        <!-- SECTION 2 : CAGE DE PROTECTION EXTÉRIEURE -->
+        <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+              Cage de Protection (JLCPCB)
+            </span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="checkEnableFrame" checked class="sr-only peer">
+              <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+            </label>
+          </div>
+          <p class="text-[11px] text-slate-400">Cadre rectangulaire complet autour des pièces pour éviter la casse lors du sablage/nettoyage.</p>
+
+          <div id="frameSettingsContainer" class="space-y-3 pt-2">
+            <!-- Marge pièces <-> cadre -->
+            <div class="space-y-1">
+              <div class="flex justify-between items-center">
+                <label for="rangeFrameMargin" class="text-slate-300 font-medium">Marge de protection (vide)</label>
+                <span class="font-mono text-indigo-400 font-bold"><span id="valFrameMargin">6.0</span> mm</span>
+              </div>
+              <input id="rangeFrameMargin" type="range" min="3" max="15" step="0.5" value="6.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            </div>
+
+            <!-- Diamètre du cadre extérieur -->
+            <div class="space-y-1">
+              <div class="flex justify-between items-center">
+                <label for="rangeFrameWidth" class="text-slate-300 font-medium">Épaisseur du cadre & rail (Ø)</label>
+                <span class="font-mono text-indigo-400 font-bold"><span id="valFrameWidth">3.0</span> mm</span>
+              </div>
+              <input id="rangeFrameWidth" type="range" min="2.0" max="5.0" step="0.2" value="3.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            </div>
           </div>
         </div>
 
-        <!-- SECTION 2 : CONFIGURATION DE LA GRAPPE -->
-        <div class="space-y-4">
+        <!-- SECTION 3 : ATTACHES & COLS DE RUPTURE -->
+        <div class="space-y-3 pt-2 border-t border-slate-800">
+          <h3 class="font-semibold text-slate-300 uppercase tracking-wider text-[11px] flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+            Cols de Rupture (Attaches Séparables)
+          </h3>
+
+          <!-- Diamètre col fin de rupture -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center">
+              <label for="rangeNeckDiameter" class="text-slate-300 font-medium">Col fin sécable (contact touche)</label>
+              <span class="font-mono text-rose-400 font-bold">Ø <span id="valNeckDiameter">1.2</span> mm</span>
+            </div>
+            <input id="rangeNeckDiameter" type="range" min="0.8" max="2.0" step="0.1" value="1.2" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            <p class="text-[10px] text-slate-400">Zone de casse facile sans abîmer la pièce (longueur 1.0 mm).</p>
+          </div>
+
+          <!-- Diamètre corps de l'attache -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center">
+              <label for="rangeBodyDiameter" class="text-slate-300 font-medium">Corps de l'attache (côté cadre)</label>
+              <span class="font-mono text-indigo-400 font-bold">Ø <span id="valBodyDiameter">2.8</span> mm</span>
+            </div>
+            <input id="rangeBodyDiameter" type="range" min="1.5" max="4.0" step="0.1" value="2.8" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+          </div>
+        </div>
+
+        <!-- SECTION 4 : AGENCEMENT & QUANTITÉ -->
+        <div class="space-y-3 pt-3 border-t border-slate-800">
           <h3 class="font-semibold text-slate-300 uppercase tracking-wider text-[11px] flex items-center gap-2">
             <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            Agencement de la Grappe
+            Grille & Disposition
           </h3>
 
           <!-- Quantité de pièces -->
-          <div class="space-y-1.5">
+          <div class="space-y-1">
             <div class="flex justify-between items-center">
-              <label for="inputCount" class="text-slate-300 font-medium">Nombre de pièces</label>
+              <label for="inputCount" class="text-slate-300 font-medium">Nombre total de pièces</label>
               <div class="flex items-center gap-1 font-mono">
                 <input id="inputCount" type="number" min="2" max="50" step="2" value="10" class="w-14 bg-slate-950 border border-slate-800 rounded px-2 py-0.5 text-right text-indigo-400 font-bold focus:border-indigo-500 focus:outline-none">
                 <span class="text-slate-400">pcs</span>
@@ -203,106 +303,32 @@
             <input id="rangeCount" type="range" min="2" max="50" step="2" value="10" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
           </div>
 
-          <!-- Disposition (Double rangée / Simple rangée) -->
-          <div class="space-y-1.5">
-            <label class="text-slate-300 font-medium block">Disposition</label>
+          <!-- Configuration Grille (Double 2x5 ou Simple 1x10) -->
+          <div class="space-y-1">
+            <label class="text-slate-300 font-medium block">Configuration de la cage</label>
             <div class="grid grid-cols-2 gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800">
               <button id="btnLayoutDouble" class="py-1.5 rounded-md font-medium text-center transition bg-indigo-600 text-white shadow-sm">
-                Double (2×5)
+                2 rangées (2×5)
               </button>
               <button id="btnLayoutSingle" class="py-1.5 rounded-md font-medium text-center transition text-slate-400 hover:text-white">
-                Simple (1×10)
+                1 rangée (1×10)
               </button>
             </div>
           </div>
 
-          <!-- Orientation du Rail -->
-          <div class="space-y-1.5">
+          <!-- Espacement entre pièces -->
+          <div class="space-y-1 pt-1">
             <div class="flex justify-between items-center">
-              <label class="text-slate-300 font-medium">Axe du rail principal</label>
-              <span id="labelAutoAxis" class="text-[10px] text-indigo-400 font-mono">Auto</span>
+              <label for="rangeSpacing" class="text-slate-300 font-medium">Espacement centre-à-centre</label>
+              <span class="font-mono text-indigo-400 font-bold"><span id="valSpacing">22.0</span> mm</span>
             </div>
-            <div class="grid grid-cols-3 gap-1.5 bg-slate-950 p-1 rounded-lg border border-slate-800 text-center">
-              <button id="btnAxisAuto" class="py-1 rounded font-medium bg-slate-800 text-white">Auto</button>
-              <button id="btnAxisX" class="py-1 rounded font-medium text-slate-400 hover:text-white">Axe X</button>
-              <button id="btnAxisY" class="py-1 rounded font-medium text-slate-400 hover:text-white">Axe Y</button>
-            </div>
-          </div>
-
-          <!-- Mode de symétrie pour rangée 2 (si double) -->
-          <div id="symmetryGroup" class="space-y-1.5">
-            <label class="text-slate-300 font-medium block">Rangée 2 (Vis-à-vis)</label>
-            <div class="grid grid-cols-2 gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800 text-center">
-              <button id="btnSymRotate" class="py-1.5 rounded-md font-medium transition bg-slate-800 text-white" title="Conserve la chiralité / pièces identiques">
-                Rotation 180°
-              </button>
-              <button id="btnSymMirror" class="py-1.5 rounded-md font-medium transition text-slate-400 hover:text-white" title="Effet miroir">
-                Miroir
-              </button>
-            </div>
-          </div>
-
-          <!-- Espacement longitudinal -->
-          <div class="space-y-1.5 pt-2 border-t border-slate-800">
-            <div class="flex justify-between items-center">
-              <label for="rangeSpacing" class="text-slate-300 font-medium">Espacement entre pièces</label>
-              <span class="font-mono text-indigo-400 font-bold"><span id="valSpacing">25.0</span> mm</span>
-            </div>
-            <input id="rangeSpacing" type="range" min="10" max="80" step="0.5" value="25" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            <input id="rangeSpacing" type="range" min="12" max="80" step="0.5" value="22" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
             <div class="flex justify-between text-[10px] text-slate-400">
               <span>Serré</span>
               <button id="btnAutoSpacing" class="text-indigo-400 hover:underline">Auto (Taille + 6mm)</button>
               <span>Large</span>
             </div>
           </div>
-        </div>
-
-        <!-- SECTION 3 : DIMENSIONS DES TIGES & RUNNERS -->
-        <div class="space-y-4 pt-4 border-t border-slate-800">
-          <h3 class="font-semibold text-slate-300 uppercase tracking-wider text-[11px] flex items-center gap-2">
-            <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-            Dimensions du Sprue
-          </h3>
-
-          <!-- Longueur tige / Éloignement du rail -->
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center">
-              <label for="rangeGateLength" class="text-slate-300 font-medium">Éloignement du rail (Tige)</label>
-              <span class="font-mono text-indigo-400 font-bold"><span id="valGateLength">5.0</span> mm</span>
-            </div>
-            <input id="rangeGateLength" type="range" min="2" max="25" step="0.5" value="5.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-          </div>
-
-          <!-- Diamètre de la tige (Gate Ø) -->
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center">
-              <label for="rangeGateDiameter" class="text-slate-300 font-medium">Diamètre d'attache (Gate)</label>
-              <span class="font-mono text-indigo-400 font-bold"><span id="valGateDiameter">1.2</span> mm</span>
-            </div>
-            <input id="rangeGateDiameter" type="range" min="0.6" max="3.0" step="0.1" value="1.2" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-            <p class="text-[10px] text-slate-400">Section sécable recommandée : 1.0 à 1.4 mm en MJF/SLS</p>
-          </div>
-
-          <!-- Diamètre du canal principal (Runner Ø) -->
-          <div class="space-y-1.5">
-            <div class="flex justify-between items-center">
-              <label for="rangeRunnerDiameter" class="text-slate-300 font-medium">Canal central (Runner)</label>
-              <span class="font-mono text-indigo-400 font-bold"><span id="valRunnerDiameter">3.5</span> mm</span>
-            </div>
-            <input id="rangeRunnerDiameter" type="range" min="2.0" max="6.0" step="0.1" value="3.5" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-          </div>
-        </div>
-
-        <!-- SECTION 4 : OPTIONS DE VISUALISATION -->
-        <div class="pt-4 border-t border-slate-800 space-y-2">
-          <label class="flex items-center gap-2 cursor-pointer text-slate-300">
-            <input id="checkShowAllPieces" type="checkbox" checked class="w-4 h-4 rounded text-indigo-600 bg-slate-950 border-slate-700">
-            <span>Prévisualiser toutes les pièces dupliquées</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer text-slate-300">
-            <input id="checkWireframe" type="checkbox" class="w-4 h-4 rounded text-indigo-600 bg-slate-950 border-slate-700">
-            <span>Mode filaire (Wireframe)</span>
-          </label>
         </div>
 
       </div>
@@ -322,9 +348,8 @@
           Exporter script OpenSCAD (.scad)
         </button>
 
-        <!-- Notification de statut / téléchargement -->
         <div id="exportStatus" class="hidden text-center text-[11px] text-indigo-400 animate-pulse font-medium">
-          Génération du maillage fusionné en cours...
+          Génération du maillage STL fusionné...
         </div>
       </div>
 
@@ -332,7 +357,7 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- SCRIPT LOGIQUE THREE.JS & GÉOMÉTRIE COMPUTATIONNELLE -->
+  <!-- SCRIPT THREE.JS & GÉOMÉTRIE DE LA CAGE DE PROTECTION -->
   <!-- ============================================================== -->
   <script type="module">
     import * as THREE from 'three';
@@ -342,38 +367,44 @@
     import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
 
     // ──────────────────────────────────────────────────────────────
-    // ÉTAT GLOBAL DE L'APPLICATION
+    // ÉTAT GLOBAL
     // ──────────────────────────────────────────────────────────────
     const state = {
       rawFileName: 'piece.stl',
-      loadedGeometry: null,       // THREE.BufferGeometry originale centrée
+      loadedGeometry: null,
       originalBBox: new THREE.Box3(),
       dimensions: new THREE.Vector3(1, 1, 1),
       
-      // Point d'attache (Gate)
-      gatePicked: false,
-      gatePoint: new THREE.Vector3(0, 0, 0),
-      gateNormal: new THREE.Vector3(0, 1, 0),
+      // Mode de vue : 'sprue' (grappe complète) | 'focus' (pièce seule)
+      viewMode: 'sprue',
 
-      // Paramètres Grappe
+      // 2 Points d'attache par pièce
+      activeGateSlot: 1, // 1: intérieur (rail), 2: extérieur (cadre)
+      gate1Picked: false,
+      gate1Point: new THREE.Vector3(0, 0, 0),
+      gate1Normal: new THREE.Vector3(0, 1, 0),
+
+      gate2Picked: false,
+      gate2Point: new THREE.Vector3(0, 0, 0),
+      gate2Normal: new THREE.Vector3(0, -1, 0),
+
+      // Paramètres Cage & Support
+      enableFrame: true,
+      frameWidth: 3.0,          // Ø du cadre rectangulaire et du rail central
+      frameMargin: 6.0,         // Espace libre entre le bord de la pièce et le cadre
+      neckDiameter: 1.2,        // Ø du col fin de rupture (au contact de la pièce)
+      neckLength: 1.0,          // Longueur du col fin
+      bodyDiameter: 2.8,        // Ø du corps de l'attache côté cadre
+      embedDepth: 0.35,         // Pénétration dans la pièce pour fusion CSG étanche
+
+      // Grille
       count: 10,
-      layout: 'double',           // 'double' | 'single'
-      runnerAxisMode: 'auto',     // 'auto' | 'x' | 'y'
-      resolvedAxis: 'x',          // 'x' | 'y'
-      symmetry: 'rotate180',      // 'rotate180' | 'mirror'
-      gateLength: 5.0,
-      gateDiameter: 1.2,
-      runnerDiameter: 3.5,
-      spacing: 25.0,
-      embedDepth: 0.35,           // Pénétration dans la pièce pour fusion étanche
-      
-      // Affichage
-      showAllPieces: true,
-      wireframe: false
+      layout: 'double',         // 'double' (2 rangées) | 'single' (1 rangée)
+      spacing: 22.0             // Espacement centre-à-centre le long du rail
     };
 
     // ──────────────────────────────────────────────────────────────
-    // INITIALISATION DE LA SCÈNE THREE.JS
+    // INITIALISATION THREE.JS
     // ──────────────────────────────────────────────────────────────
     const container = document.getElementById('viewportContainer');
     const canvas = document.getElementById('webglCanvas');
@@ -382,62 +413,72 @@
     scene.background = new THREE.Color(0x090d16);
 
     const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 2000);
-    camera.position.set(40, 60, 90);
+    camera.position.set(40, 70, 90);
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
+    renderer.toneMappingExposure = 1.15;
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.maxDistance = 1200;
+    controls.maxDistance = 1400;
     controls.minDistance = 2;
 
-    // Éclairage studio 3 points pour inspection précise
-    const ambLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambLight);
+    // Lumières
+    scene.add(new THREE.AmbientLight(0xffffff, 0.65));
+    const dir1 = new THREE.DirectionalLight(0xffffff, 1.3);
+    dir1.position.set(100, 160, 100);
+    scene.add(dir1);
+    const dir2 = new THREE.DirectionalLight(0x818cf8, 0.7);
+    dir2.position.set(-100, -50, -100);
+    scene.add(dir2);
 
-    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.2);
-    dirLight1.position.set(80, 140, 100);
-    scene.add(dirLight1);
-
-    const dirLight2 = new THREE.DirectionalLight(0x818cf8, 0.7);
-    dirLight2.position.set(-80, -40, -100);
-    scene.add(dirLight2);
-
-    // Grille au sol
+    // Grille de référence sol
     const gridHelper = new THREE.GridHelper(300, 60, 0x4f46e5, 0x1e293b);
     gridHelper.position.y = -0.01;
     scene.add(gridHelper);
 
-    // Groupes Three.js pour organisation hiérarchique
-    const modelGroup = new THREE.Group();    // Pièce maîtresse (sélection)
-    const sprueGroup = new THREE.Group();    // Rails, tiges et clones
-    const markerGroup = new THREE.Group();   // Sphère et flèche du point d'attache
-    scene.add(modelGroup);
+    // Groupes hiérarchiques
+    const focusGroup = new THREE.Group();    // Visible en mode 'focus'
+    const sprueGroup = new THREE.Group();    // Visible en mode 'sprue'
+    const markersGroup = new THREE.Group();  // Marqueurs des 2 attaches
+    const hoverMarker = new THREE.Group();   // Curseur interactif au survol
+    scene.add(focusGroup);
     scene.add(sprueGroup);
-    scene.add(markerGroup);
+    scene.add(markersGroup);
+    scene.add(hoverMarker);
 
-    // Matériaux
+    // Curseur hover
+    const hoverSphere = new THREE.Mesh(
+      new THREE.SphereGeometry(0.7, 16, 16),
+      new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true })
+    );
+    hoverMarker.add(hoverSphere);
+    hoverMarker.visible = false;
+
+    // Matériaux d'affichage
     const pieceMaterial = new THREE.MeshStandardMaterial({
-      color: 0x94a3b8,          // Gris matière type MJF PA12
+      color: 0x94a3b8, // Gris matière MJF PA12
       roughness: 0.45,
-      metalness: 0.1,
-      flatShading: false
+      metalness: 0.1
     });
 
-    const runnerMaterial = new THREE.MeshStandardMaterial({
-      color: 0x4f46e5,          // Indigo élégant pour la grappe
+    const frameMaterial = new THREE.MeshStandardMaterial({
+      color: 0x4f46e5, // Indigo pour le cadre et rails
       roughness: 0.35,
       metalness: 0.2
     });
 
-    // ──────────────────────────────────────────────────────────────
-    // GESTION DU REDIMENSIONNEMENT FENÊTRE
-    // ──────────────────────────────────────────────────────────────
+    const tabMaterial = new THREE.MeshStandardMaterial({
+      color: 0x6366f1, // Attaches
+      roughness: 0.4,
+      metalness: 0.15
+    });
+
+    // Redimensionnement
     window.addEventListener('resize', () => {
       camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix();
@@ -445,13 +486,13 @@
     });
 
     // ──────────────────────────────────────────────────────────────
-    // DRAG & DROP & UPLOAD FICHIER STL
+    // DRAG & DROP & CHARGEMENT FICHIER STL
     // ──────────────────────────────────────────────────────────────
     const dropOverlay = document.getElementById('dropOverlay');
     const fileInput = document.getElementById('fileInput');
 
-    ['dragenter', 'dragover'].forEach(eventName => {
-      window.addEventListener(eventName, (e) => {
+    ['dragenter', 'dragover'].forEach(name => {
+      window.addEventListener(name, (e) => {
         e.preventDefault();
         e.stopPropagation();
         dropOverlay.classList.remove('hidden');
@@ -459,11 +500,11 @@
       });
     });
 
-    ['dragleave', 'drop'].forEach(eventName => {
-      window.addEventListener(eventName, (e) => {
+    ['dragleave', 'drop'].forEach(name => {
+      window.addEventListener(name, (e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (e.target === dropOverlay || eventName === 'drop') {
+        if (e.target === dropOverlay || name === 'drop') {
           dropOverlay.classList.add('hidden');
           dropOverlay.classList.remove('flex');
         }
@@ -484,7 +525,7 @@
 
     function handleFile(file) {
       if (!file.name.toLowerCase().endsWith('.stl')) {
-        alert('Veuillez fournir un fichier .STL');
+        alert('Veuillez fournir un fichier STL');
         return;
       }
       state.rawFileName = file.name;
@@ -495,23 +536,18 @@
       reader.readAsArrayBuffer(file);
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // CHARGEMENT ET TRAITEMENT DU STL
-    // ──────────────────────────────────────────────────────────────
     const stlLoader = new STLLoader();
 
     function loadSTLBuffer(buffer) {
-      // 1. Nettoyage mémoire rigoureux
       clearSceneMeshes();
 
-      // 2. Parsing du STL
       const geometry = stlLoader.parse(buffer);
       if (!geometry || !geometry.attributes.position || geometry.attributes.position.count === 0) {
-        alert('Erreur: Le fichier STL semble vide ou invalide.');
+        alert('Erreur: Fichier STL invalide ou vide.');
         return;
       }
 
-      // 3. Normalisation & Centrage géométrique
+      // Centrage de la géométrie
       geometry.center();
       geometry.computeVertexNormals();
       geometry.computeBoundingBox();
@@ -520,48 +556,46 @@
       state.originalBBox.copy(geometry.boundingBox);
       geometry.boundingBox.getSize(state.dimensions);
 
-      // Calcul espacement par défaut automatique
-      autoComputeSpacing();
+      // Création du mesh de focus (au centre)
+      const focusMesh = new THREE.Mesh(geometry, pieceMaterial);
+      focusMesh.name = 'focusPiece';
+      focusGroup.add(focusMesh);
 
-      // Création du mesh principal
-      const mainMesh = new THREE.Mesh(geometry, pieceMaterial);
-      mainMesh.name = 'masterPiece';
-      modelGroup.add(mainMesh);
+      // Calcul espacement automatique adapté
+      const suggestedSpacing = Math.round((Math.max(state.dimensions.x, state.dimensions.y) + 6.0) * 2) / 2;
+      state.spacing = Math.max(suggestedSpacing, 14.0);
+      document.getElementById('rangeSpacing').value = state.spacing;
+      document.getElementById('valSpacing').textContent = state.spacing.toFixed(1);
 
-      // Mettre à jour l'UI
+      // Détecter automatiquement 2 points opposés idéaux
+      autoDetectOppositeGates();
+
+      // UI
       updateStatsUI(geometry);
       document.getElementById('emptyNotice').classList.add('hidden');
       document.getElementById('floatingStats').classList.remove('hidden');
       document.getElementById('btnExportSTL').disabled = false;
       document.getElementById('btnExportSCAD').disabled = false;
 
-      // Auto-détection initiale d'un point d'attache latéral
-      autoDetectGatePoint();
-
-      // Cadrer la caméra sur le modèle
+      // Cadrer caméra et reconstruire la grappe
       fitCameraToObject(geometry);
-
-      // Générer la grappe complète
       rebuildSprue();
     }
 
     function clearSceneMeshes() {
-      // Nettoyage modelGroup
-      while (modelGroup.children.length > 0) {
-        const obj = modelGroup.children[0];
-        modelGroup.remove(obj);
+      while (focusGroup.children.length > 0) {
+        const obj = focusGroup.children[0];
+        focusGroup.remove(obj);
         if (obj.geometry && obj.geometry !== state.loadedGeometry) obj.geometry.dispose();
       }
-      // Nettoyage sprueGroup
       while (sprueGroup.children.length > 0) {
         const obj = sprueGroup.children[0];
         sprueGroup.remove(obj);
         if (obj.geometry) obj.geometry.dispose();
       }
-      // Nettoyage markerGroup
-      while (markerGroup.children.length > 0) {
-        const obj = markerGroup.children[0];
-        markerGroup.remove(obj);
+      while (markersGroup.children.length > 0) {
+        const obj = markersGroup.children[0];
+        markersGroup.remove(obj);
         if (obj.geometry) obj.geometry.dispose();
       }
       if (state.loadedGeometry) {
@@ -571,15 +605,13 @@
     }
 
     function fitCameraToObject(geom) {
-      const box = geom.boundingBox;
-      const size = new THREE.Vector3();
-      box.getSize(size);
+      const size = state.dimensions;
       const maxDim = Math.max(size.x, size.y, size.z);
       const fov = camera.fov * (Math.PI / 180);
-      let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 2.2;
-      cameraZ = Math.max(cameraZ, 30);
+      let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * (state.viewMode === 'focus' ? 2.2 : 3.5);
+      cameraZ = Math.max(cameraZ, 40);
 
-      camera.position.set(cameraZ * 0.8, cameraZ * 0.9, cameraZ);
+      camera.position.set(cameraZ * 0.7, cameraZ * 0.9, cameraZ);
       camera.lookAt(0, 0, 0);
       controls.target.set(0, 0, 0);
       controls.update();
@@ -594,292 +626,402 @@
       document.getElementById('statDimZ').textContent = state.dimensions.z.toFixed(1);
     }
 
-    function autoComputeSpacing() {
-      // Déterminer l'axe de distribution pour l'espacement
-      const dimAlongAxis = (state.resolvedAxis === 'x') ? state.dimensions.x : state.dimensions.y;
-      const suggested = Math.round((dimAlongAxis + 6.0) * 2) / 2; // Arrondi à 0.5mm
-      state.spacing = Math.max(suggested, 10.0);
-      document.getElementById('rangeSpacing').value = state.spacing;
-      document.getElementById('valSpacing').textContent = state.spacing.toFixed(1);
-    }
-
     // ──────────────────────────────────────────────────────────────
-    // SÉLECTION DU POINT D'ATTACHEMENT (GATE PICKING)
+    // RAYCASTING & GATE PICKING (SURVOL + CLIC FIABLE)
     // ──────────────────────────────────────────────────────────────
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
-    let mouseDownPos = { x: 0, y: 0 };
+    let pointerDownCoord = { x: 0, y: 0 };
 
-    renderer.domElement.addEventListener('pointerdown', (e) => {
-      mouseDownPos.x = e.clientX;
-      mouseDownPos.y = e.clientY;
-    });
-
-    renderer.domElement.addEventListener('pointerup', (e) => {
-      const dx = Math.abs(e.clientX - mouseDownPos.x);
-      const dy = Math.abs(e.clientX - mouseDownPos.y);
-      // Si la souris n'a pas glissé (ce n'est pas un drag OrbitControls), c'est un clic de picking
-      if (dx < 4 && dy < 4 && state.loadedGeometry) {
-        pickGatePoint(e);
+    // Obtenir la liste de tous les maillages de pièces cliquables
+    function getClickableMeshes() {
+      if (state.viewMode === 'focus') {
+        return focusGroup.children;
+      } else {
+        // En mode grappe, on peut cliquer sur n'importe quel mesh de pièce !
+        return sprueGroup.children.filter(c => c.name.startsWith('spruePiece_'));
       }
-    });
+    }
 
-    function pickGatePoint(e) {
+    // Survol souris : affiche le curseur d'impact potentiel
+    renderer.domElement.addEventListener('pointermove', (e) => {
+      if (!state.loadedGeometry) return;
       const rect = renderer.domElement.getBoundingClientRect();
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
       raycaster.setFromCamera(mouse, camera);
-      const masterMesh = modelGroup.getObjectByName('masterPiece');
-      if (!masterMesh) return;
+      const meshes = getClickableMeshes();
+      const intersects = raycaster.intersectObjects(meshes, false);
 
-      const intersects = raycaster.intersectObject(masterMesh, false);
+      if (intersects.length > 0) {
+        hoverMarker.position.copy(intersects[0].point);
+        hoverMarker.visible = true;
+      } else {
+        hoverMarker.visible = false;
+      }
+    });
+
+    renderer.domElement.addEventListener('pointerdown', (e) => {
+      pointerDownCoord.x = e.clientX;
+      pointerDownCoord.y = e.clientY;
+    });
+
+    renderer.domElement.addEventListener('pointerup', (e) => {
+      const dx = Math.abs(e.clientX - pointerDownCoord.x);
+      const dy = Math.abs(e.clientY - pointerDownCoord.y);
+      // Seuil tolérant pour distinguer un clic d'un drag caméra
+      if (dx < 5 && dy < 5 && state.loadedGeometry) {
+        handlePickingClick(e);
+      }
+    });
+
+    function handlePickingClick(e) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const meshes = getClickableMeshes();
+      const intersects = raycaster.intersectObjects(meshes, false);
+
       if (intersects.length > 0) {
         const hit = intersects[0];
-        setGatePoint(hit.point, hit.face.normal);
+        // Convertir le point d'impact dans le repère local de la pièce maîtresse
+        const localPoint = hit.object.worldToLocal(hit.point.clone());
+        const localNormal = hit.face.normal.clone();
+
+        if (state.activeGateSlot === 1) {
+          setGate1(localPoint, localNormal);
+          // Bascule automatique vers le point 2 pour faciliter le flux
+          selectGateSlot(2);
+        } else {
+          setGate2(localPoint, localNormal);
+        }
       }
     }
 
-    function setGatePoint(point, normal) {
-      state.gatePicked = true;
-      state.gatePoint.copy(point);
-      state.gateNormal.copy(normal).normalize();
+    function setGate1(point, normal) {
+      state.gate1Picked = true;
+      state.gate1Point.copy(point);
+      state.gate1Normal.copy(normal).normalize();
 
-      // UI coordinates
-      document.getElementById('gateX').textContent = state.gatePoint.x.toFixed(2);
-      document.getElementById('gateY').textContent = state.gatePoint.y.toFixed(2);
-      document.getElementById('gateZ').textContent = state.gatePoint.z.toFixed(2);
-      document.getElementById('gateBadge').textContent = 'Sélectionné';
-      document.getElementById('gateBadge').className = 'text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium';
-      document.getElementById('pickingStatusText').textContent = 'Point défini. Cliquez pour déplacer à tout moment.';
+      document.getElementById('valG1X').textContent = state.gate1Point.x.toFixed(2);
+      document.getElementById('valG1Y').textContent = state.gate1Point.y.toFixed(2);
+      document.getElementById('valG1Z').textContent = state.gate1Point.z.toFixed(2);
+      document.getElementById('statusGate1').textContent = 'Défini ✓';
+      document.getElementById('statusGate1').className = 'text-emerald-400 font-mono text-[10px] font-bold';
 
-      // Mise à jour visuelle du marqueur
-      updateGateMarker();
-
-      // Reconstruire la grappe avec la nouvelle attache
+      updateMarkers();
       rebuildSprue();
     }
 
-    function updateGateMarker() {
-      while (markerGroup.children.length > 0) {
-        const obj = markerGroup.children[0];
-        markerGroup.remove(obj);
+    function setGate2(point, normal) {
+      state.gate2Picked = true;
+      state.gate2Point.copy(point);
+      state.gate2Normal.copy(normal).normalize();
+
+      document.getElementById('valG2X').textContent = state.gate2Point.x.toFixed(2);
+      document.getElementById('valG2Y').textContent = state.gate2Point.y.toFixed(2);
+      document.getElementById('valG2Z').textContent = state.gate2Point.z.toFixed(2);
+      document.getElementById('statusGate2').textContent = 'Défini ✓';
+      document.getElementById('statusGate2').className = 'text-rose-400 font-mono text-[10px] font-bold';
+
+      updateMarkers();
+      rebuildSprue();
+    }
+
+    function selectGateSlot(slot) {
+      state.activeGateSlot = slot;
+      const b1 = document.getElementById('btnSelectGate1');
+      const b2 = document.getElementById('btnSelectGate2');
+      const statusText = document.getElementById('pickingStatusText');
+      const pulseDot = document.getElementById('pickingPulseDot');
+
+      if (slot === 1) {
+        b1.className = 'py-1.5 px-2 rounded-md font-medium text-center transition bg-emerald-600 text-white flex items-center justify-center gap-1.5 shadow-sm';
+        b2.className = 'py-1.5 px-2 rounded-md font-medium text-center transition text-slate-400 hover:text-white flex items-center justify-center gap-1.5';
+        statusText.textContent = 'Cliquez pour placer le Point 1 (Attache Intérieure / Rail)';
+        pulseDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
+      } else {
+        b2.className = 'py-1.5 px-2 rounded-md font-medium text-center transition bg-rose-600 text-white flex items-center justify-center gap-1.5 shadow-sm';
+        b1.className = 'py-1.5 px-2 rounded-md font-medium text-center transition text-slate-400 hover:text-white flex items-center justify-center gap-1.5';
+        statusText.textContent = 'Cliquez pour placer le Point 2 (Attache Extérieure / Cadre)';
+        pulseDot.className = 'w-2.5 h-2.5 rounded-full bg-rose-400 animate-pulse';
+      }
+    }
+
+    document.getElementById('btnSelectGate1').addEventListener('click', () => selectGateSlot(1));
+    document.getElementById('btnSelectGate2').addEventListener('click', () => selectGateSlot(2));
+
+    // Détection automatique de deux points d'attache opposés
+    function autoDetectOppositeGates() {
+      if (!state.loadedGeometry) return;
+      const box = state.originalBBox;
+      const size = state.dimensions;
+
+      // On choisit l'axe transversal naturel (Y de préférence, ou X si la pièce est plus large en X)
+      // Point 1 : sur la face Y+
+      // Point 2 : sur la face Y-
+      const p1 = new THREE.Vector3(0, box.max.y, 0);
+      const n1 = new THREE.Vector3(0, 1, 0);
+
+      const p2 = new THREE.Vector3(0, box.min.y, 0);
+      const n2 = new THREE.Vector3(0, -1, 0);
+
+      // Ajuster par raycast pour trouver la surface exacte
+      const testRay = new THREE.Raycaster();
+      const focusMesh = focusGroup.getObjectByName('focusPiece');
+
+      if (focusMesh) {
+        // Test Y+
+        testRay.set(new THREE.Vector3(0, box.max.y + 10, 0), new THREE.Vector3(0, -1, 0));
+        const hits1 = testRay.intersectObject(focusMesh, false);
+        if (hits1.length > 0) {
+          p1.copy(hits1[0].point);
+          n1.copy(hits1[0].face.normal);
+        }
+        // Test Y-
+        testRay.set(new THREE.Vector3(0, box.min.y - 10, 0), new THREE.Vector3(0, 1, 0));
+        const hits2 = testRay.intersectObject(focusMesh, false);
+        if (hits2.length > 0) {
+          p2.copy(hits2[0].point);
+          n2.copy(hits2[0].face.normal);
+        }
+      }
+
+      setGate1(p1, n1);
+      setGate2(p2, n2);
+      selectGateSlot(1);
+    }
+
+    document.getElementById('btnAutoOpposite').addEventListener('click', () => {
+      autoDetectOppositeGates();
+    });
+
+    // Marqueurs visuels des 2 points d'attache
+    function updateMarkers() {
+      while (markersGroup.children.length > 0) {
+        const obj = markersGroup.children[0];
+        markersGroup.remove(obj);
         if (obj.geometry) obj.geometry.dispose();
       }
 
-      if (!state.gatePicked) return;
+      // Si mode focus, afficher les marqueurs sur la pièce maîtresse
+      // Si mode sprue, afficher aussi les repères
+      if (state.gate1Picked) {
+        const s1 = new THREE.Mesh(
+          new THREE.SphereGeometry(0.7, 16, 16),
+          new THREE.MeshBasicMaterial({ color: 0x10b981 }) // Vert émeraude
+        );
+        s1.position.copy(state.gate1Point);
+        markersGroup.add(s1);
 
-      // 1. Sphère d'impact
-      const sphereGeom = new THREE.SphereGeometry(0.7, 16, 16);
-      const sphereMat = new THREE.MeshBasicMaterial({ color: 0xf43f5e }); // Rose/Rouge néon
-      const sphereMesh = new THREE.Mesh(sphereGeom, sphereMat);
-      sphereMesh.position.copy(state.gatePoint);
-      markerGroup.add(sphereMesh);
-
-      // 2. Flèche le long de la normale
-      const arrowLen = Math.max(state.gateLength, 6.0);
-      const arrowHelper = new THREE.ArrowHelper(state.gateNormal, state.gatePoint, arrowLen, 0xf59e0b, 1.4, 0.8);
-      markerGroup.add(arrowHelper);
-    }
-
-    // Auto-détecter un point d'attache latéral optimal
-    function autoDetectGatePoint() {
-      if (!state.loadedGeometry) return;
-      const box = state.originalBBox;
-      // Choisir la face Y+ ou X+
-      const targetPoint = new THREE.Vector3(0, box.max.y, 0);
-      const targetNormal = new THREE.Vector3(0, 1, 0);
-
-      // On lance un rayon depuis l'extérieur vers le centre pour trouver un point réel sur la surface
-      const rayOrigin = new THREE.Vector3(0, box.max.y + 10, 0);
-      const rayDir = new THREE.Vector3(0, -1, 0);
-      raycaster.set(rayOrigin, rayDir);
-
-      const master = modelGroup.getObjectByName('masterPiece');
-      if (master) {
-        const hits = raycaster.intersectObject(master, false);
-        if (hits.length > 0) {
-          setGatePoint(hits[0].point, hits[0].face.normal);
-          return;
-        }
+        const a1 = new THREE.ArrowHelper(state.gate1Normal, state.gate1Point, 6.0, 0x10b981, 1.4, 0.8);
+        markersGroup.add(a1);
       }
-      // Fallback
-      setGatePoint(targetPoint, targetNormal);
+
+      if (state.gate2Picked) {
+        const s2 = new THREE.Mesh(
+          new THREE.SphereGeometry(0.7, 16, 16),
+          new THREE.MeshBasicMaterial({ color: 0xf43f5e }) // Rose/Rouge néon
+        );
+        s2.position.copy(state.gate2Point);
+        markersGroup.add(s2);
+
+        const a2 = new THREE.ArrowHelper(state.gate2Normal, state.gate2Point, 6.0, 0xf43f5e, 1.4, 0.8);
+        markersGroup.add(a2);
+      }
     }
 
     // ──────────────────────────────────────────────────────────────
-    // MOTEUR GÉOMÉTRIQUE DE GÉNÉRATION DE LA GRAPPE (SPRUE ENGINE)
+    // MOTEUR DE GRAPPE INDUSTRIELLE & CAGE DE PROTECTION
     // ──────────────────────────────────────────────────────────────
-    function computeSprueLayout() {
-      // 1. Résolution de l'axe du rail (X ou Y)
-      if (state.runnerAxisMode === 'auto') {
-        // Le rail doit être perpendiculaire à la direction de sortie de la tige
-        // Si la normale pointe surtout en Y, le rail est le long de X.
-        // Si la normale pointe surtout en X, le rail est le long de Y.
-        if (Math.abs(state.gateNormal.y) >= Math.abs(state.gateNormal.x)) {
-          state.resolvedAxis = 'x';
-        } else {
-          state.resolvedAxis = 'y';
-        }
+    function computeSprueBounds() {
+      const isDouble = (state.layout === 'double');
+      const totalCount = state.count;
+      const countRow1 = isDouble ? Math.ceil(totalCount / 2) : totalCount;
+      const countRow2 = isDouble ? Math.floor(totalCount / 2) : 0;
+      const cols = Math.max(countRow1, countRow2);
+
+      // Calcul des dimensions de la grille
+      const halfSizeX = state.dimensions.x / 2;
+      const halfSizeY = state.dimensions.y / 2;
+
+      // Espacement longitudinal (axe X)
+      const spanX = (cols - 1) * state.spacing;
+
+      // Espacement transversal (axe Y) entre les 2 rangées
+      // Les pièces ont une dimension Y. On laisse de la place pour le rail central
+      const rowSpacingY = Math.max(state.dimensions.y + 12.0, 24.0);
+
+      // Positions Y des rangées
+      const yRow0 = isDouble ? -rowSpacingY / 2 : 0;
+      const yRow1 = isDouble ? rowSpacingY / 2 : 0;
+      const yRailCentral = 0; // Rail central à Y = 0
+
+      // Limites extérieures du cadre rectangulaire
+      const xMin = - (spanX / 2 + halfSizeX + state.frameMargin);
+      const xMax = (spanX / 2 + halfSizeX + state.frameMargin);
+
+      let yMin, yMax;
+      if (isDouble) {
+        yMin = yRow0 - (halfSizeY + state.frameMargin);
+        yMax = yRow1 + (halfSizeY + state.frameMargin);
       } else {
-        state.resolvedAxis = state.runnerAxisMode;
-      }
-      document.getElementById('labelAutoAxis').textContent = (state.runnerAxisMode === 'auto' ? `Auto (${state.resolvedAxis.toUpperCase()})` : state.resolvedAxis.toUpperCase());
-
-      // 2. Vecteur directeur du rail & direction de la tige
-      const uRail = (state.resolvedAxis === 'x') ? new THREE.Vector3(1, 0, 0) : new THREE.Vector3(0, 1, 0);
-      
-      // La direction de la tige doit être dans le plan perpendiculaire au rail
-      // On projette la normale sur le plan orthogonal à uRail
-      const uGate = state.gateNormal.clone().projectOnPlane(uRail);
-      if (uGate.lengthSq() < 0.001) {
-        // Si la normale était strictement colinéaire au rail, fallback perpendiculaire
-        if (state.resolvedAxis === 'x') uGate.set(0, 1, 0);
-        else uGate.set(1, 0, 0);
-      } else {
-        uGate.normalize();
+        yMin = - (halfSizeY + state.frameMargin);
+        yMax = (halfSizeY + state.frameMargin);
       }
 
-      // 3. Calcul du centre du rail
-      // La tige part de gatePoint dans la direction uGate sur une longueur = gateLength + runnerRadius
-      const runnerRadius = state.runnerDiameter / 2;
-      const totalGateDist = state.gateLength + runnerRadius;
-      const railCenterAtP = state.gatePoint.clone().addScaledVector(uGate, totalGateDist);
+      // Hauteur d'ancrage Z (au niveau des points d'attache)
+      const zAttach = (state.gate1Picked && state.gate2Picked)
+        ? (state.gate1Point.z + state.gate2Point.z) / 2
+        : 0;
 
-      return { uRail, uGate, runnerRadius, railCenterAtP };
+      return {
+        cols,
+        countRow1,
+        countRow2,
+        isDouble,
+        spanX,
+        rowSpacingY,
+        yRow0,
+        yRow1,
+        yRailCentral,
+        xMin,
+        xMax,
+        yMin,
+        yMax,
+        zAttach
+      };
     }
 
     function rebuildSprue() {
-      // Nettoyer l'ancien sprue
       while (sprueGroup.children.length > 0) {
         const obj = sprueGroup.children[0];
         sprueGroup.remove(obj);
         if (obj.geometry) obj.geometry.dispose();
       }
 
-      if (!state.loadedGeometry || !state.gatePicked) return;
+      if (!state.loadedGeometry) return;
 
-      const layoutData = computeSprueLayout();
-      const { uRail, uGate, runnerRadius, railCenterAtP } = layoutData;
+      const bounds = computeSprueBounds();
+      const { cols, countRow1, countRow2, isDouble, yRow0, yRow1, yRailCentral, xMin, xMax, yMin, yMax, zAttach } = bounds;
 
-      const isDouble = (state.layout === 'double');
-      const totalCount = state.count;
-      const countRow1 = isDouble ? Math.ceil(totalCount / 2) : totalCount;
-      const countRow2 = isDouble ? Math.floor(totalCount / 2) : 0;
+      const halfFrameD = state.frameWidth / 2;
 
-      // Calcul des coordonnées longitudinales (le long de uRail)
-      const offsetsRow1 = [];
-      for (let i = 0; i < countRow1; i++) {
-        offsetsRow1.push((i - (countRow1 - 1) / 2) * state.spacing);
+      // ── 1. PLACEMENT DES PIÈCES & ATTACHES DOUBLES ─────────────
+      // Rangée 1 (bas ou unique)
+      for (let c = 0; c < countRow1; c++) {
+        const posX = (c - (countRow1 - 1) / 2) * state.spacing;
+        const posY = yRow0;
+
+        // Mesh de la pièce
+        const pieceMesh = new THREE.Mesh(state.loadedGeometry, pieceMaterial);
+        pieceMesh.name = `spruePiece_0_${c}`;
+        pieceMesh.position.set(posX, posY, 0);
+        sprueGroup.add(pieceMesh);
+
+        // Attache 1 (côté intérieur -> vers rail central ou barre de support)
+        if (state.gate1Picked) {
+          const pTouch = state.gate1Point.clone().add(new THREE.Vector3(posX, posY, 0));
+          const pSupport = new THREE.Vector3(pTouch.x, isDouble ? yRailCentral : yMax, zAttach);
+          createSubdividedAttache(pSupport, pTouch, sprueGroup);
+        }
+
+        // Attache 2 (côté extérieur -> vers le cadre extérieur bas)
+        if (state.gate2Picked && state.enableFrame) {
+          const pTouch = state.gate2Point.clone().add(new THREE.Vector3(posX, posY, 0));
+          const pSupport = new THREE.Vector3(pTouch.x, yMin, zAttach);
+          createSubdividedAttache(pSupport, pTouch, sprueGroup);
+        }
       }
-      const offsetsRow2 = [];
-      for (let i = 0; i < countRow2; i++) {
-        offsetsRow2.push((i - (countRow2 - 1) / 2) * state.spacing);
-      }
 
-      // ── A. TIGES & PIÈCES RANGÉE 1 ──────────────────────────────
-      offsetsRow1.forEach((offset, idx) => {
-        // Translation de cette pièce
-        const trans = uRail.clone().multiplyScalar(offset);
-        const P_i = state.gatePoint.clone().add(trans);
-        const gateStart = P_i.clone().addScaledVector(uGate, -state.embedDepth);
-        const gateEnd = P_i.clone().addScaledVector(uGate, state.gateLength + runnerRadius);
+      // Rangée 2 (si double rangée)
+      if (isDouble) {
+        for (let c = 0; c < countRow2; c++) {
+          const posX = (c - (countRow2 - 1) / 2) * state.spacing;
+          const posY = yRow1;
 
-        // Tige (cylindre)
-        const gateMesh = createCylinderMesh(gateStart, gateEnd, state.gateDiameter / 2, runnerMaterial);
-        sprueGroup.add(gateMesh);
+          const pieceMesh = new THREE.Mesh(state.loadedGeometry, pieceMaterial);
+          pieceMesh.name = `spruePiece_1_${c}`;
+          pieceMesh.position.set(posX, posY, 0);
+          // Rotation 180° pour faire face au rail central sans inverser la chiralité
+          pieceMesh.rotation.z = Math.PI;
+          sprueGroup.add(pieceMesh);
 
-        // Pièce dupliquée (sauf si idx === 0 sur le masterPiece qui est déjà affiché)
-        if (state.showAllPieces) {
-          if (idx !== Math.floor((countRow1 - 1) / 2)) {
-            const cloneMesh = new THREE.Mesh(state.loadedGeometry, pieceMaterial);
-            cloneMesh.position.copy(trans);
-            sprueGroup.add(cloneMesh);
+          // Attache 1 (Intérieure -> vers rail central)
+          if (state.gate1Picked) {
+            // Le point tourne avec la pièce
+            const pLocalRot = state.gate1Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
+            const pTouch = pLocalRot.add(new THREE.Vector3(posX, posY, 0));
+            const pSupport = new THREE.Vector3(pTouch.x, yRailCentral, zAttach);
+            createSubdividedAttache(pSupport, pTouch, sprueGroup);
+          }
+
+          // Attache 2 (Extérieure -> vers le cadre extérieur haut)
+          if (state.gate2Picked && state.enableFrame) {
+            const pLocalRot = state.gate2Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
+            const pTouch = pLocalRot.add(new THREE.Vector3(posX, posY, 0));
+            const pSupport = new THREE.Vector3(pTouch.x, yMax, zAttach);
+            createSubdividedAttache(pSupport, pTouch, sprueGroup);
           }
         }
-      });
-
-      // ── B. TIGES & PIÈCES RANGÉE 2 (Si double rangée) ───────────
-      if (isDouble) {
-        offsetsRow2.forEach((offset) => {
-          const trans = uRail.clone().multiplyScalar(offset);
-
-          // Transformation pour la rangée 2 par rapport au rail central
-          // Le rail passe par railCenterAtP
-          const mat = new THREE.Matrix4();
-          if (state.symmetry === 'rotate180') {
-            // Rotation 180° autour de l'axe du rail passant par railCenterAtP
-            mat.makeTranslation(-railCenterAtP.x, -railCenterAtP.y, -railCenterAtP.z);
-            const rot = new THREE.Matrix4().makeRotationAxis(uRail, Math.PI);
-            mat.premultiply(rot);
-            mat.premultiply(new THREE.Matrix4().makeTranslation(railCenterAtP.x, railCenterAtP.y, railCenterAtP.z));
-            mat.premultiply(new THREE.Matrix4().makeTranslation(trans.x, trans.y, trans.z));
-          } else {
-            // Symétrie miroir par rapport au plan passant par le rail et uRail
-            // Le vecteur normal au plan miroir est uGate
-            const planeNormal = uGate.clone().normalize();
-            // Réflexion matricielle
-            const I = new THREE.Matrix4();
-            const reflection = new THREE.Matrix4().set(
-              1 - 2*planeNormal.x*planeNormal.x, -2*planeNormal.x*planeNormal.y, -2*planeNormal.x*planeNormal.z, 0,
-              -2*planeNormal.y*planeNormal.x, 1 - 2*planeNormal.y*planeNormal.y, -2*planeNormal.y*planeNormal.z, 0,
-              -2*planeNormal.z*planeNormal.x, -2*planeNormal.z*planeNormal.y, 1 - 2*planeNormal.z*planeNormal.z, 0,
-              0, 0, 0, 1
-            );
-            mat.makeTranslation(-railCenterAtP.x, -railCenterAtP.y, -railCenterAtP.z);
-            mat.premultiply(reflection);
-            mat.premultiply(new THREE.Matrix4().makeTranslation(railCenterAtP.x, railCenterAtP.y, railCenterAtP.z));
-            mat.premultiply(new THREE.Matrix4().makeTranslation(trans.x, trans.y, trans.z));
-          }
-
-          // Point d'attache transformé
-          const P2 = state.gatePoint.clone().applyMatrix4(mat);
-          const gateStart2 = P2.clone().addScaledVector(uGate.clone().negate(), -state.embedDepth);
-          // Point sur le rail
-          const railPoint2 = railCenterAtP.clone().add(trans);
-
-          const gateMesh2 = createCylinderMesh(gateStart2, railPoint2, state.gateDiameter / 2, runnerMaterial);
-          sprueGroup.add(gateMesh2);
-
-          if (state.showAllPieces) {
-            const cloneMesh2 = new THREE.Mesh(state.loadedGeometry, pieceMaterial);
-            cloneMesh2.applyMatrix4(mat);
-            sprueGroup.add(cloneMesh2);
-          }
-        });
       }
 
-      // ── C. CANAL CENTRAL (RUNNER) ───────────────────────────────
-      // Longueur totale du runner : couvre toutes les pièces + débord de 5 mm à chaque extrémité
-      const maxCount = Math.max(countRow1, countRow2);
-      const span = (maxCount - 1) * state.spacing;
-      const runnerOverhang = Math.max(state.spacing / 2, 6.0);
-      const halfTotalLen = (span / 2) + runnerOverhang;
+      // ── 2. CADRE DE PROTECTION EXTÉRIEUR & RAIL CENTRAL ────────
+      if (state.enableFrame) {
+        // Barre bas
+        sprueGroup.add(createPoutreMesh(new THREE.Vector3(xMin, yMin, zAttach), new THREE.Vector3(xMax, yMin, zAttach), halfFrameD));
+        // Barre haut
+        sprueGroup.add(createPoutreMesh(new THREE.Vector3(xMin, yMax, zAttach), new THREE.Vector3(xMax, yMax, zAttach), halfFrameD));
+        // Barre gauche
+        sprueGroup.add(createPoutreMesh(new THREE.Vector3(xMin, yMin, zAttach), new THREE.Vector3(xMin, yMax, zAttach), halfFrameD));
+        // Barre droite
+        sprueGroup.add(createPoutreMesh(new THREE.Vector3(xMax, yMin, zAttach), new THREE.Vector3(xMax, yMax, zAttach), halfFrameD));
+      }
 
-      const runnerStart = railCenterAtP.clone().addScaledVector(uRail, -halfTotalLen);
-      const runnerEnd = railCenterAtP.clone().addScaledVector(uRail, halfTotalLen);
+      // Rail central le long de X (entre les 2 rangées)
+      if (isDouble) {
+        sprueGroup.add(createPoutreMesh(new THREE.Vector3(xMin, yRailCentral, zAttach), new THREE.Vector3(xMax, yRailCentral, zAttach), halfFrameD));
+      }
 
-      const runnerMesh = createCylinderMesh(runnerStart, runnerEnd, runnerRadius, runnerMaterial);
-      sprueGroup.add(runnerMesh);
-
-      // Mettre à jour le wireframe si activé
-      pieceMaterial.wireframe = state.wireframe;
-      runnerMaterial.wireframe = state.wireframe;
+      // Visibilité selon le mode
+      updateViewModeVisibility();
     }
 
-    // Helper : Création d'un cylindre reliant deux points dans l'espace 3D
-    function createCylinderMesh(p1, p2, radius, material) {
+    // Helper : Création d'une attache avec col de rupture (section épaisse + col fin de casse)
+    function createSubdividedAttache(pSupport, pTouch, targetGroup) {
+      const v = pTouch.clone().sub(pSupport);
+      const dist = v.length();
+      if (dist <= 0.1) return;
+
+      const dir = v.clone().normalize();
+      const neckLen = Math.min(state.neckLength, dist * 0.4);
+      const bodyLen = dist - neckLen + state.embedDepth;
+
+      // 1. Partie corps épais (côté cadre/rail)
+      const pBodyStart = pSupport.clone();
+      const pBodyEnd = pSupport.clone().addScaledVector(dir, dist - neckLen);
+      targetGroup.add(createPoutreMesh(pBodyStart, pBodyEnd, state.bodyDiameter / 2, tabMaterial));
+
+      // 2. Col fin sécable (au contact de la pièce)
+      const pNeckStart = pBodyEnd.clone();
+      const pNeckEnd = pTouch.clone().addScaledVector(dir, state.embedDepth); // Légère pénétration
+      targetGroup.add(createPoutreMesh(pNeckStart, pNeckEnd, state.neckDiameter / 2, tabMaterial));
+    }
+
+    function createPoutreMesh(p1, p2, radius, mat = frameMaterial) {
       const geom = createCylinderGeometryBetween(p1, p2, radius);
-      return new THREE.Mesh(geom, material);
+      return new THREE.Mesh(geom, mat);
     }
 
     function createCylinderGeometryBetween(p1, p2, radius) {
       const v = p2.clone().sub(p1);
-      const length = v.length();
-      const geom = new THREE.CylinderGeometry(radius, radius, length, 24);
-      // Par défaut, le cylindre est aligné avec l'axe Y et centré en 0
-      geom.translate(0, length / 2, 0);
-      
+      const len = v.length();
+      const geom = new THREE.CylinderGeometry(radius, radius, len, 20);
+      geom.translate(0, len / 2, 0);
+
       const q = new THREE.Quaternion();
       q.setFromUnitVectors(new THREE.Vector3(0, 1, 0), v.clone().normalize());
       geom.applyQuaternion(q);
@@ -888,247 +1030,269 @@
     }
 
     // ──────────────────────────────────────────────────────────────
-    // GÉNÉRATION ET EXPORT STL DIRECT (FUSION PAR BUFFERGEOMETRYUTILS)
+    // GESTION DU MODE DE VUE (FOCUS PIÈCE VS GRAPPE COMPLÈTE)
+    // ──────────────────────────────────────────────────────────────
+    const btnViewFocus = document.getElementById('btnViewFocus');
+    const btnViewSprue = document.getElementById('btnViewSprue');
+
+    btnViewFocus.addEventListener('click', () => {
+      state.viewMode = 'focus';
+      btnViewFocus.className = 'px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm transition flex items-center gap-1';
+      btnViewSprue.className = 'px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1';
+      updateViewModeVisibility();
+      if (state.loadedGeometry) fitCameraToObject(state.loadedGeometry);
+    });
+
+    btnViewSprue.addEventListener('click', () => {
+      state.viewMode = 'sprue';
+      btnViewSprue.className = 'px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm transition flex items-center gap-1';
+      btnViewFocus.className = 'px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1';
+      updateViewModeVisibility();
+      if (state.loadedGeometry) fitCameraToObject(state.loadedGeometry);
+    });
+
+    function updateViewModeVisibility() {
+      if (state.viewMode === 'focus') {
+        focusGroup.visible = true;
+        sprueGroup.visible = false;
+        markersGroup.visible = true;
+      } else {
+        focusGroup.visible = false;
+        sprueGroup.visible = true;
+        markersGroup.visible = true;
+      }
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // EXPORT STL UNIQUE DIRECT (FUSION AVEC CAGE & ATTACHES)
     // ──────────────────────────────────────────────────────────────
     document.getElementById('btnExportSTL').addEventListener('click', () => {
       exportMergedSTL();
     });
 
     async function exportMergedSTL() {
-      if (!state.loadedGeometry || !state.gatePicked) return;
+      if (!state.loadedGeometry) return;
 
       const statusEl = document.getElementById('exportStatus');
       const btnText = document.getElementById('btnExportText');
       statusEl.classList.remove('hidden');
-      btnText.textContent = 'Fusion en cours...';
+      btnText.textContent = 'Fusion des maillages...';
 
-      // Laisser le temps au navigateur de rafraîchir l'UI avant le calcul intensif
-      await new Promise(r => setTimeout(r, 50));
+      await new Promise(r => setTimeout(r, 60));
 
       try {
-        const layoutData = computeSprueLayout();
-        const { uRail, uGate, runnerRadius, railCenterAtP } = layoutData;
+        const bounds = computeSprueBounds();
+        const { cols, countRow1, countRow2, isDouble, yRow0, yRow1, yRailCentral, xMin, xMax, yMin, yMax, zAttach } = bounds;
+        const halfFrameD = state.frameWidth / 2;
 
-        const isDouble = (state.layout === 'double');
-        const totalCount = state.count;
-        const countRow1 = isDouble ? Math.ceil(totalCount / 2) : totalCount;
-        const countRow2 = isDouble ? Math.floor(totalCount / 2) : 0;
+        const geomsToMerge = [];
 
-        const geometriesToMerge = [];
+        // 1. Pièces et doubles attaches (Rangée 1)
+        for (let c = 0; c < countRow1; c++) {
+          const posX = (c - (countRow1 - 1) / 2) * state.spacing;
+          const posY = yRow0;
 
-        // 1. Ajouter les pièces et tiges de la Rangée 1
-        for (let i = 0; i < countRow1; i++) {
-          const offset = (i - (countRow1 - 1) / 2) * state.spacing;
-          const trans = uRail.clone().multiplyScalar(offset);
+          const pGeom = state.loadedGeometry.clone();
+          pGeom.translate(posX, posY, 0);
+          geomsToMerge.push(pGeom);
 
-          // Géométrie de la pièce transformée
-          const pieceGeom = state.loadedGeometry.clone();
-          pieceGeom.translate(trans.x, trans.y, trans.z);
-          geometriesToMerge.push(pieceGeom);
-
-          // Géométrie de la tige
-          const P_i = state.gatePoint.clone().add(trans);
-          const gateStart = P_i.clone().addScaledVector(uGate, -state.embedDepth);
-          const gateEnd = P_i.clone().addScaledVector(uGate, state.gateLength + runnerRadius);
-          const gateGeom = createCylinderGeometryBetween(gateStart, gateEnd, state.gateDiameter / 2);
-          geometriesToMerge.push(gateGeom);
-        }
-
-        // 2. Ajouter les pièces et tiges de la Rangée 2
-        if (isDouble) {
-          for (let i = 0; i < countRow2; i++) {
-            const offset = (i - (countRow2 - 1) / 2) * state.spacing;
-            const trans = uRail.clone().multiplyScalar(offset);
-
-            const mat = new THREE.Matrix4();
-            if (state.symmetry === 'rotate180') {
-              mat.makeTranslation(-railCenterAtP.x, -railCenterAtP.y, -railCenterAtP.z);
-              mat.premultiply(new THREE.Matrix4().makeRotationAxis(uRail, Math.PI));
-              mat.premultiply(new THREE.Matrix4().makeTranslation(railCenterAtP.x, railCenterAtP.y, railCenterAtP.z));
-              mat.premultiply(new THREE.Matrix4().makeTranslation(trans.x, trans.y, trans.z));
-            } else {
-              const planeNormal = uGate.clone().normalize();
-              const reflection = new THREE.Matrix4().set(
-                1 - 2*planeNormal.x*planeNormal.x, -2*planeNormal.x*planeNormal.y, -2*planeNormal.x*planeNormal.z, 0,
-                -2*planeNormal.y*planeNormal.x, 1 - 2*planeNormal.y*planeNormal.y, -2*planeNormal.y*planeNormal.z, 0,
-                -2*planeNormal.z*planeNormal.x, -2*planeNormal.z*planeNormal.y, 1 - 2*planeNormal.z*planeNormal.z, 0,
-                0, 0, 0, 1
-              );
-              mat.makeTranslation(-railCenterAtP.x, -railCenterAtP.y, -railCenterAtP.z);
-              mat.premultiply(reflection);
-              mat.premultiply(new THREE.Matrix4().makeTranslation(railCenterAtP.x, railCenterAtP.y, railCenterAtP.z));
-              mat.premultiply(new THREE.Matrix4().makeTranslation(trans.x, trans.y, trans.z));
-            }
-
-            // Pièce
-            const pieceGeom2 = state.loadedGeometry.clone();
-            pieceGeom2.applyMatrix4(mat);
-            geometriesToMerge.push(pieceGeom2);
-
-            // Tige
-            const P2 = state.gatePoint.clone().applyMatrix4(mat);
-            const gateStart2 = P2.clone().addScaledVector(uGate.clone().negate(), -state.embedDepth);
-            const railPoint2 = railCenterAtP.clone().add(trans);
-            const gateGeom2 = createCylinderGeometryBetween(gateStart2, railPoint2, state.gateDiameter / 2);
-            geometriesToMerge.push(gateGeom2);
+          if (state.gate1Picked) {
+            const pTouch = state.gate1Point.clone().add(new THREE.Vector3(posX, posY, 0));
+            const pSupport = new THREE.Vector3(pTouch.x, isDouble ? yRailCentral : yMax, zAttach);
+            addSubdividedAttacheGeoms(pSupport, pTouch, geomsToMerge);
+          }
+          if (state.gate2Picked && state.enableFrame) {
+            const pTouch = state.gate2Point.clone().add(new THREE.Vector3(posX, posY, 0));
+            const pSupport = new THREE.Vector3(pTouch.x, yMin, zAttach);
+            addSubdividedAttacheGeoms(pSupport, pTouch, geomsToMerge);
           }
         }
 
-        // 3. Ajouter le canal central (Runner)
-        const maxCount = Math.max(countRow1, countRow2);
-        const span = (maxCount - 1) * state.spacing;
-        const runnerOverhang = Math.max(state.spacing / 2, 6.0);
-        const halfTotalLen = (span / 2) + runnerOverhang;
+        // 2. Pièces et doubles attaches (Rangée 2)
+        if (isDouble) {
+          for (let c = 0; c < countRow2; c++) {
+            const posX = (c - (countRow2 - 1) / 2) * state.spacing;
+            const posY = yRow1;
 
-        const runnerStart = railCenterAtP.clone().addScaledVector(uRail, -halfTotalLen);
-        const runnerEnd = railCenterAtP.clone().addScaledVector(uRail, halfTotalLen);
-        const runnerGeom = createCylinderGeometryBetween(runnerStart, runnerEnd, runnerRadius);
-        geometriesToMerge.push(runnerGeom);
+            const pGeom = state.loadedGeometry.clone();
+            pGeom.applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
+            pGeom.translate(posX, posY, 0);
+            geomsToMerge.push(pGeom);
 
-        // 4. Fusion des géométries en un seul BufferGeometry
-        const mergedGeometry = BufferGeometryUtils.mergeGeometries(geometriesToMerge, false);
+            if (state.gate1Picked) {
+              const pLocalRot = state.gate1Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
+              const pTouch = pLocalRot.add(new THREE.Vector3(posX, posY, 0));
+              const pSupport = new THREE.Vector3(pTouch.x, yRailCentral, zAttach);
+              addSubdividedAttacheGeoms(pSupport, pTouch, geomsToMerge);
+            }
+            if (state.gate2Picked && state.enableFrame) {
+              const pLocalRot = state.gate2Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
+              const pTouch = pLocalRot.add(new THREE.Vector3(posX, posY, 0));
+              const pSupport = new THREE.Vector3(pTouch.x, yMax, zAttach);
+              addSubdividedAttacheGeoms(pSupport, pTouch, geomsToMerge);
+            }
+          }
+        }
 
-        // 5. Export en STL Binaire (compact et standard)
+        // 3. Cadre rectangulaire de protection
+        if (state.enableFrame) {
+          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(xMin, yMin, zAttach), new THREE.Vector3(xMax, yMin, zAttach), halfFrameD));
+          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(xMin, yMax, zAttach), new THREE.Vector3(xMax, yMax, zAttach), halfFrameD));
+          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(xMin, yMin, zAttach), new THREE.Vector3(xMin, yMax, zAttach), halfFrameD));
+          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(xMax, yMin, zAttach), new THREE.Vector3(xMax, yMax, zAttach), halfFrameD));
+        }
+
+        // 4. Rail central
+        if (isDouble) {
+          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(xMin, yRailCentral, zAttach), new THREE.Vector3(xMax, yRailCentral, zAttach), halfFrameD));
+        }
+
+        // 5. Fusion globale
+        const mergedGeometry = BufferGeometryUtils.mergeGeometries(geomsToMerge, false);
+
+        // 6. Export binaire STL
         const exporter = new STLExporter();
-        const outputMesh = new THREE.Mesh(mergedGeometry);
-        const binaryStlData = exporter.parse(outputMesh, { binary: true });
+        const binaryStlData = exporter.parse(new THREE.Mesh(mergedGeometry), { binary: true });
 
-        // Nettoyage immédiat des géométries temporaires
-        geometriesToMerge.forEach(g => g.dispose());
+        // Nettoyage mémoire
+        geomsToMerge.forEach(g => g.dispose());
         mergedGeometry.dispose();
 
-        // 6. Déclenchement du téléchargement
+        // Téléchargement
         const baseName = state.rawFileName.replace(/\.[^/.]+$/, '');
-        const exportFileName = `grappe_${state.count}x_${baseName}.stl`;
-        const blob = new Blob([binaryStlData], { type: 'application/octet-stream' });
-        triggerDownload(blob, exportFileName);
+        const filename = `grappe_${state.count}x_${baseName}_cage.stl`;
+        triggerDownload(new Blob([binaryStlData], { type: 'application/octet-stream' }), filename);
 
       } catch (err) {
-        console.error('Erreur export STL:', err);
-        alert('Erreur lors de la génération du STL: ' + err.message);
+        console.error(err);
+        alert('Erreur lors de la génération: ' + err.message);
       } finally {
         statusEl.classList.add('hidden');
         btnText.textContent = 'Télécharger le STL de la grappe';
       }
     }
 
+    function addSubdividedAttacheGeoms(pSupport, pTouch, targetArray) {
+      const v = pTouch.clone().sub(pSupport);
+      const dist = v.length();
+      if (dist <= 0.1) return;
+
+      const dir = v.clone().normalize();
+      const neckLen = Math.min(state.neckLength, dist * 0.4);
+
+      // Corps épais
+      const pBodyStart = pSupport.clone();
+      const pBodyEnd = pSupport.clone().addScaledVector(dir, dist - neckLen);
+      targetArray.push(createCylinderGeometryBetween(pBodyStart, pBodyEnd, state.bodyDiameter / 2));
+
+      // Col fin de casse
+      const pNeckStart = pBodyEnd.clone();
+      const pNeckEnd = pTouch.clone().addScaledVector(dir, state.embedDepth);
+      targetArray.push(createCylinderGeometryBetween(pNeckStart, pNeckEnd, state.neckDiameter / 2));
+    }
+
     // ──────────────────────────────────────────────────────────────
-    // GÉNÉRATION SCRIPT OPENSCAD (.SCAD)
+    // EXPORT SCRIPT OPENSCAD (.SCAD)
     // ──────────────────────────────────────────────────────────────
     document.getElementById('btnExportSCAD').addEventListener('click', () => {
       exportOpenSCADScript();
     });
 
     function exportOpenSCADScript() {
-      if (!state.loadedGeometry || !state.gatePicked) return;
-
-      const layoutData = computeSprueLayout();
-      const { uRail, uGate, runnerRadius, railCenterAtP } = layoutData;
-      const isDouble = (state.layout === 'double');
+      if (!state.loadedGeometry) return;
+      const bounds = computeSprueBounds();
       const baseName = state.rawFileName.replace(/\.[^/.]+$/, '');
 
-      const scadContent = `// ============================================================
-// GRAPPE D'IMPRESSION 3D INDUSTRIELLE (SLS / MJF)
-// Généré automatiquement par 3D Sprue Generator
-// Fichier STL source : ${state.rawFileName}
+      const scad = `// ============================================================
+// GRAPPE D'IMPRESSION 3D AVEC CAGE DE PROTECTION ET DOUBLE ATTACHE
+// Généré par 3D Sprue & Frame Generator
+// Modèle STL : ${state.rawFileName}
 // ============================================================
 
-// ── PARAMÈTRES ÉDITABLES ────────────────────────────────────
-stl_file        = "${state.rawFileName}";
-total_count     = ${state.count};
-spacing         = ${state.spacing.toFixed(2)};
-gate_length     = ${state.gateLength.toFixed(2)};
-gate_diameter   = ${state.gateDiameter.toFixed(2)};
-runner_diameter = ${state.runnerDiameter.toFixed(2)};
-embed_depth     = ${state.embedDepth.toFixed(2)};
-$fn             = 32;
+stl_file       = "${state.rawFileName}";
+total_count    = ${state.count};
+spacing_x      = ${state.spacing.toFixed(2)};
+frame_w        = ${state.frameWidth.toFixed(2)};
+frame_margin   = ${state.frameMargin.toFixed(2)};
+neck_diam      = ${state.neckDiameter.toFixed(2)};
+body_diam      = ${state.bodyDiameter.toFixed(2)};
+neck_length    = ${state.neckLength.toFixed(2)};
+embed_depth    = ${state.embedDepth.toFixed(2)};
 
-// ── CONSTANTES GÉOMÉTRIQUES CALCULÉES ───────────────────────
-gate_px = ${state.gatePoint.x.toFixed(4)};
-gate_py = ${state.gatePoint.y.toFixed(4)};
-gate_pz = ${state.gatePoint.z.toFixed(4)};
+$fn = 32;
 
-ugate_x = ${uGate.x.toFixed(4)};
-ugate_y = ${uGate.y.toFixed(4)};
-ugate_z = ${uGate.z.toFixed(4)};
+// Limites calculées de la cage
+x_min = ${bounds.xMin.toFixed(2)};
+x_max = ${bounds.xMax.toFixed(2)};
+y_min = ${bounds.yMin.toFixed(2)};
+y_max = ${bounds.yMax.toFixed(2)};
+y_mid = ${bounds.yRailCentral.toFixed(2)};
+z_att = ${bounds.zAttach.toFixed(2)};
 
-rail_cx = ${railCenterAtP.x.toFixed(4)};
-rail_cy = ${railCenterAtP.y.toFixed(4)};
-rail_cz = ${railCenterAtP.z.toFixed(4)};
+// Points d'attache sur la pièce
+g1 = [${state.gate1Point.x.toFixed(3)}, ${state.gate1Point.y.toFixed(3)}, ${state.gate1Point.z.toFixed(3)}];
+g2 = [${state.gate2Point.x.toFixed(3)}, ${state.gate2Point.y.toFixed(3)}, ${state.gate2Point.z.toFixed(3)}];
 
-is_double   = ${isDouble ? "true" : "false"};
-count_row1  = is_double ? ceil(total_count / 2) : total_count;
-count_row2  = is_double ? floor(total_count / 2) : 0;
-axis_mode   = "${state.resolvedAxis}"; // "x" ou "y"
-
-// ── MODULE TIGE D'ATTACHE (CYLINDRE ORIENTÉ) ────────────────
-module attache_cylindre(p1, p2, r) {
+module poutre(p1, p2, d) {
     v = p2 - p1;
     len = norm(v);
-    if (len > 0.001) {
+    if (len > 0.01) {
         translate(p1)
         rotate([0, acos(v[2] / len), atan2(v[1], v[0]) * 180 / 3.14159265])
-        cylinder(r = r, h = len);
+        cylinder(r = d/2, h = len);
     }
 }
 
-// ── ASSEMBLAGE COMPLET DE LA GRAPPE ─────────────────────────
-union() {
-    // 1. Rangée 1 : Pièces et tiges
-    for (i = [0 : count_row1 - 1]) {
-        offset = (i - (count_row1 - 1) / 2) * spacing;
-        trans = (axis_mode == "x") ? [offset, 0, 0] : [0, offset, 0];
-        
-        // Pièce STL
-        translate(trans)
-            import(stl_file);
-
-        // Tige de liaison
-        p_gate  = [gate_px + trans[0], gate_py + trans[1], gate_pz + trans[2]];
-        p_start = p_gate - [ugate_x * embed_depth, ugate_y * embed_depth, ugate_z * embed_depth];
-        p_end   = p_gate + [ugate_x * (gate_length + runner_diameter/2), ugate_y * (gate_length + runner_diameter/2), ugate_z * (gate_length + runner_diameter/2)];
-        
-        attache_cylindre(p_start, p_end, gate_diameter / 2);
-    }
-
-    // 2. Rangée 2 (si double rangée)
-    if (is_double) {
-        for (i = [0 : count_row2 - 1]) {
-            offset = (i - (count_row2 - 1) / 2) * spacing;
-            trans = (axis_mode == "x") ? [offset, 0, 0] : [0, offset, 0];
-
-            // Pièce symétrique
-            translate(trans)
-            translate([rail_cx, rail_cy, rail_cz])
-            rotate((axis_mode == "x") ? [180, 0, 0] : [0, 180, 0])
-            translate([-rail_cx, -rail_cy, -rail_cz])
-                import(stl_file);
-
-            // Tige opposée
-            p_rail = [rail_cx + trans[0], rail_cy + trans[1], rail_cz + trans[2]];
-            p_end2 = p_rail - [ugate_x * (gate_length + runner_diameter/2), ugate_y * (gate_length + runner_diameter/2), ugate_z * (gate_length + runner_diameter/2)];
-            attache_cylindre(p_rail, p_end2, gate_diameter / 2);
-        }
-    }
-
-    // 3. Canal central (Runner)
-    max_c = is_double ? max(count_row1, count_row2) : count_row1;
-    total_len = (max_c - 1) * spacing + max(spacing, 12);
+module attache_double(p_support, p_touch) {
+    v = p_touch - p_support;
+    len = norm(v);
+    dir = v / len;
+    p_neck = p_support + dir * (len - neck_length);
+    p_end  = p_touch + dir * embed_depth;
     
-    if (axis_mode == "x") {
-        translate([rail_cx - total_len / 2, rail_cy, rail_cz])
-        rotate([0, 90, 0])
-        cylinder(r = runner_diameter / 2, h = total_len);
-    } else {
-        translate([rail_cx, rail_cy - total_len / 2, rail_cz])
-        rotate([-90, 0, 0])
-        cylinder(r = runner_diameter / 2, h = total_len);
+    // Corps épais
+    poutre(p_support, p_neck, body_diam);
+    // Col fin de rupture
+    poutre(p_neck, p_end, neck_diam);
+}
+
+union() {
+    // 1. Cadre rectangulaire de protection
+    poutre([x_min, y_min, z_att], [x_max, y_min, z_att], frame_w);
+    poutre([x_min, y_max, z_att], [x_max, y_max, z_att], frame_w);
+    poutre([x_min, y_min, z_att], [x_min, y_max, z_att], frame_w);
+    poutre([x_max, y_min, z_att], [x_max, y_max, z_att], frame_w);
+
+    // Rail central
+    poutre([x_min, y_mid, z_att], [x_max, y_mid, z_att], frame_w);
+
+    // 2. Pièces et attaches
+    count_row = ${bounds.countRow1};
+    for (c = [0 : count_row - 1]) {
+        pos_x = (c - (count_row - 1) / 2) * spacing_x;
+        
+        // Rangée 1
+        translate([pos_x, ${bounds.yRow0.toFixed(2)}, 0]) {
+            import(stl_file);
+        }
+        pt1 = [pos_x + g1[0], ${bounds.yRow0.toFixed(2)} + g1[1], g1[2]];
+        pt2 = [pos_x + g2[0], ${bounds.yRow0.toFixed(2)} + g2[1], g2[2]];
+        attache_double([pt1[0], y_mid, z_att], pt1);
+        attache_double([pt2[0], y_min, z_att], pt2);
+
+        // Rangée 2 (vis-à-vis)
+        translate([pos_x, ${bounds.yRow1.toFixed(2)}, 0])
+        rotate([0, 0, 180]) {
+            import(stl_file);
+        }
+        pt1_rot = [pos_x - g1[0], ${bounds.yRow1.toFixed(2)} - g1[1], g1[2]];
+        pt2_rot = [pos_x - g2[0], ${bounds.yRow1.toFixed(2)} - g2[1], g2[2]];
+        attache_double([pt1_rot[0], y_mid, z_att], pt1_rot);
+        attache_double([pt2_rot[0], y_max, z_att], pt2_rot);
     }
 }
 `;
-
-      const blob = new Blob([scadContent], { type: 'text/plain;charset=utf-8' });
-      triggerDownload(blob, `grappe_${state.count}x_${baseName}.scad`);
+      triggerDownload(new Blob([scad], { type: 'text/plain;charset=utf-8' }), `grappe_${state.count}x_${baseName}_cage.scad`);
     }
 
     function triggerDownload(blob, filename) {
@@ -1142,20 +1306,52 @@ union() {
     }
 
     // ──────────────────────────────────────────────────────────────
-    // ÉVÉNEMENTS UI & SYNCHRONISATION DES CONTRÔLES
+    // ÉVÉNEMENTS UI
     // ──────────────────────────────────────────────────────────────
-    
-    // Recentrer la vue
     document.getElementById('btnResetCamera').addEventListener('click', () => {
       if (state.loadedGeometry) fitCameraToObject(state.loadedGeometry);
     });
 
-    // Auto-détecter point
-    document.getElementById('btnAutoGate').addEventListener('click', () => {
-      autoDetectGatePoint();
+    const checkEnableFrame = document.getElementById('checkEnableFrame');
+    const frameSettings = document.getElementById('frameSettingsContainer');
+    checkEnableFrame.addEventListener('change', (e) => {
+      state.enableFrame = e.target.checked;
+      frameSettings.style.opacity = state.enableFrame ? '1' : '0.4';
+      rebuildSprue();
     });
 
-    // Quantité
+    const rangeFrameMargin = document.getElementById('rangeFrameMargin');
+    const valFrameMargin = document.getElementById('valFrameMargin');
+    rangeFrameMargin.addEventListener('input', (e) => {
+      state.frameMargin = parseFloat(e.target.value);
+      valFrameMargin.textContent = state.frameMargin.toFixed(1);
+      rebuildSprue();
+    });
+
+    const rangeFrameWidth = document.getElementById('rangeFrameWidth');
+    const valFrameWidth = document.getElementById('valFrameWidth');
+    rangeFrameWidth.addEventListener('input', (e) => {
+      state.frameWidth = parseFloat(e.target.value);
+      valFrameWidth.textContent = state.frameWidth.toFixed(1);
+      rebuildSprue();
+    });
+
+    const rangeNeckDiameter = document.getElementById('rangeNeckDiameter');
+    const valNeckDiameter = document.getElementById('valNeckDiameter');
+    rangeNeckDiameter.addEventListener('input', (e) => {
+      state.neckDiameter = parseFloat(e.target.value);
+      valNeckDiameter.textContent = state.neckDiameter.toFixed(1);
+      rebuildSprue();
+    });
+
+    const rangeBodyDiameter = document.getElementById('rangeBodyDiameter');
+    const valBodyDiameter = document.getElementById('valBodyDiameter');
+    rangeBodyDiameter.addEventListener('input', (e) => {
+      state.bodyDiameter = parseFloat(e.target.value);
+      valBodyDiameter.textContent = state.bodyDiameter.toFixed(1);
+      rebuildSprue();
+    });
+
     const inputCount = document.getElementById('inputCount');
     const rangeCount = document.getElementById('rangeCount');
     function updateCount(val) {
@@ -1169,61 +1365,21 @@ union() {
     inputCount.addEventListener('change', (e) => updateCount(e.target.value));
     rangeCount.addEventListener('input', (e) => updateCount(e.target.value));
 
-    // Disposition (Double / Single)
     const btnLayoutDouble = document.getElementById('btnLayoutDouble');
     const btnLayoutSingle = document.getElementById('btnLayoutSingle');
-    const symmetryGroup = document.getElementById('symmetryGroup');
-
     btnLayoutDouble.addEventListener('click', () => {
       state.layout = 'double';
       btnLayoutDouble.className = 'py-1.5 rounded-md font-medium text-center transition bg-indigo-600 text-white shadow-sm';
       btnLayoutSingle.className = 'py-1.5 rounded-md font-medium text-center transition text-slate-400 hover:text-white';
-      symmetryGroup.classList.remove('hidden');
       updateCount(state.count);
     });
-
     btnLayoutSingle.addEventListener('click', () => {
       state.layout = 'single';
       btnLayoutSingle.className = 'py-1.5 rounded-md font-medium text-center transition bg-indigo-600 text-white shadow-sm';
       btnLayoutDouble.className = 'py-1.5 rounded-md font-medium text-center transition text-slate-400 hover:text-white';
-      symmetryGroup.classList.add('hidden');
       rebuildSprue();
     });
 
-    // Symétrie Rangée 2
-    const btnSymRotate = document.getElementById('btnSymRotate');
-    const btnSymMirror = document.getElementById('btnSymMirror');
-    btnSymRotate.addEventListener('click', () => {
-      state.symmetry = 'rotate180';
-      btnSymRotate.className = 'py-1.5 rounded-md font-medium transition bg-slate-800 text-white';
-      btnSymMirror.className = 'py-1.5 rounded-md font-medium transition text-slate-400 hover:text-white';
-      rebuildSprue();
-    });
-    btnSymMirror.addEventListener('click', () => {
-      state.symmetry = 'mirror';
-      btnSymMirror.className = 'py-1.5 rounded-md font-medium transition bg-slate-800 text-white';
-      btnSymRotate.className = 'py-1.5 rounded-md font-medium transition text-slate-400 hover:text-white';
-      rebuildSprue();
-    });
-
-    // Axe du Rail
-    const btnAxisAuto = document.getElementById('btnAxisAuto');
-    const btnAxisX = document.getElementById('btnAxisX');
-    const btnAxisY = document.getElementById('btnAxisY');
-    function setAxisMode(mode) {
-      state.runnerAxisMode = mode;
-      [btnAxisAuto, btnAxisX, btnAxisY].forEach(b => b.className = 'py-1 rounded font-medium text-slate-400 hover:text-white');
-      if (mode === 'auto') btnAxisAuto.className = 'py-1 rounded font-medium bg-slate-800 text-white';
-      if (mode === 'x') btnAxisX.className = 'py-1 rounded font-medium bg-slate-800 text-white';
-      if (mode === 'y') btnAxisY.className = 'py-1 rounded font-medium bg-slate-800 text-white';
-      autoComputeSpacing();
-      rebuildSprue();
-    }
-    btnAxisAuto.addEventListener('click', () => setAxisMode('auto'));
-    btnAxisX.addEventListener('click', () => setAxisMode('x'));
-    btnAxisY.addEventListener('click', () => setAxisMode('y'));
-
-    // Espacement
     const rangeSpacing = document.getElementById('rangeSpacing');
     const valSpacing = document.getElementById('valSpacing');
     rangeSpacing.addEventListener('input', (e) => {
@@ -1232,49 +1388,15 @@ union() {
       rebuildSprue();
     });
     document.getElementById('btnAutoSpacing').addEventListener('click', () => {
-      autoComputeSpacing();
+      const suggestedSpacing = Math.round((Math.max(state.dimensions.x, state.dimensions.y) + 6.0) * 2) / 2;
+      state.spacing = Math.max(suggestedSpacing, 14.0);
+      rangeSpacing.value = state.spacing;
+      valSpacing.textContent = state.spacing.toFixed(1);
       rebuildSprue();
-    });
-
-    // Dimensions Tige & Runner
-    const rangeGateLength = document.getElementById('rangeGateLength');
-    const valGateLength = document.getElementById('valGateLength');
-    rangeGateLength.addEventListener('input', (e) => {
-      state.gateLength = parseFloat(e.target.value);
-      valGateLength.textContent = state.gateLength.toFixed(1);
-      updateGateMarker();
-      rebuildSprue();
-    });
-
-    const rangeGateDiameter = document.getElementById('rangeGateDiameter');
-    const valGateDiameter = document.getElementById('valGateDiameter');
-    rangeGateDiameter.addEventListener('input', (e) => {
-      state.gateDiameter = parseFloat(e.target.value);
-      valGateDiameter.textContent = state.gateDiameter.toFixed(1);
-      rebuildSprue();
-    });
-
-    const rangeRunnerDiameter = document.getElementById('rangeRunnerDiameter');
-    const valRunnerDiameter = document.getElementById('valRunnerDiameter');
-    rangeRunnerDiameter.addEventListener('input', (e) => {
-      state.runnerDiameter = parseFloat(e.target.value);
-      valRunnerDiameter.textContent = state.runnerDiameter.toFixed(1);
-      rebuildSprue();
-    });
-
-    // Options affichage
-    document.getElementById('checkShowAllPieces').addEventListener('change', (e) => {
-      state.showAllPieces = e.target.checked;
-      rebuildSprue();
-    });
-    document.getElementById('checkWireframe').addEventListener('change', (e) => {
-      state.wireframe = e.target.checked;
-      pieceMaterial.wireframe = state.wireframe;
-      runnerMaterial.wireframe = state.wireframe;
     });
 
     // ──────────────────────────────────────────────────────────────
-    // BOUCLE D'ANIMATION DE RENDU (60 FPS)
+    // BOUCLE DE RENDU (60 FPS)
     // ──────────────────────────────────────────────────────────────
     function animate() {
       requestAnimationFrame(animate);
