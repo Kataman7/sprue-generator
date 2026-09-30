@@ -44,6 +44,47 @@
     .crosshair-cursor {
       cursor: crosshair !important;
     }
+    /* Styles ViewCube 3D */
+    .cube-scene {
+      perspective: 320px;
+    }
+    #viewCube {
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    .cube-face {
+      position: absolute;
+      width: 56px;
+      height: 56px;
+      left: 12px;
+      top: 12px;
+      background: rgba(15, 23, 42, 0.88);
+      border: 1.5px solid rgba(99, 102, 241, 0.4);
+      color: #cbd5e1;
+      font-size: 8.5px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+      border-radius: 4px;
+    }
+    .cube-face:hover {
+      background: rgba(99, 102, 241, 0.9);
+      color: #ffffff;
+      border-color: #a5b4fc;
+      box-shadow: inset 0 0 14px rgba(255, 255, 255, 0.25), 0 0 8px rgba(99, 102, 241, 0.5);
+    }
+    .cube-front  { transform: translateZ(28px); }
+    .cube-back   { transform: rotateY(180deg) translateZ(28px); }
+    .cube-right  { transform: rotateY(90deg) translateZ(28px); }
+    .cube-left   { transform: rotateY(-90deg) translateZ(28px); }
+    .cube-top    { transform: rotateX(90deg) translateZ(28px); }
+    .cube-bottom { transform: rotateX(-90deg) translateZ(28px); }
   </style>
 
   <!-- Import Map pour Three.js et ses addons officiels via unpkg -->
@@ -157,6 +198,31 @@
             <span class="text-[10px] text-slate-400 block font-sans">Z</span>
             <span class="text-slate-200 font-bold" id="statDimZ">0.0</span> <span class="text-[9px] text-slate-400">mm</span>
           </div>
+        </div>
+      </div>
+
+      <!-- WIDGET VIEWCUBE 3D (SÉLECTEUR DE VUES D'ORIENTATION) -->
+      <div id="viewCubeWrapper" class="absolute top-4 right-4 z-10 flex flex-col items-center select-none bg-slate-900/60 backdrop-blur-md p-2 rounded-xl border border-slate-800/80 shadow-2xl">
+        <!-- Cube 3D interactif -->
+        <div class="cube-scene w-20 h-20 flex items-center justify-center my-1">
+          <div id="viewCube" class="w-full h-full relative">
+            <div class="cube-face cube-front" data-view="front" title="Vue de Face (Z+)">FACE</div>
+            <div class="cube-face cube-back" data-view="back" title="Vue Arrière / Dos (Z-)">DOS</div>
+            <div class="cube-face cube-top" data-view="top" title="Vue de Dessus (Y+)">DESSUS</div>
+            <div class="cube-face cube-bottom" data-view="bottom" title="Vue de Dessous (Y-)">DESSOUS</div>
+            <div class="cube-face cube-left" data-view="left" title="Vue Gauche (X-)">GAUCHE</div>
+            <div class="cube-face cube-right" data-view="right" title="Vue Droite (X+)">DROITE</div>
+          </div>
+        </div>
+
+        <!-- Boutons de raccourcis de vues rapides -->
+        <div class="grid grid-cols-3 gap-1 w-full pt-1.5 border-t border-slate-800/80 text-[9px] text-center font-bold">
+          <button data-view="top" class="btn-quick-view py-1 rounded bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition">Haut</button>
+          <button data-view="front" class="btn-quick-view py-1 rounded bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition">Face</button>
+          <button data-view="right" class="btn-quick-view py-1 rounded bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition">Droit</button>
+          <button data-view="bottom" class="btn-quick-view py-1 rounded bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition">Bas</button>
+          <button data-view="left" class="btn-quick-view py-1 rounded bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition">Gauche</button>
+          <button data-view="iso" class="btn-quick-view py-1 rounded bg-indigo-600/30 hover:bg-indigo-600 text-indigo-300 hover:text-white transition border border-indigo-500/20">Iso</button>
         </div>
       </div>
 
@@ -328,37 +394,41 @@
             </h3>
           </div>
 
-          <!-- Disposition & Quantité -->
+          <!-- Disposition & Dimensions de la Grille -->
           <div class="space-y-3 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80">
-            <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">A. Disposition des Pièces</span>
-
-            <!-- Quantité de pièces -->
-            <div class="space-y-1">
-              <div class="flex justify-between items-center">
-                <label for="inputCount" class="text-slate-300 font-medium">Nombre total de pièces</label>
-                <div class="flex items-center gap-1 font-mono">
-                  <input id="inputCount" type="number" min="2" max="50" step="2" value="10" class="w-14 bg-slate-950 border border-slate-800 rounded px-2 py-0.5 text-right text-indigo-400 font-bold focus:border-indigo-500 focus:outline-none">
-                  <span class="text-slate-400">pcs</span>
-                </div>
-              </div>
-              <input id="rangeCount" type="range" min="2" max="50" step="2" value="10" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">A. Configuration Grille</span>
+              <span id="badgeTotalPieces" class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                10 pièces (2 × 5)
+              </span>
             </div>
 
-            <!-- Configuration Grille -->
+            <!-- Rangées / Lignes (Y) -->
             <div class="space-y-1">
-              <label class="text-slate-300 font-medium block">Configuration de la grille</label>
-              <div class="grid grid-cols-2 gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800">
-                <button id="btnLayoutDouble" class="py-1.5 rounded-md font-medium text-center transition bg-indigo-600 text-white shadow-sm">
-                  2 rangées (2×5)
-                </button>
-                <button id="btnLayoutSingle" class="py-1.5 rounded-md font-medium text-center transition text-slate-400 hover:text-white">
-                  1 rangée (1×10)
-                </button>
+              <div class="flex justify-between items-center">
+                <label for="inputRows" class="text-slate-300 font-medium">Nombre de Rangées / Lignes (Y)</label>
+                <div class="flex items-center gap-1 font-mono">
+                  <input id="inputRows" type="number" min="1" max="10" step="1" value="2" class="w-12 bg-slate-950 border border-slate-800 rounded px-2 py-0.5 text-right text-indigo-400 font-bold focus:border-indigo-500 focus:outline-none">
+                  <span class="text-slate-400">lignes</span>
+                </div>
               </div>
+              <input id="rangeRows" type="range" min="1" max="8" step="1" value="2" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            </div>
+
+            <!-- Colonnes (X) -->
+            <div class="space-y-1 pt-1 border-t border-slate-800">
+              <div class="flex justify-between items-center">
+                <label for="inputCols" class="text-slate-300 font-medium">Nombre de Colonnes (X)</label>
+                <div class="flex items-center gap-1 font-mono">
+                  <input id="inputCols" type="number" min="1" max="25" step="1" value="5" class="w-12 bg-slate-950 border border-slate-800 rounded px-2 py-0.5 text-right text-indigo-400 font-bold focus:border-indigo-500 focus:outline-none">
+                  <span class="text-slate-400">cols</span>
+                </div>
+              </div>
+              <input id="rangeCols" type="range" min="1" max="15" step="1" value="5" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
             </div>
 
             <!-- Espacement entre pièces -->
-            <div class="space-y-1 pt-1">
+            <div class="space-y-1 pt-1 border-t border-slate-800">
               <div class="flex justify-between items-center">
                 <label for="rangeSpacing" class="text-slate-300 font-medium">Espacement centre-à-centre</label>
                 <span class="font-mono text-indigo-400 font-bold"><span id="valSpacing">22.0</span> mm</span>
@@ -465,9 +535,9 @@
       bodyDiameter: 2.8,        // Ø du corps de l'attache côté cadre
       embedDepth: 0.35,         // Pénétration dans la pièce pour fusion CSG étanche
 
-      // Grille
-      count: 10,
-      layout: 'double',         // 'double' (2 rangées) | 'single' (1 rangée)
+      // Grille (Nombre de rangées et de colonnes)
+      rows: 2,                  // Nombre de rangées / lignes (axe Y)
+      cols: 5,                  // Nombre de colonnes (axe X)
       spacing: 22.0             // Espacement centre-à-centre le long du rail
     };
 
@@ -944,54 +1014,63 @@
     }
 
     // ──────────────────────────────────────────────────────────────
-    // CALCUL GÉOMÉTRIQUE BASÉ SUR LES LONGUEURS INDÉPENDANTES 1 & 2
+    // CALCUL GÉOMÉTRIQUE BASÉ SUR LA GRILLE RANGÉES (Y) × COLONNES (X)
     // ──────────────────────────────────────────────────────────────
     function computeSprueBounds() {
-      const isDouble = (state.layout === 'double');
-      const totalCount = state.count;
-      const countRow1 = isDouble ? Math.ceil(totalCount / 2) : totalCount;
-      const countRow2 = isDouble ? Math.floor(totalCount / 2) : 0;
-      const cols = Math.max(countRow1, countRow2);
-
+      const rows = state.rows;
+      const cols = state.cols;
+      const totalCount = rows * cols;
       const spanX = (cols - 1) * state.spacing;
       const halfSizeX = state.dimensions.x / 2;
 
-      // ── Calcul précis des Y basé sur gate1Length et gate2Length ──
-      // Pour une pièce à Y_row :
-      // Point 1 (intérieur) est à Y_row + g1.y.
-      // Le rail central est à distance gate1Length du point 1 :
-      // Donc Y_railCentral = (Y_row0 + g1.y) + gate1Length.
-      // Pour placer le rail central à Y = 0 (symétrie centrale) :
-      // Y_row0 = - (gate1Point.y + state.gate1Length);
-      // Et pour la rangée 1 (tournée de 180°) :
-      // Son point intérieur tourne à -g1.y, donc son point d'attache est à Y_row1 - g1.y.
-      // Il doit aussi être à distance gate1Length du rail central Y=0 :
-      // Donc Y_row1 = (gate1Point.y + state.gate1Length) = -Y_row0 !
-      const g1y = state.gate1Point.y;
-      const g2y = state.gate2Point.y;
+      const g1y = Math.abs(state.gate1Point.y);
+      const g2y = Math.abs(state.gate2Point.y);
+      const dInt = g1y + state.gate1Length;
+      const dExt = g2y + state.gate2Length;
 
-      let yRow0, yRow1, yRailCentral, yMin, yMax;
-
-      if (isDouble) {
-        yRailCentral = 0;
-        yRow0 = - (Math.abs(g1y) + state.gate1Length);
-        yRow1 = (Math.abs(g1y) + state.gate1Length);
-
-        // Le cadre extérieur est à distance gate2Length du point 2 de chaque rangée :
-        // Rangée 0 : point 2 est à yRow0 + g2y. Le cadre bas est à (yRow0 + g2y) - gate2Length.
-        // Rangée 1 : point 2 est à yRow1 - g2y. Le cadre haut est à (yRow1 - g2y) + gate2Length.
-        yMin = (yRow0 - Math.abs(g2y)) - state.gate2Length;
-        yMax = (yRow1 + Math.abs(g2y)) + state.gate2Length;
-      } else {
-        // Rangée simple (1x10) :
-        yRow0 = 0;
-        yRow1 = 0;
-        yRailCentral = Math.abs(g1y) + state.gate1Length;
-        yMax = yRailCentral;
-        yMin = - (Math.abs(g2y) + state.gate2Length);
+      // Calcul des coordonnées Y pour chaque rangée
+      const rowPositions = [];
+      let currentY = 0;
+      for (let r = 0; r < rows; r++) {
+        const isOdd = (r % 2 === 1);
+        if (r === 0) {
+          currentY = 0;
+        } else if (isOdd) {
+          currentY += 2 * dInt;
+        } else {
+          currentY += 2 * dExt;
+        }
+        rowPositions.push({ rawY: currentY, isOdd });
       }
 
-      // Limites X du cadre : couvre toutes les pièces avec une marge de sécurité
+      // Centrage global en Y
+      const minY = rowPositions[0].rawY - dExt;
+      const lastRow = rowPositions[rowPositions.length - 1];
+      const maxY = lastRow.rawY + (lastRow.isOdd ? dExt : dInt);
+      const yOffset = - (minY + maxY) / 2;
+
+      const railYSet = new Set();
+      rowPositions.forEach((rp) => {
+        rp.y = rp.rawY + yOffset;
+        if (!rp.isOdd) {
+          rp.rotZ = 0;
+          rp.railIntY = rp.y + dInt;
+          rp.railExtY = rp.y - dExt;
+        } else {
+          rp.rotZ = Math.PI;
+          rp.railIntY = rp.y - dInt;
+          rp.railExtY = rp.y + dExt;
+        }
+        railYSet.add(Math.round(rp.railIntY * 1000) / 1000);
+        railYSet.add(Math.round(rp.railExtY * 1000) / 1000);
+      });
+
+      const allRailYs = Array.from(railYSet).sort((a, b) => a - b);
+      const yMin = allRailYs[0];
+      const yMax = allRailYs[allRailYs.length - 1];
+      const intermediateRails = allRailYs.filter(y => y > yMin + 0.05 && y < yMax - 0.05);
+
+      // Limites X du cadre
       const xMargin = Math.max(state.gate2Length, 6.0);
       const xMin = - (spanX / 2 + halfSizeX + xMargin);
       const xMax = (spanX / 2 + halfSizeX + xMargin);
@@ -1002,14 +1081,12 @@
         : 0;
 
       return {
+        rows,
         cols,
-        countRow1,
-        countRow2,
-        isDouble,
+        totalCount,
         spanX,
-        yRow0,
-        yRow1,
-        yRailCentral,
+        rowPositions,
+        intermediateRails,
         xMin,
         xMax,
         yMin,
@@ -1028,81 +1105,54 @@
       if (!state.loadedGeometry) return;
 
       const bounds = computeSprueBounds();
-      const { cols, countRow1, countRow2, isDouble, yRow0, yRow1, yRailCentral, xMin, xMax, yMin, yMax, zAttach } = bounds;
       const halfFrameD = state.frameWidth / 2;
 
-      // ── 1. PLACEMENT DES PIÈCES & DOUBLES ATTACHES ─────────────
-      // Rangée 1 (bas ou unique)
-      for (let c = 0; c < countRow1; c++) {
-        const posX = (c - (countRow1 - 1) / 2) * state.spacing;
-        const posY = yRow0;
-
-        const pieceMesh = new THREE.Mesh(state.loadedGeometry, pieceMaterial);
-        pieceMesh.name = `spruePiece_0_${c}`;
-        pieceMesh.position.set(posX, posY, 0);
-        sprueGroup.add(pieceMesh);
-
-        // Attache 1 (Intérieure -> vers rail central)
-        if (state.gate1Picked) {
-          const pTouch = state.gate1Point.clone().add(new THREE.Vector3(posX, posY, 0));
-          const pSupport = new THREE.Vector3(pTouch.x, yRailCentral, zAttach);
-          createSubdividedAttache(pSupport, pTouch, sprueGroup);
-        }
-
-        // Attache 2 (Extérieure -> vers cadre extérieur bas)
-        if (state.gate2Picked && state.enableFrame) {
-          const pTouch = state.gate2Point.clone().add(new THREE.Vector3(posX, posY, 0));
-          const pSupport = new THREE.Vector3(pTouch.x, yMin, zAttach);
-          createSubdividedAttache(pSupport, pTouch, sprueGroup);
-        }
-      }
-
-      // Rangée 2 (si double rangée)
-      if (isDouble) {
-        for (let c = 0; c < countRow2; c++) {
-          const posX = (c - (countRow2 - 1) / 2) * state.spacing;
-          const posY = yRow1;
+      // 1. Placement des pièces et attaches pour chaque rangée
+      bounds.rowPositions.forEach((rp, rIdx) => {
+        for (let c = 0; c < bounds.cols; c++) {
+          const posX = (c - (bounds.cols - 1) / 2) * state.spacing;
+          const posY = rp.y;
 
           const pieceMesh = new THREE.Mesh(state.loadedGeometry, pieceMaterial);
-          pieceMesh.name = `spruePiece_1_${c}`;
+          pieceMesh.name = `spruePiece_${rIdx}_${c}`;
           pieceMesh.position.set(posX, posY, 0);
-          pieceMesh.rotation.z = Math.PI; // 180° rotation pour faire face au rail central
+          pieceMesh.rotation.z = rp.rotZ;
           sprueGroup.add(pieceMesh);
 
-          // Attache 1 (Intérieure -> vers rail central)
+          // Attache 1 (Intérieure)
           if (state.gate1Picked) {
-            const pLocalRot = state.gate1Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
-            const pTouch = pLocalRot.add(new THREE.Vector3(posX, posY, 0));
-            const pSupport = new THREE.Vector3(pTouch.x, yRailCentral, zAttach);
+            const pLocal = state.gate1Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), rp.rotZ);
+            const pTouch = pLocal.add(new THREE.Vector3(posX, posY, 0));
+            const pSupport = new THREE.Vector3(pTouch.x, rp.railIntY, bounds.zAttach);
             createSubdividedAttache(pSupport, pTouch, sprueGroup);
           }
 
-          // Attache 2 (Extérieure -> vers cadre extérieur haut)
+          // Attache 2 (Extérieure)
           if (state.gate2Picked && state.enableFrame) {
-            const pLocalRot = state.gate2Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
-            const pTouch = pLocalRot.add(new THREE.Vector3(posX, posY, 0));
-            const pSupport = new THREE.Vector3(pTouch.x, yMax, zAttach);
+            const pLocal = state.gate2Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), rp.rotZ);
+            const pTouch = pLocal.add(new THREE.Vector3(posX, posY, 0));
+            const pSupport = new THREE.Vector3(pTouch.x, rp.railExtY, bounds.zAttach);
             createSubdividedAttache(pSupport, pTouch, sprueGroup);
           }
         }
-      }
+      });
 
-      // ── 2. CADRE DE PROTECTION & RAIL CENTRAL ──────────────────
+      // 2. Cadre rectangulaire de protection
       if (state.enableFrame) {
         // Barre bas
-        sprueGroup.add(createPoutreMesh(new THREE.Vector3(xMin, yMin, zAttach), new THREE.Vector3(xMax, yMin, zAttach), halfFrameD));
+        sprueGroup.add(createPoutreMesh(new THREE.Vector3(bounds.xMin, bounds.yMin, bounds.zAttach), new THREE.Vector3(bounds.xMax, bounds.yMin, bounds.zAttach), halfFrameD));
         // Barre haut
-        sprueGroup.add(createPoutreMesh(new THREE.Vector3(xMin, yMax, zAttach), new THREE.Vector3(xMax, yMax, zAttach), halfFrameD));
+        sprueGroup.add(createPoutreMesh(new THREE.Vector3(bounds.xMin, bounds.yMax, bounds.zAttach), new THREE.Vector3(bounds.xMax, bounds.yMax, bounds.zAttach), halfFrameD));
         // Barre gauche
-        sprueGroup.add(createPoutreMesh(new THREE.Vector3(xMin, yMin, zAttach), new THREE.Vector3(xMin, yMax, zAttach), halfFrameD));
+        sprueGroup.add(createPoutreMesh(new THREE.Vector3(bounds.xMin, bounds.yMin, bounds.zAttach), new THREE.Vector3(bounds.xMin, bounds.yMax, bounds.zAttach), halfFrameD));
         // Barre droite
-        sprueGroup.add(createPoutreMesh(new THREE.Vector3(xMax, yMin, zAttach), new THREE.Vector3(xMax, yMax, zAttach), halfFrameD));
+        sprueGroup.add(createPoutreMesh(new THREE.Vector3(bounds.xMax, bounds.yMin, bounds.zAttach), new THREE.Vector3(bounds.xMax, bounds.yMax, bounds.zAttach), halfFrameD));
       }
 
-      // Rail central (entre les 2 rangées)
-      if (isDouble) {
-        sprueGroup.add(createPoutreMesh(new THREE.Vector3(xMin, yRailCentral, zAttach), new THREE.Vector3(xMax, yRailCentral, zAttach), halfFrameD));
-      }
+      // 3. Rails horizontaux intermédiaires (entre les rangées)
+      bounds.intermediateRails.forEach(rY => {
+        sprueGroup.add(createPoutreMesh(new THREE.Vector3(bounds.xMin, rY, bounds.zAttach), new THREE.Vector3(bounds.xMax, rY, bounds.zAttach), halfFrameD));
+      });
 
       updateViewModeVisibility();
     }
@@ -1198,75 +1248,58 @@
 
       try {
         const bounds = computeSprueBounds();
-        const { cols, countRow1, countRow2, isDouble, yRow0, yRow1, yRailCentral, xMin, xMax, yMin, yMax, zAttach } = bounds;
         const halfFrameD = state.frameWidth / 2;
 
         const geomsToMerge = [];
 
-        // 1. Pièces et doubles attaches (Rangée 1)
-        for (let c = 0; c < countRow1; c++) {
-          const posX = (c - (countRow1 - 1) / 2) * state.spacing;
-          const posY = yRow0;
-
-          const pGeom = state.loadedGeometry.clone();
-          pGeom.translate(posX, posY, 0);
-          geomsToMerge.push(pGeom);
-
-          if (state.gate1Picked) {
-            const pTouch = state.gate1Point.clone().add(new THREE.Vector3(posX, posY, 0));
-            const pSupport = new THREE.Vector3(pTouch.x, yRailCentral, zAttach);
-            addSubdividedAttacheGeoms(pSupport, pTouch, geomsToMerge);
-          }
-          if (state.gate2Picked && state.enableFrame) {
-            const pTouch = state.gate2Point.clone().add(new THREE.Vector3(posX, posY, 0));
-            const pSupport = new THREE.Vector3(pTouch.x, yMin, zAttach);
-            addSubdividedAttacheGeoms(pSupport, pTouch, geomsToMerge);
-          }
-        }
-
-        // 2. Pièces et doubles attaches (Rangée 2)
-        if (isDouble) {
-          for (let c = 0; c < countRow2; c++) {
-            const posX = (c - (countRow2 - 1) / 2) * state.spacing;
-            const posY = yRow1;
+        // 1. Pièces et doubles attaches pour chaque rangée
+        bounds.rowPositions.forEach((rp) => {
+          for (let c = 0; c < bounds.cols; c++) {
+            const posX = (c - (bounds.cols - 1) / 2) * state.spacing;
+            const posY = rp.y;
 
             const pGeom = state.loadedGeometry.clone();
-            pGeom.applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
+            if (rp.rotZ !== 0) {
+              pGeom.applyAxisAngle(new THREE.Vector3(0, 0, 1), rp.rotZ);
+            }
             pGeom.translate(posX, posY, 0);
             geomsToMerge.push(pGeom);
 
+            // Attache 1
             if (state.gate1Picked) {
-              const pLocalRot = state.gate1Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
-              const pTouch = pLocalRot.add(new THREE.Vector3(posX, posY, 0));
-              const pSupport = new THREE.Vector3(pTouch.x, yRailCentral, zAttach);
+              const pLocal = state.gate1Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), rp.rotZ);
+              const pTouch = pLocal.add(new THREE.Vector3(posX, posY, 0));
+              const pSupport = new THREE.Vector3(pTouch.x, rp.railIntY, bounds.zAttach);
               addSubdividedAttacheGeoms(pSupport, pTouch, geomsToMerge);
             }
+
+            // Attache 2
             if (state.gate2Picked && state.enableFrame) {
-              const pLocalRot = state.gate2Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI);
-              const pTouch = pLocalRot.add(new THREE.Vector3(posX, posY, 0));
-              const pSupport = new THREE.Vector3(pTouch.x, yMax, zAttach);
+              const pLocal = state.gate2Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), rp.rotZ);
+              const pTouch = pLocal.add(new THREE.Vector3(posX, posY, 0));
+              const pSupport = new THREE.Vector3(pTouch.x, rp.railExtY, bounds.zAttach);
               addSubdividedAttacheGeoms(pSupport, pTouch, geomsToMerge);
             }
           }
-        }
+        });
 
-        // 3. Cadre rectangulaire de protection
+        // 2. Cadre rectangulaire de protection
         if (state.enableFrame) {
-          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(xMin, yMin, zAttach), new THREE.Vector3(xMax, yMin, zAttach), halfFrameD));
-          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(xMin, yMax, zAttach), new THREE.Vector3(xMax, yMax, zAttach), halfFrameD));
-          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(xMin, yMin, zAttach), new THREE.Vector3(xMin, yMax, zAttach), halfFrameD));
-          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(xMax, yMin, zAttach), new THREE.Vector3(xMax, yMax, zAttach), halfFrameD));
+          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(bounds.xMin, bounds.yMin, bounds.zAttach), new THREE.Vector3(bounds.xMax, bounds.yMin, bounds.zAttach), halfFrameD));
+          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(bounds.xMin, bounds.yMax, bounds.zAttach), new THREE.Vector3(bounds.xMax, bounds.yMax, bounds.zAttach), halfFrameD));
+          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(bounds.xMin, bounds.yMin, bounds.zAttach), new THREE.Vector3(bounds.xMin, bounds.yMax, bounds.zAttach), halfFrameD));
+          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(bounds.xMax, bounds.yMin, bounds.zAttach), new THREE.Vector3(bounds.xMax, bounds.yMax, bounds.zAttach), halfFrameD));
         }
 
-        // 4. Rail central
-        if (isDouble) {
-          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(xMin, yRailCentral, zAttach), new THREE.Vector3(xMax, yRailCentral, zAttach), halfFrameD));
-        }
+        // 3. Rails horizontaux intermédiaires
+        bounds.intermediateRails.forEach(rY => {
+          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(bounds.xMin, rY, bounds.zAttach), new THREE.Vector3(bounds.xMax, rY, bounds.zAttach), halfFrameD));
+        });
 
-        // 5. Fusion globale
+        // 4. Fusion globale
         const mergedGeometry = BufferGeometryUtils.mergeGeometries(geomsToMerge, false);
 
-        // 6. Export binaire STL
+        // 5. Export binaire STL
         const exporter = new STLExporter();
         const binaryStlData = exporter.parse(new THREE.Mesh(mergedGeometry), { binary: true });
 
@@ -1276,7 +1309,7 @@
 
         // Téléchargement
         const baseName = state.rawFileName.replace(/\.[^/.]+$/, '');
-        const filename = `grappe_${state.count}x_${baseName}_cage.stl`;
+        const filename = `grappe_${state.rows}x${state.cols}_${baseName}_cage.stl`;
         triggerDownload(new Blob([binaryStlData], { type: 'application/octet-stream' }), filename);
 
       } catch (err) {
@@ -1323,10 +1356,12 @@
 // GRAPPE D'IMPRESSION 3D AVEC CAGE DE PROTECTION ET DOUBLE ATTACHE
 // Généré par 3D Sprue & Frame Generator
 // Modèle STL : ${state.rawFileName}
+// Grille : ${state.rows} rangées × ${state.cols} colonnes (${bounds.totalCount} pièces)
 // ============================================================
 
 stl_file       = "${state.rawFileName}";
-total_count    = ${state.count};
+rows           = ${state.rows};
+cols           = ${state.cols};
 spacing_x      = ${state.spacing.toFixed(2)};
 frame_w        = ${state.frameWidth.toFixed(2)};
 gate1_length   = ${state.gate1Length.toFixed(2)};
@@ -1343,7 +1378,6 @@ x_min = ${bounds.xMin.toFixed(2)};
 x_max = ${bounds.xMax.toFixed(2)};
 y_min = ${bounds.yMin.toFixed(2)};
 y_max = ${bounds.yMax.toFixed(2)};
-y_mid = ${bounds.yRailCentral.toFixed(2)};
 z_att = ${bounds.zAttach.toFixed(2)};
 
 // Points d'attache sur la pièce
@@ -1367,9 +1401,7 @@ module attache_double(p_support, p_touch) {
     p_neck = p_support + dir * (len - neck_length);
     p_end  = p_touch + dir * embed_depth;
     
-    // Corps épais
     poutre(p_support, p_neck, body_diam);
-    // Col fin de rupture
     poutre(p_neck, p_end, neck_diam);
 }
 
@@ -1380,35 +1412,26 @@ union() {
     poutre([x_min, y_min, z_att], [x_min, y_max, z_att], frame_w);
     poutre([x_max, y_min, z_att], [x_max, y_max, z_att], frame_w);
 
-    // Rail central
-    poutre([x_min, y_mid, z_att], [x_max, y_mid, z_att], frame_w);
+    // 2. Rails intermédiaires
+${bounds.intermediateRails.map(rY => `    poutre([x_min, ${rY.toFixed(2)}, z_att], [x_max, ${rY.toFixed(2)}, z_att], frame_w);`).join('\n')}
 
-    // 2. Pièces et attaches
-    count_row = ${bounds.countRow1};
-    for (c = [0 : count_row - 1]) {
-        pos_x = (c - (count_row - 1) / 2) * spacing_x;
-        
-        // Rangée 1
-        translate([pos_x, ${bounds.yRow0.toFixed(2)}, 0]) {
-            import(stl_file);
-        }
-        pt1 = [pos_x + g1[0], ${bounds.yRow0.toFixed(2)} + g1[1], g1[2]];
-        pt2 = [pos_x + g2[0], ${bounds.yRow0.toFixed(2)} + g2[1], g2[2]];
-        attache_double([pt1[0], y_mid, z_att], pt1);
-        attache_double([pt2[0], y_min, z_att], pt2);
+    // 3. Pièces et attaches
+${bounds.rowPositions.map((rp, rIdx) => `
+    // Rangée ${rIdx}
+    for (c = [0 : cols - 1]) {
+        pos_x = (c - (cols - 1) / 2) * spacing_x;
+        translate([pos_x, ${rp.y.toFixed(2)}, 0])
+        ${rp.rotZ !== 0 ? 'rotate([0, 0, 180])\n        ' : ''}import(stl_file);
 
-        // Rangée 2 (vis-à-vis)
-        translate([pos_x, ${bounds.yRow1.toFixed(2)}, 0])
-        rotate([0, 0, 180]) {
-            import(stl_file);
-        }
-        pt1_rot = [pos_x - g1[0], ${bounds.yRow1.toFixed(2)} - g1[1], g1[2]];
-        pt2_rot = [pos_x - g2[0], ${bounds.yRow1.toFixed(2)} - g2[1], g2[2]];
-        attache_double([pt1_rot[0], y_mid, z_att], pt1_rot);
-        attache_double([pt2_rot[0], y_max, z_att], pt2_rot);
-    }
+        pt1 = [pos_x + ${rp.rotZ === 0 ? 'g1[0]' : '-g1[0]'}, ${rp.y.toFixed(2)} + ${rp.rotZ === 0 ? 'g1[1]' : '-g1[1]'}, g1[2]];
+        pt2 = [pos_x + ${rp.rotZ === 0 ? 'g2[0]' : '-g2[0]'}, ${rp.y.toFixed(2)} + ${rp.rotZ === 0 ? 'g2[1]' : '-g2[1]'}, g2[2]];
+        attache_double([pt1[0], ${rp.railIntY.toFixed(2)}, z_att], pt1);
+        attache_double([pt2[0], ${rp.railExtY.toFixed(2)}, z_att], pt2);
+    }`).join('\n')}
 }
 `;
+      triggerDownload(new Blob([scad], { type: 'text/plain;charset=utf-8' }), `grappe_${state.rows}x${state.cols}_${baseName}_cage.scad`);
+    }
       triggerDownload(new Blob([scad], { type: 'text/plain;charset=utf-8' }), `grappe_${state.count}x_${baseName}_cage.scad`);
     }
 
@@ -1486,33 +1509,31 @@ union() {
       rebuildSprue();
     });
 
-    const inputCount = document.getElementById('inputCount');
-    const rangeCount = document.getElementById('rangeCount');
-    function updateCount(val) {
-      val = Math.max(2, Math.min(50, parseInt(val) || 10));
-      if (state.layout === 'double' && val % 2 !== 0) val += 1;
-      state.count = val;
-      inputCount.value = val;
-      rangeCount.value = val;
+    // ── ÉCOUTEURS GRILLE RANGÉES (Y) × COLONNES (X) ────────────
+    const inputRows = document.getElementById('inputRows');
+    const rangeRows = document.getElementById('rangeRows');
+    const inputCols = document.getElementById('inputCols');
+    const rangeCols = document.getElementById('rangeCols');
+    const badgeTotalPieces = document.getElementById('badgeTotalPieces');
+
+    function updateGrid(r, c) {
+      r = Math.max(1, Math.min(10, parseInt(r) || 1));
+      c = Math.max(1, Math.min(25, parseInt(c) || 1));
+      state.rows = r;
+      state.cols = c;
+      inputRows.value = r;
+      rangeRows.value = r;
+      inputCols.value = c;
+      rangeCols.value = c;
+      const total = r * c;
+      badgeTotalPieces.textContent = `${total} pièce${total > 1 ? 's' : ''} (${r} × ${c})`;
       rebuildSprue();
     }
-    inputCount.addEventListener('change', (e) => updateCount(e.target.value));
-    rangeCount.addEventListener('input', (e) => updateCount(e.target.value));
 
-    const btnLayoutDouble = document.getElementById('btnLayoutDouble');
-    const btnLayoutSingle = document.getElementById('btnLayoutSingle');
-    btnLayoutDouble.addEventListener('click', () => {
-      state.layout = 'double';
-      btnLayoutDouble.className = 'py-1.5 rounded-md font-medium text-center transition bg-indigo-600 text-white shadow-sm';
-      btnLayoutSingle.className = 'py-1.5 rounded-md font-medium text-center transition text-slate-400 hover:text-white';
-      updateCount(state.count);
-    });
-    btnLayoutSingle.addEventListener('click', () => {
-      state.layout = 'single';
-      btnLayoutSingle.className = 'py-1.5 rounded-md font-medium text-center transition bg-indigo-600 text-white shadow-sm';
-      btnLayoutDouble.className = 'py-1.5 rounded-md font-medium text-center transition text-slate-400 hover:text-white';
-      rebuildSprue();
-    });
+    inputRows.addEventListener('change', (e) => updateGrid(e.target.value, state.cols));
+    rangeRows.addEventListener('input', (e) => updateGrid(e.target.value, state.cols));
+    inputCols.addEventListener('change', (e) => updateGrid(state.rows, e.target.value));
+    rangeCols.addEventListener('input', (e) => updateGrid(state.rows, e.target.value));
 
     const rangeSpacing = document.getElementById('rangeSpacing');
     const valSpacing = document.getElementById('valSpacing');
@@ -1530,11 +1551,103 @@ union() {
     });
 
     // ──────────────────────────────────────────────────────────────
+    // VIEWCUBE 3D & NAVIGATION D'ORIENTATION CAMÉRA
+    // ──────────────────────────────────────────────────────────────
+    const viewCubeEl = document.getElementById('viewCube');
+
+    function updateViewCubeRotation() {
+      if (!viewCubeEl) return;
+      const m = camera.matrixWorldInverse.elements;
+      // Synchronisation de la rotation 3D de la caméra avec le ViewCube
+      viewCubeEl.style.transform = `matrix3d(
+        ${m[0]}, ${-m[1]}, ${m[2]}, 0,
+        ${m[4]}, ${-m[5]}, ${m[6]}, 0,
+        ${m[8]}, ${-m[9]}, ${m[10]}, 0,
+        0, 0, 0, 1
+      )`;
+    }
+
+    function setCameraView(viewName) {
+      const target = controls.target.clone();
+      const dist = Math.max(camera.position.distanceTo(target), 45);
+
+      let toPos = new THREE.Vector3();
+      let toUp = new THREE.Vector3(0, 1, 0);
+
+      switch (viewName) {
+        case 'top':
+          toPos.set(target.x, target.y + dist, target.z + 0.001);
+          toUp.set(0, 0, -1);
+          break;
+        case 'bottom':
+          toPos.set(target.x, target.y - dist, target.z + 0.001);
+          toUp.set(0, 0, 1);
+          break;
+        case 'front':
+          toPos.set(target.x, target.y, target.z + dist);
+          toUp.set(0, 1, 0);
+          break;
+        case 'back':
+          toPos.set(target.x, target.y, target.z - dist);
+          toUp.set(0, 1, 0);
+          break;
+        case 'left':
+          toPos.set(target.x - dist, target.y, target.z);
+          toUp.set(0, 1, 0);
+          break;
+        case 'right':
+          toPos.set(target.x + dist, target.y, target.z);
+          toUp.set(0, 1, 0);
+          break;
+        case 'iso':
+        default:
+          const dIso = dist * 0.65;
+          toPos.set(target.x + dIso, target.y + dIso * 1.1, target.z + dIso * 1.2);
+          toUp.set(0, 1, 0);
+          break;
+      }
+      animateCameraTo(toPos, toUp, target);
+    }
+
+    function animateCameraTo(toPos, toUp, toTarget) {
+      const fromPos = camera.position.clone();
+      const fromUp = camera.up.clone();
+      const startTime = performance.now();
+      const duration = 280;
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1.0);
+        const ease = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+
+        camera.position.lerpVectors(fromPos, toPos, ease);
+        camera.up.lerpVectors(fromUp, toUp, ease).normalize();
+        camera.lookAt(toTarget);
+        controls.update();
+
+        if (progress < 1.0) {
+          requestAnimationFrame(step);
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    // Clic sur n'importe quelle face du ViewCube ou bouton de vue rapide
+    document.querySelectorAll('[data-view]').forEach(elem => {
+      elem.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const v = elem.getAttribute('data-view');
+        if (v) setCameraView(v);
+      });
+    });
+
+    // ──────────────────────────────────────────────────────────────
     // BOUCLE DE RENDU (60 FPS)
     // ──────────────────────────────────────────────────────────────
     function animate() {
       requestAnimationFrame(animate);
       controls.update();
+      updateViewCubeRotation();
       renderer.render(scene, camera);
     }
     animate();
