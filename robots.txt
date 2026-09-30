@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://picokeebs.github.io/sprue-generator/sitemap.xml

@@ -3,7 +3,97 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Sprue & Frame Generator — Grappe Industrielle (SLS / MJF)</title>
+  <title>3D Sprue Generator — Grappe 3D Industrielle SLS &amp; MJF (JLCPCB, PCBWay)</title>
+
+  <!-- SEO Référencement & Indexation Google / Bing -->
+  <meta name="description" content="Générateur de grappe d'impression 3D (sprue) et cage de protection industrielle pour SLS et MJF (JLCPCB, PCBWay). Export direct STL binaire fusionné, double attache sécable, 100% gratuit et sans serveur.">
+  <meta name="keywords" content="sprue generator, grappe impression 3d, 3d sprue, jlcpcb 3d printing, pcbway 3d, sls, mjf, nylon pa12, cage de protection 3d, attaches sécables, runner, gates, batch 3d print, stl merger, fusion stl, openscad sprue">
+  <meta name="author" content="Picokeebs">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#090d16">
+  <link rel="canonical" href="https://picokeebs.github.io/sprue-generator/">
+
+  <!-- Open Graph / Réseaux sociaux -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://picokeebs.github.io/sprue-generator/">
+  <meta property="og:title" content="3D Sprue Generator — Grappe 3D Industrielle SLS &amp; MJF">
+  <meta property="og:description" content="Transformez vos pièces STL en grappe de production avec cage de protection et attaches sécables pour l'impression 3D industrielle (JLCPCB, PCBWay).">
+  <meta property="og:site_name" content="3D Sprue Generator">
+  <meta property="og:locale" content="fr_FR">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://picokeebs.github.io/sprue-generator/">
+  <meta name="twitter:title" content="3D Sprue Generator — Grappe 3D Industrielle SLS &amp; MJF">
+  <meta name="twitter:description" content="Générez des grappes STL industrielles avec cage de protection et attaches sécables pour SLS &amp; MJF. 100% client-side.">
+
+  <!-- Favicon SVG intégré (Zero requête externe) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10'/%3E%3C/svg%3E">
+
+  <!-- Données Structurées Schema.org JSON-LD (WebApplication + FAQPage) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://picokeebs.github.io/sprue-generator/#webapp",
+        "name": "3D Sprue & Frame Generator",
+        "url": "https://picokeebs.github.io/sprue-generator/",
+        "description": "Application web 3D client-side gratuite permettant de regrouper des modèles STL sous forme de grappe industrielle (sprue) avec cage de protection pour la production SLS et MJF (JLCPCB, PCBWay).",
+        "applicationCategory": "DesignApplication",
+        "operatingSystem": "All modern web browsers supporting WebGL",
+        "browserRequirements": "Requires WebGL",
+        "softwareVersion": "1.2.0",
+        "inLanguage": "fr",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "EUR"
+        },
+        "featureList": [
+          "Import STL instantané sans transfert serveur (100% confidentiel)",
+          "Sélection interactive 3D des points de contact par Raycasting",
+          "Double attache sécable configurables (col fin sécable et corps de maintien)",
+          "Cage de protection rectangulaire type JLCPCB MJF",
+          "Export direct STL binaire fusionné",
+          "Export script paramétrique OpenSCAD (.scad)"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://picokeebs.github.io/sprue-generator/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Pourquoi regrouper des pièces 3D en grappe (sprue) avec une cage pour JLCPCB ou PCBWay ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Les services de fabrication additive industrielle (SLS, MJF en Nylon PA12) imposent souvent un coût fixe par pièce manipulée ou refusent les petites pièces isolées inférieures à 20 mm qui risquent de passer à travers les tamis de dépoudrage. Les regrouper dans une cage rigide avec attaches sécables compte comme un seul fichier unitaire, réduisant considérablement la facture."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Comment fonctionnent les attaches sécables (break-away gates) ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "L'outil génère un profil conique composé d'un corps robuste relié au rail et d'un col fin au point de contact avec la pièce. Cela assure un maintien rigide pendant le frittage laser tout en permettant de détacher les pièces à la main ou à la pince sans laisser de traces disgracieuses."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Mes modèles 3D STL sont-ils envoyés sur un serveur distant ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Non. L'application s'exécute à 100% côté client dans votre navigateur Web via WebGL et Three.js. Aucun fichier n'est téléversé sur un serveur, garantissant la confidentialité absolue de vos conceptions industrielles."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -142,7 +232,13 @@
 
       <button id="btnResetCamera" title="Recentrer la caméra" class="px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition flex items-center gap-1.5 border border-slate-700">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-        Centrer
+        <span>Centrer</span>
+      </button>
+
+      <!-- Bouton Guide & FAQ SEO -->
+      <button id="btnOpenFaq" title="Guide technique & FAQ impression 3D (SLS / MJF)" class="px-2.5 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium transition flex items-center gap-1.5 border border-slate-700">
+        <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>Guide &amp; FAQ</span>
       </button>
 
       <label class="px-3 py-1.5 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white font-medium cursor-pointer transition flex items-center gap-1.5 shadow-sm shadow-indigo-600/30">
@@ -152,6 +248,84 @@
       </label>
     </div>
   </header>
+
+  <!-- MODAL GUIDE INDUSTRIEL & FAQ SEO (INDEXABLE & ACCESSIBLE) -->
+  <div id="faqModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/50">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center border border-indigo-500/30">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-white">Guide Industriel &amp; FAQ (SLS / MJF)</h2>
+            <p class="text-[11px] text-slate-400">Recommandations de fabrication pour JLCPCB, PCBWay &amp; séries Nylon</p>
+          </div>
+        </div>
+        <button id="btnCloseFaq" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <!-- Modal Body (Contenu sémantique riche pour SEO Google/Bing) -->
+      <div class="p-6 overflow-y-auto space-y-5 text-xs text-slate-300 leading-relaxed">
+        <article class="space-y-4">
+          <section>
+            <h3 class="text-sm font-semibold text-indigo-300 flex items-center gap-2 mb-1.5">
+              <span>🏭</span> Pourquoi utiliser une grappe (sprue) et cage de protection ?
+            </h3>
+            <p>
+              Dans les procédés d'impression 3D industrielle à lit de poudre comme le <strong>Frittage Sélectif Laser (SLS)</strong> ou le <strong>Multi Jet Fusion (MJF)</strong> (Nylon PA12 / PA11), les fabricants tels que <em>JLCPCB</em>, <em>PCBWay</em> ou <em>Sculpteo</em> facturent des frais par pièce manipulée et imposent souvent une taille minimale (ex. 15-20 mm) pour éviter la perte d'objets lors du tamisage du gâteau de poudre.
+            </p>
+            <p class="mt-1.5">
+              En regroupant vos pièces au sein d'une <strong>grappe fermée avec cage protectrice</strong>, l'ensemble est comptabilisé comme <strong>une seule pièce unique</strong> par le devis automatique, réduisant drastiquement le coût total unitaire tout en protégeant les pièces fines pendant le transport.
+            </p>
+          </section>
+
+          <section class="border-t border-slate-800/80 pt-3">
+            <h3 class="text-sm font-semibold text-indigo-300 flex items-center gap-2 mb-1.5">
+              <span>✂️</span> Conception des attaches sécables (Break-Away Gates)
+            </h3>
+            <p>
+              Pour permettre un ébavurage rapide et propre à réception :
+            </p>
+            <ul class="list-disc list-inside space-y-1 mt-1 text-slate-400">
+              <li><strong class="text-slate-200">Col fin (Neck Ø 0.8 à 1.5 mm) :</strong> situé exactement au point de jonction avec la pièce, il concentre la contrainte mécanique pour que l'attache casse net au ras du modèle.</li>
+              <li><strong class="text-slate-200">Corps de maintien (Body Ø 2.5 à 3.5 mm) :</strong> apporte la rigidité nécessaire pour que les pièces ne vibrent pas pendant le sablage et la teinture industrielle.</li>
+              <li><strong class="text-slate-200">Double fixation opposée :</strong> une attache intérieure fixée sur le rail central et une attache extérieure sur le cadre périphérique garantissent un maintien sans torsion.</li>
+            </ul>
+          </section>
+
+          <section class="border-t border-slate-800/80 pt-3">
+            <h3 class="text-sm font-semibold text-indigo-300 flex items-center gap-2 mb-1.5">
+              <span>🔒</span> Sécurité et Confidentialité (100% Client-Side)
+            </h3>
+            <p>
+              Cette application fonctionne <strong>intégralement dans votre navigateur Web</strong> via le moteur Three.js et WebGL. Aucun fichier STL n'est téléversé sur un serveur externe. Vos modèles 3D et secrets industriels restent strictement sur votre machine locale.
+            </p>
+          </section>
+
+          <section class="border-t border-slate-800/80 pt-3">
+            <h3 class="text-sm font-semibold text-indigo-300 flex items-center gap-2 mb-1.5">
+              <span>💡</span> Formats d'exportation disponibles
+            </h3>
+            <p>
+              - <strong>STL Binaire fusionné :</strong> maillage géométrique unique avec normales unifiées, prêt pour le slicer ou l'upload direct sur JLCPCB / PCBWay.<br>
+              - <strong>Script OpenSCAD (.scad) :</strong> script paramétrique libre avec inclusion de la pièce pour adapter les dimensions dans votre chaîne CAO.
+            </p>
+          </section>
+        </article>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3 border-t border-slate-800 flex justify-end bg-slate-950/50">
+        <button id="btnFaqUnderstood" class="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition text-xs">
+          Compris
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- ============================================================== -->
   <!-- CORPS PRINCIPAL (VIEWER 3D + SIDEBAR) -->
@@ -1660,6 +1834,30 @@ ${bounds.rowPositions.map((rp, rIdx) => `
         if (v) setCameraView(v);
       });
     });
+
+    // ──────────────────────────────────────────────────────────────
+    // MODAL GUIDE TECHNIQUE & FAQ SEO
+    // ──────────────────────────────────────────────────────────────
+    const faqModal = document.getElementById('faqModal');
+    const btnOpenFaq = document.getElementById('btnOpenFaq');
+    const btnCloseFaq = document.getElementById('btnCloseFaq');
+    const btnFaqUnderstood = document.getElementById('btnFaqUnderstood');
+
+    function openFaqModal() {
+      if (faqModal) faqModal.classList.remove('hidden');
+    }
+    function closeFaqModal() {
+      if (faqModal) faqModal.classList.add('hidden');
+    }
+
+    if (btnOpenFaq) btnOpenFaq.addEventListener('click', openFaqModal);
+    if (btnCloseFaq) btnCloseFaq.addEventListener('click', closeFaqModal);
+    if (btnFaqUnderstood) btnFaqUnderstood.addEventListener('click', closeFaqModal);
+    if (faqModal) {
+      faqModal.addEventListener('click', (e) => {
+        if (e.target === faqModal) closeFaqModal();
+      });
+    }
 
     // ──────────────────────────────────────────────────────────────
     // BOUCLE DE RENDU (60 FPS)
