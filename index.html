@@ -1599,7 +1599,7 @@
 
             const pGeom = state.loadedGeometry.clone();
             if (rp.rotZ !== 0) {
-              pGeom.applyAxisAngle(new THREE.Vector3(0, 0, 1), rp.rotZ);
+              pGeom.rotateZ(rp.rotZ);
             }
             pGeom.translate(posX, posY, 0);
             geomsToMerge.push(pGeom);
