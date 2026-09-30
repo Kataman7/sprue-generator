@@ -196,28 +196,46 @@
           </div>
 
           <!-- Coordonnées Point 1 -->
-          <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80 space-y-1">
-            <div class="flex justify-between text-[11px]">
+          <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80 space-y-1.5">
+            <div class="flex justify-between text-[11px] items-center">
               <span class="font-semibold text-emerald-400 flex items-center gap-1">● Attache 1 (Intérieure) :</span>
               <span id="statusGate1" class="text-slate-400 font-mono text-[10px]">Non définie</span>
             </div>
-            <div class="grid grid-cols-3 gap-1.5 font-mono text-[10px] text-slate-300 text-center">
-              <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400">X:</span> <span id="valG1X">0.0</span></div>
-              <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400">Y:</span> <span id="valG1Y">0.0</span></div>
-              <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400">Z:</span> <span id="valG1Z">0.0</span></div>
+            <div class="grid grid-cols-3 gap-1.5 font-mono text-[11px] text-slate-300">
+              <div class="bg-slate-950 px-2 py-1 rounded flex items-center gap-1 border border-slate-800 focus-within:border-emerald-500 transition" title="Coordonnée X">
+                <span class="text-slate-400 text-[10px] select-none font-sans">X</span>
+                <input type="number" id="inputG1X" step="0.1" value="0.0" class="w-full bg-transparent text-slate-100 font-bold focus:outline-none text-right">
+              </div>
+              <div class="bg-slate-950 px-2 py-1 rounded flex items-center gap-1 border border-slate-800 focus-within:border-emerald-500 transition" title="Coordonnée Y">
+                <span class="text-slate-400 text-[10px] select-none font-sans">Y</span>
+                <input type="number" id="inputG1Y" step="0.1" value="0.0" class="w-full bg-transparent text-slate-100 font-bold focus:outline-none text-right">
+              </div>
+              <div class="bg-slate-950 px-2 py-1 rounded flex items-center gap-1 border border-slate-800 focus-within:border-emerald-500 transition" title="Coordonnée Z">
+                <span class="text-slate-400 text-[10px] select-none font-sans">Z</span>
+                <input type="number" id="inputG1Z" step="0.1" value="0.0" class="w-full bg-transparent text-slate-100 font-bold focus:outline-none text-right">
+              </div>
             </div>
           </div>
 
           <!-- Coordonnées Point 2 -->
-          <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80 space-y-1">
-            <div class="flex justify-between text-[11px]">
+          <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80 space-y-1.5">
+            <div class="flex justify-between text-[11px] items-center">
               <span class="font-semibold text-rose-400 flex items-center gap-1">● Attache 2 (Extérieure) :</span>
               <span id="statusGate2" class="text-slate-400 font-mono text-[10px]">Non définie</span>
             </div>
-            <div class="grid grid-cols-3 gap-1.5 font-mono text-[10px] text-slate-300 text-center">
-              <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400">X:</span> <span id="valG2X">0.0</span></div>
-              <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400">Y:</span> <span id="valG2Y">0.0</span></div>
-              <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400">Z:</span> <span id="valG2Z">0.0</span></div>
+            <div class="grid grid-cols-3 gap-1.5 font-mono text-[11px] text-slate-300">
+              <div class="bg-slate-950 px-2 py-1 rounded flex items-center gap-1 border border-slate-800 focus-within:border-rose-500 transition" title="Coordonnée X">
+                <span class="text-slate-400 text-[10px] select-none font-sans">X</span>
+                <input type="number" id="inputG2X" step="0.1" value="0.0" class="w-full bg-transparent text-slate-100 font-bold focus:outline-none text-right">
+              </div>
+              <div class="bg-slate-950 px-2 py-1 rounded flex items-center gap-1 border border-slate-800 focus-within:border-rose-500 transition" title="Coordonnée Y">
+                <span class="text-slate-400 text-[10px] select-none font-sans">Y</span>
+                <input type="number" id="inputG2Y" step="0.1" value="0.0" class="w-full bg-transparent text-slate-100 font-bold focus:outline-none text-right">
+              </div>
+              <div class="bg-slate-950 px-2 py-1 rounded flex items-center gap-1 border border-slate-800 focus-within:border-rose-500 transition" title="Coordonnée Z">
+                <span class="text-slate-400 text-[10px] select-none font-sans">Z</span>
+                <input type="number" id="inputG2Z" step="0.1" value="0.0" class="w-full bg-transparent text-slate-100 font-bold focus:outline-none text-right">
+              </div>
             </div>
           </div>
 
@@ -747,14 +765,22 @@
       }
     }
 
+    const inputG1X = document.getElementById('inputG1X');
+    const inputG1Y = document.getElementById('inputG1Y');
+    const inputG1Z = document.getElementById('inputG1Z');
+
+    const inputG2X = document.getElementById('inputG2X');
+    const inputG2Y = document.getElementById('inputG2Y');
+    const inputG2Z = document.getElementById('inputG2Z');
+
     function setGate1(point, normal) {
       state.gate1Picked = true;
       state.gate1Point.copy(point);
       state.gate1Normal.copy(normal).normalize();
 
-      document.getElementById('valG1X').textContent = state.gate1Point.x.toFixed(2);
-      document.getElementById('valG1Y').textContent = state.gate1Point.y.toFixed(2);
-      document.getElementById('valG1Z').textContent = state.gate1Point.z.toFixed(2);
+      inputG1X.value = state.gate1Point.x.toFixed(2);
+      inputG1Y.value = state.gate1Point.y.toFixed(2);
+      inputG1Z.value = state.gate1Point.z.toFixed(2);
       document.getElementById('statusGate1').textContent = 'Défini ✓';
       document.getElementById('statusGate1').className = 'text-emerald-400 font-mono text-[10px] font-bold';
 
@@ -767,15 +793,46 @@
       state.gate2Point.copy(point);
       state.gate2Normal.copy(normal).normalize();
 
-      document.getElementById('valG2X').textContent = state.gate2Point.x.toFixed(2);
-      document.getElementById('valG2Y').textContent = state.gate2Point.y.toFixed(2);
-      document.getElementById('valG2Z').textContent = state.gate2Point.z.toFixed(2);
+      inputG2X.value = state.gate2Point.x.toFixed(2);
+      inputG2Y.value = state.gate2Point.y.toFixed(2);
+      inputG2Z.value = state.gate2Point.z.toFixed(2);
       document.getElementById('statusGate2').textContent = 'Défini ✓';
       document.getElementById('statusGate2').className = 'text-rose-400 font-mono text-[10px] font-bold';
 
       updateMarkers();
       rebuildSprue();
     }
+
+    // Gestion de la modification manuelle des coordonnées au clavier (X, Y, Z)
+    function onManualGate1Change() {
+      state.gate1Point.x = parseFloat(inputG1X.value) || 0;
+      state.gate1Point.y = parseFloat(inputG1Y.value) || 0;
+      state.gate1Point.z = parseFloat(inputG1Z.value) || 0;
+      state.gate1Picked = true;
+      document.getElementById('statusGate1').textContent = 'Défini ✓';
+      document.getElementById('statusGate1').className = 'text-emerald-400 font-mono text-[10px] font-bold';
+      updateMarkers();
+      rebuildSprue();
+    }
+    [inputG1X, inputG1Y, inputG1Z].forEach(inp => {
+      inp.addEventListener('input', onManualGate1Change);
+      inp.addEventListener('change', onManualGate1Change);
+    });
+
+    function onManualGate2Change() {
+      state.gate2Point.x = parseFloat(inputG2X.value) || 0;
+      state.gate2Point.y = parseFloat(inputG2Y.value) || 0;
+      state.gate2Point.z = parseFloat(inputG2Z.value) || 0;
+      state.gate2Picked = true;
+      document.getElementById('statusGate2').textContent = 'Défini ✓';
+      document.getElementById('statusGate2').className = 'text-rose-400 font-mono text-[10px] font-bold';
+      updateMarkers();
+      rebuildSprue();
+    }
+    [inputG2X, inputG2Y, inputG2Z].forEach(inp => {
+      inp.addEventListener('input', onManualGate2Change);
+      inp.addEventListener('change', onManualGate2Change);
+    });
 
     function selectGateSlot(slot) {
       state.activeGateSlot = slot;
