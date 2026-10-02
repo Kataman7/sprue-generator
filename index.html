@@ -56,8 +56,7 @@
           "Sélection interactive 3D des points de contact par Raycasting",
           "Double attache sécable configurables (col fin sécable et corps de maintien)",
           "Cage de protection rectangulaire type JLCPCB MJF",
-          "Export direct STL binaire fusionné",
-          "Export script paramétrique OpenSCAD (.scad)"
+          "Export direct STL binaire fusionné étanche"
         ]
       },
       {
@@ -202,66 +201,60 @@
       </div>
       <div>
         <h1 class="text-sm font-bold tracking-tight text-white flex items-center gap-2">
-          3D Sprue & Frame Generator
-          <span class="text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Cage MJF / SLS</span>
+          3D Sprue &amp; Frame Generator
+          <span class="text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">MJF / SLS Batch Cage</span>
         </h1>
-        <p class="text-[11px] text-slate-400">Double attache & cage protectrice industrielle pour pièces 3D</p>
+        <p class="text-[11px] text-slate-400">Industrial breakaway tabs &amp; protective runner frames for 3D printing</p>
       </div>
     </div>
 
-    <!-- Actions globales & Toggles de vue -->
+    <!-- Global Actions & View Toggles -->
     <div class="flex items-center space-x-2.5 text-xs">
       
-      <!-- Bouton Cacher / Afficher la grille -->
-      <button id="btnToggleGrid" title="Afficher ou masquer la grille au sol" class="px-2.5 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-indigo-400 font-medium transition flex items-center gap-1.5 border border-slate-700">
+      <!-- Toggle Ground Grid -->
+      <button id="btnToggleGrid" title="Toggle ground reference grid" class="px-2.5 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-indigo-400 font-medium transition flex items-center gap-1.5 border border-slate-700 cursor-pointer">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16M9 4v16m6-16v16"></path></svg>
-        <span id="labelToggleGrid">Grille : On</span>
+        <span id="labelToggleGrid">Grid: On</span>
       </button>
 
-      <!-- Toggle Mode Caméra (Perspective vs Isométrique / Orthographique) -->
-      <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800" title="Mode de projection : Perspective ou Isométrique (Ortho CAD)">
-        <button id="btnCamPersp" class="px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm transition flex items-center gap-1">
+      <!-- Toggle Guides -->
+      <button id="btnToggleGuides" title="Toggle 3D guide planes and axes" class="px-2.5 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-sky-400 font-medium transition flex items-center gap-1.5 border border-slate-700 cursor-pointer">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
+        <span id="labelToggleGuides">Guides: On</span>
+      </button>
+
+      <!-- Camera Mode (Perspective vs Orthographic CAD) -->
+      <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800" title="Projection Mode: Perspective or Isometric (Ortho CAD)">
+        <button id="btnCamPersp" class="px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1 cursor-pointer">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
           <span>Persp</span>
         </button>
-        <button id="btnCamOrtho" class="px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1">
+        <button id="btnCamOrtho" class="px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm transition flex items-center gap-1 cursor-pointer">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
           <span>Iso (Ortho)</span>
         </button>
       </div>
 
-      <!-- Toggle Mode de Vue -->
-      <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800">
-        <button id="btnViewFocus" class="px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
-          Pièce seule (Focus)
-        </button>
-        <button id="btnViewSprue" class="px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm transition flex items-center gap-1">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-          Grappe complète
-        </button>
-      </div>
-
-      <button id="btnResetCamera" title="Recentrer la caméra" class="px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition flex items-center gap-1.5 border border-slate-700">
+      <button id="btnResetCamera" title="Center camera on model" class="px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition flex items-center gap-1.5 border border-slate-700 cursor-pointer">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-        <span>Centrer</span>
+        <span>Center</span>
       </button>
 
-      <!-- Bouton Guide & FAQ SEO -->
-      <button id="btnOpenFaq" title="Guide technique & FAQ impression 3D (SLS / MJF)" class="px-2.5 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium transition flex items-center gap-1.5 border border-slate-700">
+      <!-- Technical Guide & FAQ Button -->
+      <button id="btnOpenFaq" title="Manufacturing Guide &amp; SLS / MJF FAQ" class="px-2.5 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium transition flex items-center gap-1.5 border border-slate-700 cursor-pointer">
         <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         <span>Guide &amp; FAQ</span>
       </button>
 
       <label class="px-3 py-1.5 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white font-medium cursor-pointer transition flex items-center gap-1.5 shadow-sm shadow-indigo-600/30">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-        <span>Changer STL</span>
+        <span>Upload STL</span>
         <input type="file" id="fileInput" accept=".stl" class="hidden">
       </label>
     </div>
   </header>
 
-  <!-- MODAL GUIDE INDUSTRIEL & FAQ SEO (INDEXABLE & ACCESSIBLE) -->
+  <!-- MANUFACTURING GUIDE & FAQ MODAL -->
   <div id="faqModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
       <!-- Modal Header -->
@@ -271,60 +264,59 @@
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
           </div>
           <div>
-            <h2 class="text-sm font-bold text-white">Guide Industriel &amp; FAQ (SLS / MJF)</h2>
-            <p class="text-[11px] text-slate-400">Recommandations de fabrication pour JLCPCB, PCBWay &amp; séries Nylon</p>
+            <h2 class="text-sm font-bold text-white">Industrial Manufacturing Guide &amp; FAQ (SLS / MJF)</h2>
+            <p class="text-[11px] text-slate-400">Design guidelines for bulk ordering on JLCPCB, PCBWay &amp; Nylon PA12 services</p>
           </div>
         </div>
-        <button id="btnCloseFaq" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+        <button id="btnCloseFaq" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
       </div>
 
-      <!-- Modal Body (Contenu sémantique riche pour SEO Google/Bing) -->
+      <!-- Modal Body -->
       <div class="p-6 overflow-y-auto space-y-5 text-xs text-slate-300 leading-relaxed">
         <article class="space-y-4">
           <section>
             <h3 class="text-sm font-semibold text-indigo-300 flex items-center gap-2 mb-1.5">
-              <span>🏭</span> Pourquoi utiliser une grappe (sprue) et cage de protection ?
+              <span>🏭</span> Why use a sprue with a protective cage?
             </h3>
             <p>
-              Dans les procédés d'impression 3D industrielle à lit de poudre comme le <strong>Frittage Sélectif Laser (SLS)</strong> ou le <strong>Multi Jet Fusion (MJF)</strong> (Nylon PA12 / PA11), les fabricants tels que <em>JLCPCB</em>, <em>PCBWay</em> ou <em>Sculpteo</em> facturent des frais par pièce manipulée et imposent souvent une taille minimale (ex. 15-20 mm) pour éviter la perte d'objets lors du tamisage du gâteau de poudre.
+              In industrial powder-bed 3D printing processes such as <strong>Selective Laser Sintering (SLS)</strong> or <strong>Multi Jet Fusion (MJF)</strong> in Nylon PA12/PA11, service bureaus like <em>JLCPCB</em> and <em>PCBWay</em> charge manual handling fees per individual piece and impose minimum part size limits (often 15–20 mm) to prevent loss during powder cake de-caking and sieving.
             </p>
             <p class="mt-1.5">
-              En regroupant vos pièces au sein d'une <strong>grappe fermée avec cage protectrice</strong>, l'ensemble est comptabilisé comme <strong>une seule pièce unique</strong> par le devis automatique, réduisant drastiquement le coût total unitaire tout en protégeant les pièces fines pendant le transport.
+              By consolidating multiple parts into a <strong>closed sprue with an outer protective runner frame</strong>, the entire build is treated as a <strong>single unified part</strong> during automated quoting. This drastically reduces unit costs while preventing delicate parts from damage during transport and tumbling.
             </p>
           </section>
 
           <section class="border-t border-slate-800/80 pt-3">
             <h3 class="text-sm font-semibold text-indigo-300 flex items-center gap-2 mb-1.5">
-              <span>✂️</span> Conception des attaches sécables (Break-Away Gates)
+              <span>✂️</span> Break-Away Gate &amp; Runner Design
             </h3>
             <p>
-              Pour permettre un ébavurage rapide et propre à réception :
+              Designed for fast, clean, tool-free post-processing upon arrival:
             </p>
             <ul class="list-disc list-inside space-y-1 mt-1 text-slate-400">
-              <li><strong class="text-slate-200">Col fin (Neck Ø 0.8 à 1.5 mm) :</strong> situé exactement au point de jonction avec la pièce, il concentre la contrainte mécanique pour que l'attache casse net au ras du modèle.</li>
-              <li><strong class="text-slate-200">Corps de maintien (Body Ø 2.5 à 3.5 mm) :</strong> apporte la rigidité nécessaire pour que les pièces ne vibrent pas pendant le sablage et la teinture industrielle.</li>
-              <li><strong class="text-slate-200">Double fixation opposée :</strong> une attache intérieure fixée sur le rail central et une attache extérieure sur le cadre périphérique garantissent un maintien sans torsion.</li>
+              <li><strong class="text-slate-200">Breakaway Neck (Ø 0.5 to 1.5 mm):</strong> Located directly at the contact junction with the part surface, concentrating mechanical stress so tabs snap off cleanly with minimal witness marks.</li>
+              <li><strong class="text-slate-200">Tab Stem Body (Ø 2.0 to 3.5 mm):</strong> Provides necessary rigidity so parts do not vibrate or break prematurely during bead-blasting, de-powdering, and industrial tumbling.</li>
+              <li><strong class="text-slate-200">Protective Outer Frame:</strong> Surrounds the parts to absorb external handling impacts during shipping.</li>
             </ul>
           </section>
 
           <section class="border-t border-slate-800/80 pt-3">
             <h3 class="text-sm font-semibold text-indigo-300 flex items-center gap-2 mb-1.5">
-              <span>🔒</span> Sécurité et Confidentialité (100% Client-Side)
+              <span>🔒</span> 100% Client-Side Privacy
             </h3>
             <p>
-              Cette application fonctionne <strong>intégralement dans votre navigateur Web</strong> via le moteur Three.js et WebGL. Aucun fichier STL n'est téléversé sur un serveur externe. Vos modèles 3D et secrets industriels restent strictement sur votre machine locale.
+              This application runs <strong>entirely in your web browser</strong> using Three.js and WebGL. No STL files or 3D geometry are uploaded to external servers. Your CAD models and proprietary designs stay strictly private on your machine.
             </p>
           </section>
 
           <section class="border-t border-slate-800/80 pt-3">
             <h3 class="text-sm font-semibold text-indigo-300 flex items-center gap-2 mb-1.5">
-              <span>💡</span> Formats d'exportation disponibles
+              <span>💡</span> Available Export Format
             </h3>
             <p>
-              - <strong>STL Binaire fusionné :</strong> maillage géométrique unique avec normales unifiées, prêt pour le slicer ou l'upload direct sur JLCPCB / PCBWay.<br>
-              - <strong>Script OpenSCAD (.scad) :</strong> script paramétrique libre avec inclusion de la pièce pour adapter les dimensions dans votre chaîne CAO.
+              - <strong>Merged Binary STL:</strong> Single watertight mesh with unified normals, ready directly for your slicer or instant upload to JLCPCB / PCBWay.
             </p>
           </section>
         </article>
@@ -332,41 +324,41 @@
 
       <!-- Modal Footer -->
       <div class="px-6 py-3 border-t border-slate-800 flex justify-end bg-slate-950/50">
-        <button id="btnFaqUnderstood" class="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition text-xs">
-          Compris
+        <button id="btnFaqUnderstood" class="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition text-xs cursor-pointer">
+          Got it
         </button>
       </div>
     </div>
   </div>
 
   <!-- ============================================================== -->
-  <!-- CORPS PRINCIPAL (VIEWER 3D + SIDEBAR) -->
+  <!-- MAIN WORKSPACE (3D VIEWER + CONFIGURATION SIDEBAR) -->
   <!-- ============================================================== -->
   <div class="flex-1 flex overflow-hidden relative">
 
-    <!-- 1. ZONE 3D VIEWPORT -->
+    <!-- 1. 3D VIEWPORT -->
     <div id="viewportContainer" class="flex-1 h-full relative bg-radial from-slate-900 to-slate-950 overflow-hidden crosshair-cursor">
       <canvas id="webglCanvas" class="w-full h-full block"></canvas>
 
-      <!-- Overlay Drag & Drop -->
+      <!-- Drag & Drop Overlay -->
       <div id="dropOverlay" class="absolute inset-4 rounded-xl border-2 border-dashed border-indigo-500/50 bg-indigo-950/40 backdrop-blur-sm hidden flex-col items-center justify-center z-30 transition pointer-events-none">
         <div class="p-4 rounded-full bg-indigo-600/20 text-indigo-400 mb-3 animate-bounce">
           <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
         </div>
-        <p class="text-base font-semibold text-white">Déposez votre fichier .STL ici</p>
-        <p class="text-xs text-indigo-300 mt-1">Traitement 100% local dans le navigateur</p>
+        <p class="text-base font-semibold text-white">Drop your .STL file here</p>
+        <p class="text-xs text-indigo-300 mt-1">100% private in-browser client-side processing</p>
       </div>
 
-      <!-- Message initial d'attente (vide) -->
+      <!-- Initial Empty State Notice -->
       <div id="emptyNotice" class="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none p-6 text-center">
         <div class="w-16 h-16 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-center text-slate-500 mb-4 shadow-xl">
           <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
         </div>
-        <h2 class="text-base font-medium text-slate-200">Aucun modèle 3D chargé</h2>
-        <p class="text-xs text-slate-400 mt-1 max-w-sm">Glissez-déposez un fichier STL dans cette zone ou utilisez le bouton "Changer STL".</p>
+        <h2 class="text-base font-medium text-slate-200">No 3D Model Loaded</h2>
+        <p class="text-xs text-slate-400 mt-1 max-w-sm">Drag and drop an STL file into this area or click "Upload STL".</p>
       </div>
 
-      <!-- Badge Info Dimensions -->
+      <!-- Floating Dimensions Badge -->
       <div id="floatingStats" class="absolute top-4 left-4 z-10 bg-slate-900/85 backdrop-blur border border-slate-800 rounded-lg p-3 text-xs shadow-xl hidden space-y-1.5 min-w-[200px]">
         <div class="flex items-center justify-between border-b border-slate-800 pb-1.5 mb-1.5">
           <span class="font-semibold text-slate-300 truncate max-w-[120px]" id="statFileName">piece.stl</span>
@@ -388,288 +380,252 @@
         </div>
       </div>
 
-      <!-- WIDGET VIEWCUBE 3D (ORIENTATION CAMÉRA) -->
+      <!-- 3D VIEWCUBE WIDGET (ORIENTATION) -->
       <div id="viewCubeWrapper" class="absolute top-4 right-4 z-10 flex flex-col items-center select-none bg-slate-900/60 backdrop-blur-md p-1.5 rounded-xl border border-slate-800/80 shadow-2xl">
         <div class="cube-scene w-20 h-20 flex items-center justify-center">
           <div id="viewCube" class="w-full h-full relative">
-            <div class="cube-face cube-front" data-view="front" title="Vue de Face (Z+)">FACE</div>
-            <div class="cube-face cube-back" data-view="back" title="Vue Arrière (Z-)">DOS</div>
-            <div class="cube-face cube-top" data-view="top" title="Vue de Dessus (Y+)">DESSUS</div>
-            <div class="cube-face cube-bottom" data-view="bottom" title="Vue de Dessous (Y-)">DESSOUS</div>
-            <div class="cube-face cube-left" data-view="left" title="Vue Gauche (X-)">GAUCHE</div>
-            <div class="cube-face cube-right" data-view="right" title="Vue Droite (X+)">DROITE</div>
+            <div class="cube-face cube-front" data-view="front" title="Front View (Z+)">FRONT</div>
+            <div class="cube-face cube-back" data-view="back" title="Back View (Z-)">BACK</div>
+            <div class="cube-face cube-top" data-view="top" title="Top View (Y+)">TOP</div>
+            <div class="cube-face cube-bottom" data-view="bottom" title="Bottom View (Y-)">BOTTOM</div>
+            <div class="cube-face cube-left" data-view="left" title="Left View (X-)">LEFT</div>
+            <div class="cube-face cube-right" data-view="right" title="Right View (X+)">RIGHT</div>
           </div>
         </div>
       </div>
 
-      <!-- Barre d'aide / picking en bas du canvas -->
+      <!-- Viewport Interaction Notice -->
       <div id="pickingNotice" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-slate-900/90 backdrop-blur border border-slate-700/80 rounded-full px-4 py-2 text-xs shadow-xl flex items-center gap-2.5 text-slate-300">
         <span id="pickingPulseDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span id="pickingStatusText">Cliquez sur le modèle pour placer le point d'attache</span>
+        <span id="pickingStatusText">Click on model to place attachment gate</span>
       </div>
     </div>
 
-    <!-- 2. PANNEAU LATÉRAL (SIDEBAR CONFIGURATION) -->
+    <!-- 2. PANNEAU LATÉRAL (SIDEBAR CONFIGURATION SIMPLIFIÉE) -->
     <aside class="w-96 h-full bg-slate-900 border-l border-slate-800 flex flex-col z-20 shrink-0">
       
-      <!-- Contenu défilable -->
-      <div class="flex-1 overflow-y-auto p-5 space-y-5 text-xs">
+      <!-- Work Mode Switcher Tabs -->
+      <div class="p-3 bg-slate-950 border-b border-slate-800 flex gap-2">
+        <button id="tabModeFocus" class="flex-1 py-2 px-3 rounded-lg bg-indigo-600 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition shadow-sm shadow-indigo-600/30 cursor-pointer">
+          <svg class="w-4 h-4 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+          <span>1. Part Focus (Gates)</span>
+        </button>
+        <button id="tabModeSprue" class="flex-1 py-2 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition border border-slate-800 cursor-pointer">
+          <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          <span>2. Batch Sprue (Grid)</span>
+        </button>
+      </div>
 
-        <!-- SECTION 1 : POINTS D'ATTACHE SUR LA PIÈCE -->
-        <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800 space-y-3">
+      <!-- Scrollable Settings Container -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
+
+        <!-- AUTO-OPTIMIZATION STATUS BANNER -->
+        <div class="p-2.5 rounded-lg bg-gradient-to-r from-emerald-950/60 via-slate-950 to-indigo-950/60 border border-emerald-500/30 flex items-center justify-between text-[11px]">
+          <div class="flex items-center gap-2">
+            <span class="flex h-2 w-2 relative">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span class="text-emerald-300 font-semibold">Auto-Optimization Active</span>
+          </div>
+          <span class="text-[10px] text-emerald-400/90 font-mono bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Flat on Bed (Z=0)</span>
+        </div>
+
+        <!-- SECTION 1 : PART GATE POINTS (PART FOCUS MODE ONLY) -->
+        <div id="sectionPoints" class="bg-slate-950/70 rounded-xl p-3.5 border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              1. Attachment Gate Points
+            </span>
+            <button id="btnToggleSymmetry" type="button" class="px-2 py-0.5 rounded text-[10px] font-semibold transition border flex items-center gap-1 bg-slate-900 text-slate-400 border-slate-800 hover:text-white cursor-pointer" title="Automatically mirrors Gate 1 to Gate 2 across the central axis">
+              <span id="dotSymmetry" class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+              <span id="labelSymmetry">Mirror: Off</span>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-400">Click on the 3D model to place gate points. With mirror mode enabled, placing Gate 1 instantly generates its symmetric counterpart.</p>
+
+          <!-- Active Gate Selection Buttons -->
+          <div class="grid grid-cols-2 gap-2 bg-slate-900 p-1 rounded-lg border border-slate-800">
+            <button id="btnSelectGate1" class="py-1.5 px-2 rounded-md font-medium text-center transition bg-emerald-600 text-white flex items-center justify-center gap-1.5 text-[11px] cursor-pointer">
+              <span class="w-2 h-2 rounded-full bg-white"></span>
+              <span>Gate 1</span>
+            </button>
+            <button id="btnSelectGate2" class="py-1.5 px-2 rounded-md font-medium text-center transition text-slate-400 hover:text-white flex items-center justify-center gap-1.5 text-[11px] cursor-pointer">
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+              <span>Gate 2</span>
+            </button>
+          </div>
+
+          <!-- Part Orientation (Z-axis only) -->
+          <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+            <span class="text-[10px] text-slate-400 font-semibold">Part Orientation:</span>
+            <button id="btnRotZPlus" title="Rotate 90° horizontally around vertical Z axis (keeps flat bed alignment)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-indigo-300 hover:text-white border border-slate-700 font-medium text-[10px] flex items-center gap-1.5 transition cursor-pointer">
+              <svg class="w-3 h-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              <span>Rotate 90° (Z)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SECTION 2 : ARRAY & QUANTITY (BATCH SPRUE MODE ONLY) -->
+        <div id="sectionGrid" class="bg-slate-950/70 rounded-xl p-3.5 border border-slate-800 space-y-3 hidden">
           <div class="flex items-center justify-between">
             <span class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
-              1. Points d'Attache sur la Pièce
+              <span id="titleGridSection">1. Array &amp; Quantity</span>
             </span>
-            <span class="text-[10px] text-indigo-400 font-semibold bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">Double contact</span>
-          </div>
-          <p class="text-[11px] text-slate-400">Positionnez les 2 points de contact sur le modèle (au clic ou par saisie manuelle X, Y, Z).</p>
-
-          <!-- Sélecteur du point actif pour le clic -->
-          <div class="grid grid-cols-2 gap-2 bg-slate-900 p-1 rounded-lg border border-slate-800">
-            <button id="btnSelectGate1" class="py-1.5 px-2 rounded-md font-medium text-center transition bg-emerald-600 text-white flex items-center justify-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-white"></span>
-              <span>Point 1 (Intérieur / Rail)</span>
-            </button>
-            <button id="btnSelectGate2" class="py-1.5 px-2 rounded-md font-medium text-center transition text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-              <span>Point 2 (Extérieur / Cadre)</span>
-            </button>
+            <span id="badgeTotalPieces" class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+              10 parts (2 × 5)
+            </span>
           </div>
 
-          <!-- Coordonnées Point 1 -->
-          <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80 space-y-1.5">
-            <div class="flex justify-between text-[11px] items-center">
-              <span class="font-semibold text-emerald-400 flex items-center gap-1">● Point 1 (Intérieur / Rail) :</span>
-              <span id="statusGate1" class="text-slate-400 font-mono text-[10px]">Non défini</span>
+          <!-- Rows & Columns with - / + step buttons -->
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800 space-y-1.5">
+              <span class="text-[10px] text-slate-400 font-medium block">Rows (Y)</span>
+              <div class="flex items-center justify-between">
+                <button id="btnDecRows" class="w-6 h-6 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold flex items-center justify-center cursor-pointer select-none">-</button>
+                <input id="inputRows" type="number" min="1" max="10" value="2" class="w-12 bg-slate-950 text-center text-indigo-400 font-bold border border-slate-800 rounded py-0.5 text-xs focus:outline-none">
+                <button id="btnIncRows" class="w-6 h-6 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold flex items-center justify-center cursor-pointer select-none">+</button>
+              </div>
             </div>
-            <div class="grid grid-cols-3 gap-1.5 font-mono text-[11px] text-slate-300">
-              <div class="bg-slate-950 px-2 py-1 rounded flex items-center gap-1 border border-slate-800 focus-within:border-emerald-500 transition" title="Coordonnée X">
-                <span class="text-slate-400 text-[10px] select-none font-sans">X</span>
-                <input type="number" id="inputG1X" step="0.1" value="0.0" class="w-full bg-transparent text-slate-100 font-bold focus:outline-none text-right">
-              </div>
-              <div class="bg-slate-950 px-2 py-1 rounded flex items-center gap-1 border border-slate-800 focus-within:border-emerald-500 transition" title="Coordonnée Y">
-                <span class="text-slate-400 text-[10px] select-none font-sans">Y</span>
-                <input type="number" id="inputG1Y" step="0.1" value="0.0" class="w-full bg-transparent text-slate-100 font-bold focus:outline-none text-right">
-              </div>
-              <div class="bg-slate-950 px-2 py-1 rounded flex items-center gap-1 border border-slate-800 focus-within:border-emerald-500 transition" title="Coordonnée Z">
-                <span class="text-slate-400 text-[10px] select-none font-sans">Z</span>
-                <input type="number" id="inputG1Z" step="0.1" value="0.0" class="w-full bg-transparent text-slate-100 font-bold focus:outline-none text-right">
+            <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800 space-y-1.5">
+              <span class="text-[10px] text-slate-400 font-medium block">Columns (X)</span>
+              <div class="flex items-center justify-between">
+                <button id="btnDecCols" class="w-6 h-6 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold flex items-center justify-center cursor-pointer select-none">-</button>
+                <input id="inputCols" type="number" min="1" max="25" value="5" class="w-12 bg-slate-950 text-center text-indigo-400 font-bold border border-slate-800 rounded py-0.5 text-xs focus:outline-none">
+                <button id="btnIncCols" class="w-6 h-6 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold flex items-center justify-center cursor-pointer select-none">+</button>
               </div>
             </div>
           </div>
+          <p class="text-[10px] text-emerald-400 flex items-center gap-1">
+            <span>✓</span> Auto-spaced with compact safety clearance (2.0 mm gap, zero collision).
+          </p>
+        </div>
 
-          <!-- Coordonnées Point 2 -->
-          <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80 space-y-1.5">
-            <div class="flex justify-between text-[11px] items-center">
-              <span class="font-semibold text-rose-400 flex items-center gap-1">● Point 2 (Extérieur / Cadre) :</span>
-              <span id="statusGate2" class="text-slate-400 font-mono text-[10px]">Non défini</span>
-            </div>
-            <div class="grid grid-cols-3 gap-1.5 font-mono text-[11px] text-slate-300">
-              <div class="bg-slate-950 px-2 py-1 rounded flex items-center gap-1 border border-slate-800 focus-within:border-rose-500 transition" title="Coordonnée X">
-                <span class="text-slate-400 text-[10px] select-none font-sans">X</span>
-                <input type="number" id="inputG2X" step="0.1" value="0.0" class="w-full bg-transparent text-slate-100 font-bold focus:outline-none text-right">
-              </div>
-              <div class="bg-slate-950 px-2 py-1 rounded flex items-center gap-1 border border-slate-800 focus-within:border-rose-500 transition" title="Coordonnée Y">
-                <span class="text-slate-400 text-[10px] select-none font-sans">Y</span>
-                <input type="number" id="inputG2Y" step="0.1" value="0.0" class="w-full bg-transparent text-slate-100 font-bold focus:outline-none text-right">
-              </div>
-              <div class="bg-slate-950 px-2 py-1 rounded flex items-center gap-1 border border-slate-800 focus-within:border-rose-500 transition" title="Coordonnée Z">
-                <span class="text-slate-400 text-[10px] select-none font-sans">Z</span>
-                <input type="number" id="inputG2Z" step="0.1" value="0.0" class="w-full bg-transparent text-slate-100 font-bold focus:outline-none text-right">
-              </div>
-            </div>
+        <!-- SECTION 3 : RUNNER & TAB DIMENSIONS -->
+        <div id="sectionDimensions" class="bg-slate-950/70 rounded-xl p-3.5 border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-violet-500"></span>
+              <span id="titleDimensionsSection">2. Tab &amp; Runner Dimensions</span>
+            </span>
           </div>
 
-          <!-- Actions sur les points d'attache -->
-          <div class="grid grid-cols-2 gap-2 pt-1">
-            <button id="btnSwapGates" title="Inverser la position du Point 1 et du Point 2" class="py-2 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white font-medium transition border border-slate-800 hover:border-indigo-500/50 flex items-center justify-center gap-1.5 text-[11px] shadow-sm">
-              <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
-              </svg>
-              <span>Inverser P1 ⇄ P2</span>
-            </button>
-            <button id="btnAutoOpposite" title="Calculer automatiquement 2 points opposés sur la pièce" class="py-2 px-2 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 font-medium transition border border-indigo-500/30 flex items-center justify-center gap-1.5 text-[11px] shadow-sm">
-              <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-              </svg>
-              <span>Auto-détecter</span>
-            </button>
+          <!-- Runner & Frame Diameter -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center">
+              <label for="rangeFrameWidth" class="text-slate-300 font-medium text-[11px]">Runner &amp; Frame Width (Ø)</label>
+              <span class="font-mono text-indigo-400 font-bold text-[11px]">Ø <span id="valFrameWidth">3.0</span> mm</span>
+            </div>
+            <input id="rangeFrameWidth" type="range" min="1.5" max="6.0" step="0.1" value="3.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            <span class="text-[10px] text-slate-500">Rigidity of the outer perimeter frame and rails.</span>
+          </div>
+
+          <!-- Tab Stem Body Diameter -->
+          <div class="space-y-1 pt-2 border-t border-slate-800">
+            <div class="flex justify-between items-center">
+              <label for="rangeBodyDiameter" class="text-slate-300 font-medium text-[11px]">Tab Stem Diameter (0.7 × Runner)</label>
+              <span class="font-mono text-indigo-400 font-bold text-[11px]">Ø <span id="valBodyDiameter">2.1</span> mm</span>
+            </div>
+            <input id="rangeBodyDiameter" type="range" min="0.8" max="5.0" step="0.1" value="2.1" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            <span class="text-[10px] text-slate-500">Thick stem section (automatically 70% of runner diameter).</span>
+          </div>
+
+          <!-- Breakaway Neck Diameter -->
+          <div class="space-y-1 pt-2 border-t border-slate-800">
+            <div class="flex justify-between items-center">
+              <label for="rangeNeckDiameter" class="text-slate-300 font-medium text-[11px]">Breakaway Neck Diameter (Ø)</label>
+              <span class="font-mono text-rose-400 font-bold text-[11px]">Ø <span id="valNeckDiameter">1.20</span> mm</span>
+            </div>
+            <input id="rangeNeckDiameter" type="range" min="0.3" max="2.5" step="0.05" value="1.2" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            <span class="text-[10px] text-slate-500">Break-off contact point for easy snap removal (min 0.30 mm).</span>
+          </div>
+
+          <!-- Breakaway Neck Length -->
+          <div class="space-y-1 pt-2 border-t border-slate-800">
+            <div class="flex justify-between items-center">
+              <label for="rangeNeckLength" class="text-slate-300 font-medium text-[11px]">Breakaway Neck Length</label>
+              <span class="font-mono text-emerald-400 font-bold text-[11px]"><span id="valNeckLength">1.0</span> mm</span>
+            </div>
+            <input id="rangeNeckLength" type="range" min="0.3" max="3.0" step="0.1" value="1.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
           </div>
         </div>
 
-        <!-- SECTION 2 : TIGES D'ATTACHE & PROFIL SÉCABLE -->
-        <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800 space-y-4">
+        <!-- SECTION 4 : FOOTPRINT & VOLUME METRICS (BATCH SPRUE MODE ONLY) -->
+        <div id="costSavingsWidget" class="bg-gradient-to-br from-indigo-950/40 via-slate-950 to-slate-900 rounded-xl p-3.5 border border-indigo-500/30 space-y-2.5 shadow-lg hidden">
           <div class="flex items-center justify-between">
-            <h3 class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-              <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-              2. Tiges d'Attache & Profil de Rupture
-            </h3>
+            <span class="font-bold text-white uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+              Sprue Footprint &amp; Volume
+            </span>
+            <span id="badgeSavingRate" class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              Optimal Z Minimal ✓
+            </span>
           </div>
 
-          <!-- A. Longueurs des tiges (Éloignement) -->
-          <div class="space-y-3 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80">
-            <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">A. Longueurs des tiges (Éloignement)</span>
-            
-            <!-- Longueur Attache 1 (Rail Central) -->
-            <div class="space-y-1">
-              <div class="flex justify-between items-center">
-                <label for="rangeGate1Length" class="text-emerald-400 font-medium flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                  Longueur Attache 1 (vers Rail Central)
-                </label>
-                <span class="font-mono text-emerald-400 font-bold"><span id="valGate1Length">5.0</span> mm</span>
-              </div>
-              <input id="rangeGate1Length" type="range" min="1.5" max="30" step="0.5" value="5.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+          <div class="grid grid-cols-3 gap-2 text-center font-mono">
+            <div class="bg-slate-950/80 p-2 rounded border border-slate-800">
+              <span class="text-[10px] text-slate-400 block font-sans">Bounding Box</span>
+              <span id="valSprueBBoxDim" class="text-slate-100 font-bold text-[11px] block truncate">0 × 0 × 0</span>
+              <span class="text-[9px] text-slate-400 block font-sans">mm</span>
             </div>
-
-            <!-- Longueur Attache 2 (Cadre Extérieur) -->
-            <div class="space-y-1 pt-1 border-t border-slate-800">
-              <div class="flex justify-between items-center">
-                <label for="rangeGate2Length" class="text-rose-400 font-medium flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                  Longueur Attache 2 (vers Cadre Extérieur)
-                </label>
-                <span class="font-mono text-rose-400 font-bold"><span id="valGate2Length">6.0</span> mm</span>
-              </div>
-              <input id="rangeGate2Length" type="range" min="1.5" max="30" step="0.5" value="6.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            <div class="bg-slate-950/80 p-2 rounded border border-slate-800">
+              <span class="text-[10px] text-slate-400 block font-sans">BBox Volume</span>
+              <span id="valSprueVolume" class="text-indigo-400 font-bold text-[11px] block">0.0</span>
+              <span class="text-[9px] text-slate-400 block font-sans">cm³</span>
             </div>
-          </div>
-
-          <!-- B. Dimensions du Col sécable & Corps de tige -->
-          <div class="space-y-3 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80">
-            <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">B. Col Sécable & Corps de Tige</span>
-            
-            <!-- Longueur du col fin -->
-            <div class="space-y-1">
-              <div class="flex justify-between items-center">
-                <label for="rangeNeckLength" class="text-slate-300 font-medium">Longueur du col fin (zone sécable)</label>
-                <span class="font-mono text-indigo-400 font-bold"><span id="valNeckLength">1.0</span> mm</span>
-              </div>
-              <input id="rangeNeckLength" type="range" min="0.4" max="4.0" step="0.1" value="1.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-              <p class="text-[10px] text-slate-400">Longueur du rétrécissement fragile au contact de la pièce (défaut: 1.0 mm).</p>
-            </div>
-
-            <!-- Diamètre col fin de rupture -->
-            <div class="space-y-1 pt-1 border-t border-slate-800">
-              <div class="flex justify-between items-center">
-                <label for="rangeNeckDiameter" class="text-slate-300 font-medium">Diamètre du col fin (Ø contact)</label>
-                <span class="font-mono text-rose-400 font-bold">Ø <span id="valNeckDiameter">1.2</span> mm</span>
-              </div>
-              <input id="rangeNeckDiameter" type="range" min="0.8" max="2.0" step="0.1" value="1.2" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-            </div>
-
-            <!-- Diamètre corps de l'attache -->
-            <div class="space-y-1 pt-1 border-t border-slate-800">
-              <div class="flex justify-between items-center">
-                <label for="rangeBodyDiameter" class="text-slate-300 font-medium">Diamètre du corps de tige (Ø cadre)</label>
-                <span class="font-mono text-indigo-400 font-bold">Ø <span id="valBodyDiameter">2.8</span> mm</span>
-              </div>
-              <input id="rangeBodyDiameter" type="range" min="1.5" max="4.5" step="0.1" value="2.8" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+            <div class="bg-slate-950/80 p-2 rounded border border-slate-800">
+              <span class="text-[10px] text-slate-400 block font-sans">Z Height (Cost)</span>
+              <span id="valSprueHeightZ" class="text-emerald-400 font-bold text-[11px] block">0.0</span>
+              <span class="text-[9px] text-slate-400 block font-sans">mm</span>
             </div>
           </div>
         </div>
 
-        <!-- SECTION 3 : AGENCEMENT GRAPPE & CAGE DE PROTECTION -->
-        <div class="bg-slate-950/70 rounded-xl p-4 border border-slate-800 space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="font-semibold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-              <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-              3. Agencement & Cage de Protection
-            </h3>
-          </div>
-
-          <!-- Disposition & Dimensions de la Grille -->
-          <div class="space-y-3 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80">
-            <div class="flex items-center justify-between">
-              <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">A. Configuration Grille</span>
-              <span id="badgeTotalPieces" class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                10 pièces (2 × 5)
-              </span>
-            </div>
-
-            <!-- Rangées / Lignes (Y) -->
-            <div class="space-y-1">
-              <div class="flex justify-between items-center">
-                <label for="inputRows" class="text-slate-300 font-medium">Nombre de Rangées / Lignes (Y)</label>
-                <div class="flex items-center gap-1 font-mono">
-                  <input id="inputRows" type="number" min="1" max="10" step="1" value="2" class="w-12 bg-slate-950 border border-slate-800 rounded px-2 py-0.5 text-right text-indigo-400 font-bold focus:border-indigo-500 focus:outline-none">
-                  <span class="text-slate-400">lignes</span>
-                </div>
-              </div>
-              <input id="rangeRows" type="range" min="1" max="8" step="1" value="2" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-            </div>
-
-            <!-- Colonnes (X) -->
-            <div class="space-y-1 pt-1 border-t border-slate-800">
-              <div class="flex justify-between items-center">
-                <label for="inputCols" class="text-slate-300 font-medium">Nombre de Colonnes (X)</label>
-                <div class="flex items-center gap-1 font-mono">
-                  <input id="inputCols" type="number" min="1" max="25" step="1" value="5" class="w-12 bg-slate-950 border border-slate-800 rounded px-2 py-0.5 text-right text-indigo-400 font-bold focus:border-indigo-500 focus:outline-none">
-                  <span class="text-slate-400">cols</span>
-                </div>
-              </div>
-              <input id="rangeCols" type="range" min="1" max="15" step="1" value="5" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-            </div>
-
-            <!-- Espacement entre pièces -->
-            <div class="space-y-1 pt-1 border-t border-slate-800">
-              <div class="flex justify-between items-center">
-                <label for="rangeSpacing" class="text-slate-300 font-medium">Espacement centre-à-centre</label>
-                <span class="font-mono text-indigo-400 font-bold"><span id="valSpacing">22.0</span> mm</span>
-              </div>
-              <input id="rangeSpacing" type="range" min="12" max="80" step="0.5" value="22" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-              <div class="flex justify-between text-[10px] text-slate-400">
-                <span>Serré</span>
-                <button id="btnAutoSpacing" class="text-indigo-400 hover:underline">Auto (Taille + 6mm)</button>
-                <span>Large</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Cage de protection extérieure -->
-          <div class="space-y-3 bg-slate-900/60 p-3 rounded-lg border border-slate-800/80">
-            <div class="flex items-center justify-between">
-              <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold block">B. Cadre Extérieur (Protection)</span>
-              <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" id="checkEnableFrame" checked class="sr-only peer">
-                <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
-              </label>
-            </div>
-
-            <div id="frameSettingsContainer" class="space-y-2 pt-1">
-              <div class="space-y-1">
-                <div class="flex justify-between items-center">
-                  <label for="rangeFrameWidth" class="text-slate-300 font-medium">Épaisseur cadre & rail (Ø)</label>
-                  <span class="font-mono text-indigo-400 font-bold"><span id="valFrameWidth">3.0</span> mm</span>
-                </div>
-                <input id="rangeFrameWidth" type="range" min="2.0" max="5.0" step="0.2" value="3.0" class="w-full h-1.5 bg-slate-800 rounded-lg cursor-pointer">
-                <p class="text-[10px] text-slate-400">Cadre rigide protecteur (standard MJF: Ø 3.0 mm).</p>
-              </div>
-            </div>
-          </div>
+        <!-- HIDDEN COMPATIBILITY ELEMENTS -->
+        <div class="hidden">
+          <input type="range" id="rangeRows" min="1" max="10" value="2">
+          <input type="range" id="rangeCols" min="1" max="25" value="5">
+          <input type="range" id="rangeSpacing" min="10" max="80" value="20">
+          <span id="valSpacing">20.0</span>
+          <input type="range" id="rangeGate1Length" min="1" max="30" value="5">
+          <span id="valGate1Length">5.0</span>
+          <input type="range" id="rangeGate2Length" min="1" max="30" value="5">
+          <span id="valGate2Length">5.0</span>
+          <input type="checkbox" id="checkEnableFrame" checked>
+          <input type="checkbox" id="checkSnapping" checked>
+          <span id="badgeCurrentRotation">0° / 0° / 0°</span>
+          <span id="statusGate1">Defined</span>
+          <span id="statusGate2">Defined</span>
+          <input type="number" id="inputG1X" value="0"><input type="number" id="inputG1Y" value="0"><input type="number" id="inputG1Z" value="0">
+          <input type="number" id="inputG2X" value="0"><input type="number" id="inputG2Y" value="0"><input type="number" id="inputG2Z" value="0">
+          <button id="btnAutoSpacing"></button>
+          <button id="btnSwapGates"></button>
+          <button id="btnAutoOpposite"></button>
+          <button id="btnResetRotation"></button>
+          <button id="btnRotXMinus"></button>
+          <button id="btnRotYMinus"></button>
+          <button id="btnRotZMinus"></button>
+          <button id="btnStructureFlat"></button>
+          <button id="btnStructureCentered"></button>
+          <button id="btnCompactSpacing"></button>
+          <span id="structureDescText"></span>
         </div>
 
       </div>
 
-      <!-- PIED DU PANNEAU (BOUTONS D'EXPORT) -->
+      <!-- SIDEBAR FOOTER (EXPORT ACTION) -->
       <div class="p-4 bg-slate-950 border-t border-slate-800 space-y-2.5 shrink-0">
         
-        <!-- Bouton STL Principal -->
+        <!-- Primary STL Download Button -->
         <button id="btnExportSTL" disabled class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 disabled:from-slate-800 disabled:to-slate-800 disabled:text-slate-600 text-white font-bold text-sm tracking-wide shadow-lg shadow-indigo-600/20 disabled:shadow-none transition flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-          <span id="btnExportText">Télécharger le STL de la grappe</span>
-        </button>
-
-        <!-- Bouton OpenSCAD secondaire -->
-        <button id="btnExportSCAD" disabled class="w-full py-2 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-slate-300 hover:text-white transition font-medium text-xs border border-slate-800 flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed">
-          <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-          Exporter script OpenSCAD (.scad)
+          <span id="btnExportText">Download Batch Sprue STL</span>
         </button>
 
         <div id="exportStatus" class="hidden text-center text-[11px] text-indigo-400 animate-pulse font-medium">
-          Génération du maillage STL fusionné...
+          Generating merged binary STL...
         </div>
       </div>
 
@@ -679,1394 +635,6 @@
   <!-- ============================================================== -->
   <!-- SCRIPT THREE.JS & GÉOMÉTRIE DE LA CAGE DE PROTECTION -->
   <!-- ============================================================== -->
-  <script type="module">
-    import * as THREE from 'three';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-    import { STLLoader } from 'three/addons/loaders/STLLoader.js';
-    import { STLExporter } from 'three/addons/exporters/STLExporter.js';
-    import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
-
-    // ──────────────────────────────────────────────────────────────
-    // ÉTAT GLOBAL
-    // ──────────────────────────────────────────────────────────────
-    const state = {
-      rawFileName: 'piece.stl',
-      loadedGeometry: null,
-      originalBBox: new THREE.Box3(),
-      dimensions: new THREE.Vector3(1, 1, 1),
-      
-      // Mode de vue : 'sprue' (grappe complète) | 'focus' (pièce seule)
-      viewMode: 'sprue',
-      showGrid: true,
-      cameraMode: 'perspective', // 'perspective' | 'orthographic'
-
-      // 2 Points d'attache par pièce
-      activeGateSlot: 1, // 1: intérieur (rail), 2: extérieur (cadre)
-      gate1Picked: false,
-      gate1Point: new THREE.Vector3(0, 0, 0),
-      gate1Normal: new THREE.Vector3(0, 1, 0),
-
-      gate2Picked: false,
-      gate2Point: new THREE.Vector3(0, 0, 0),
-      gate2Normal: new THREE.Vector3(0, -1, 0),
-
-      // Longueurs séparées des attaches 1 et 2
-      gate1Length: 5.0,         // Longueur attache 1 (vers rail central)
-      gate2Length: 6.0,         // Longueur attache 2 (vers cadre extérieur)
-
-      // Paramètres Cage & Profils
-      enableFrame: true,
-      frameWidth: 3.0,          // Ø du cadre rectangulaire et du rail central
-      neckDiameter: 1.2,        // Ø du col fin de rupture (au contact de la pièce)
-      neckLength: 1.0,          // Longueur du col fin
-      bodyDiameter: 2.8,        // Ø du corps de l'attache côté cadre
-      embedDepth: 0.35,         // Pénétration dans la pièce pour fusion CSG étanche
-
-      // Grille (Nombre de rangées et de colonnes)
-      rows: 2,                  // Nombre de rangées / lignes (axe Y)
-      cols: 5,                  // Nombre de colonnes (axe X)
-      spacing: 22.0             // Espacement centre-à-centre le long du rail
-    };
-
-    // ──────────────────────────────────────────────────────────────
-    // INITIALISATION THREE.JS
-    // ──────────────────────────────────────────────────────────────
-    const container = document.getElementById('viewportContainer');
-    const canvas = document.getElementById('webglCanvas');
-
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x090d16);
-
-    const aspect = container.clientWidth / container.clientHeight;
-    const perspCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 2000);
-    perspCamera.position.set(40, 70, 90);
-
-    const initialOrthoHeight = 120;
-    const orthoCamera = new THREE.OrthographicCamera(
-      -initialOrthoHeight * aspect / 2,
-      initialOrthoHeight * aspect / 2,
-      initialOrthoHeight / 2,
-      -initialOrthoHeight / 2,
-      0.1,
-      2000
-    );
-    orthoCamera.position.set(40, 70, 90);
-
-    let camera = perspCamera;
-
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.maxDistance = 1400;
-    controls.minDistance = 2;
-
-    // Lumières
-    scene.add(new THREE.AmbientLight(0xffffff, 0.65));
-    const dir1 = new THREE.DirectionalLight(0xffffff, 1.3);
-    dir1.position.set(100, 160, 100);
-    scene.add(dir1);
-    const dir2 = new THREE.DirectionalLight(0x818cf8, 0.7);
-    dir2.position.set(-100, -50, -100);
-    scene.add(dir2);
-
-    // Grille de référence sol
-    const gridHelper = new THREE.GridHelper(300, 60, 0x4f46e5, 0x1e293b);
-    gridHelper.position.y = -0.01;
-    scene.add(gridHelper);
-
-    // Groupes hiérarchiques
-    const focusGroup = new THREE.Group();    // Visible en mode 'focus'
-    const sprueGroup = new THREE.Group();    // Visible en mode 'sprue'
-    const markersGroup = new THREE.Group();  // Marqueurs des 2 attaches
-    const hoverMarker = new THREE.Group();   // Curseur interactif au survol
-    scene.add(focusGroup);
-    scene.add(sprueGroup);
-    scene.add(markersGroup);
-    scene.add(hoverMarker);
-
-    // Curseur hover
-    const hoverSphere = new THREE.Mesh(
-      new THREE.SphereGeometry(0.7, 16, 16),
-      new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true })
-    );
-    hoverMarker.add(hoverSphere);
-    hoverMarker.visible = false;
-
-    // Matériaux d'affichage
-    const pieceMaterial = new THREE.MeshStandardMaterial({
-      color: 0x94a3b8, // Gris matière MJF PA12
-      roughness: 0.45,
-      metalness: 0.1
-    });
-
-    const frameMaterial = new THREE.MeshStandardMaterial({
-      color: 0x4f46e5, // Indigo pour le cadre et rails
-      roughness: 0.35,
-      metalness: 0.2
-    });
-
-    const tabMaterial = new THREE.MeshStandardMaterial({
-      color: 0x6366f1, // Attaches
-      roughness: 0.4,
-      metalness: 0.15
-    });
-
-    // Redimensionnement
-    window.addEventListener('resize', () => {
-      const aspect = container.clientWidth / container.clientHeight;
-      perspCamera.aspect = aspect;
-      perspCamera.updateProjectionMatrix();
-
-      const frustumHeight = (orthoCamera.top - orthoCamera.bottom);
-      const width = frustumHeight * aspect;
-      orthoCamera.left = -width / 2;
-      orthoCamera.right = width / 2;
-      orthoCamera.updateProjectionMatrix();
-
-      renderer.setSize(container.clientWidth, container.clientHeight);
-    });
-
-    // ──────────────────────────────────────────────────────────────
-    // SÉLECTION DU MODE DE CAMÉRA (PERSPECTIVE VS ISOMÉTRIQUE)
-    // ──────────────────────────────────────────────────────────────
-    const btnCamPersp = document.getElementById('btnCamPersp');
-    const btnCamOrtho = document.getElementById('btnCamOrtho');
-
-    function setCameraMode(mode) {
-      if (mode === state.cameraMode && camera) return;
-      state.cameraMode = mode;
-
-      const aspect = container.clientWidth / container.clientHeight;
-      const target = controls.target.clone();
-
-      if (mode === 'orthographic') {
-        // Perspective -> Isométrique (Orthographique CAD)
-        const dist = Math.max(perspCamera.position.distanceTo(target), 10);
-        const fovRad = THREE.MathUtils.degToRad(perspCamera.fov * 0.5);
-        const height = 2 * dist * Math.tan(fovRad);
-        const width = height * aspect;
-
-        orthoCamera.left = -width / 2;
-        orthoCamera.right = width / 2;
-        orthoCamera.top = height / 2;
-        orthoCamera.bottom = -height / 2;
-        orthoCamera.zoom = 1;
-        orthoCamera.position.copy(perspCamera.position);
-        orthoCamera.quaternion.copy(perspCamera.quaternion);
-        orthoCamera.up.copy(perspCamera.up);
-        orthoCamera.updateProjectionMatrix();
-
-        camera = orthoCamera;
-        controls.object = orthoCamera;
-
-        btnCamOrtho.className = 'px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm transition flex items-center gap-1';
-        btnCamPersp.className = 'px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1';
-      } else {
-        // Isométrique (Orthographique) -> Perspective
-        const orthoHeight = (orthoCamera.top - orthoCamera.bottom) / orthoCamera.zoom;
-        const fovRad = THREE.MathUtils.degToRad(perspCamera.fov * 0.5);
-        const targetDist = (orthoHeight / 2) / Math.tan(fovRad);
-
-        const dir = orthoCamera.position.clone().sub(target).normalize();
-        if (dir.lengthSq() < 0.0001) dir.set(0, 0.7, 0.7).normalize();
-        perspCamera.position.copy(target).addScaledVector(dir, Math.max(targetDist, 10));
-        perspCamera.quaternion.copy(orthoCamera.quaternion);
-        perspCamera.up.copy(orthoCamera.up);
-        perspCamera.aspect = aspect;
-        perspCamera.updateProjectionMatrix();
-
-        camera = perspCamera;
-        controls.object = perspCamera;
-
-        btnCamPersp.className = 'px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm transition flex items-center gap-1';
-        btnCamOrtho.className = 'px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1';
-      }
-
-      controls.target.copy(target);
-      controls.update();
-      updateViewCubeRotation();
-    }
-
-    btnCamPersp.addEventListener('click', () => setCameraMode('perspective'));
-    btnCamOrtho.addEventListener('click', () => setCameraMode('orthographic'));
-
-    // ──────────────────────────────────────────────────────────────
-    // BOUTON TOGGLE GRILLE
-    // ──────────────────────────────────────────────────────────────
-    const btnToggleGrid = document.getElementById('btnToggleGrid');
-    const labelToggleGrid = document.getElementById('labelToggleGrid');
-    btnToggleGrid.addEventListener('click', () => {
-      state.showGrid = !state.showGrid;
-      gridHelper.visible = state.showGrid;
-      if (state.showGrid) {
-        btnToggleGrid.className = 'px-2.5 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-indigo-400 font-medium transition flex items-center gap-1.5 border border-slate-700';
-        labelToggleGrid.textContent = 'Grille : On';
-      } else {
-        btnToggleGrid.className = 'px-2.5 py-1.5 rounded-md bg-slate-900 hover:bg-slate-800 text-slate-400 font-medium transition flex items-center gap-1.5 border border-slate-800';
-        labelToggleGrid.textContent = 'Grille : Off';
-      }
-    });
-
-    // ──────────────────────────────────────────────────────────────
-    // DRAG & DROP & CHARGEMENT FICHIER STL
-    // ──────────────────────────────────────────────────────────────
-    const dropOverlay = document.getElementById('dropOverlay');
-    const fileInput = document.getElementById('fileInput');
-
-    ['dragenter', 'dragover'].forEach(name => {
-      window.addEventListener(name, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropOverlay.classList.remove('hidden');
-        dropOverlay.classList.add('flex');
-      });
-    });
-
-    ['dragleave', 'drop'].forEach(name => {
-      window.addEventListener(name, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (e.target === dropOverlay || name === 'drop') {
-          dropOverlay.classList.add('hidden');
-          dropOverlay.classList.remove('flex');
-        }
-      });
-    });
-
-    window.addEventListener('drop', (e) => {
-      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        handleFile(e.dataTransfer.files[0]);
-      }
-    });
-
-    fileInput.addEventListener('change', (e) => {
-      if (e.target.files && e.target.files.length > 0) {
-        handleFile(e.target.files[0]);
-      }
-    });
-
-    function handleFile(file) {
-      if (!file.name.toLowerCase().endsWith('.stl')) {
-        alert('Veuillez fournir un fichier STL');
-        return;
-      }
-      state.rawFileName = file.name;
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        loadSTLBuffer(event.target.result);
-      };
-      reader.readAsArrayBuffer(file);
-    }
-
-    const stlLoader = new STLLoader();
-
-    function loadSTLBuffer(buffer) {
-      clearSceneMeshes();
-
-      const geometry = stlLoader.parse(buffer);
-      if (!geometry || !geometry.attributes.position || geometry.attributes.position.count === 0) {
-        alert('Erreur: Fichier STL invalide ou vide.');
-        return;
-      }
-
-      // Centrage de la géométrie
-      geometry.center();
-      geometry.computeVertexNormals();
-      geometry.computeBoundingBox();
-
-      state.loadedGeometry = geometry;
-      state.originalBBox.copy(geometry.boundingBox);
-      geometry.boundingBox.getSize(state.dimensions);
-
-      // Création du mesh de focus (au centre)
-      const focusMesh = new THREE.Mesh(geometry, pieceMaterial);
-      focusMesh.name = 'focusPiece';
-      focusGroup.add(focusMesh);
-
-      // Calcul espacement automatique adapté
-      const suggestedSpacing = Math.round((Math.max(state.dimensions.x, state.dimensions.y) + 6.0) * 2) / 2;
-      state.spacing = Math.max(suggestedSpacing, 14.0);
-      document.getElementById('rangeSpacing').value = state.spacing;
-      document.getElementById('valSpacing').textContent = state.spacing.toFixed(1);
-
-      // Détecter automatiquement 2 points opposés idéaux
-      autoDetectOppositeGates();
-
-      // UI
-      updateStatsUI(geometry);
-      document.getElementById('emptyNotice').classList.add('hidden');
-      document.getElementById('floatingStats').classList.remove('hidden');
-      document.getElementById('btnExportSTL').disabled = false;
-      document.getElementById('btnExportSCAD').disabled = false;
-
-      // Cadrer caméra et reconstruire la grappe
-      fitCameraToObject(geometry);
-      rebuildSprue();
-    }
-
-    function clearSceneMeshes() {
-      while (focusGroup.children.length > 0) {
-        const obj = focusGroup.children[0];
-        focusGroup.remove(obj);
-        if (obj.geometry && obj.geometry !== state.loadedGeometry) obj.geometry.dispose();
-      }
-      while (sprueGroup.children.length > 0) {
-        const obj = sprueGroup.children[0];
-        sprueGroup.remove(obj);
-        if (obj.geometry) obj.geometry.dispose();
-      }
-      while (markersGroup.children.length > 0) {
-        const obj = markersGroup.children[0];
-        markersGroup.remove(obj);
-        if (obj.geometry) obj.geometry.dispose();
-      }
-      if (state.loadedGeometry) {
-        state.loadedGeometry.dispose();
-        state.loadedGeometry = null;
-      }
-    }
-
-    function fitCameraToObject(geom) {
-      const size = state.dimensions;
-      const maxDim = Math.max(size.x, size.y, size.z);
-      const fov = perspCamera.fov * (Math.PI / 180);
-      let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * (state.viewMode === 'focus' ? 2.2 : 3.5);
-      cameraZ = Math.max(cameraZ, 40);
-
-      perspCamera.position.set(cameraZ * 0.7, cameraZ * 0.9, cameraZ);
-      perspCamera.lookAt(0, 0, 0);
-
-      const aspect = container.clientWidth / container.clientHeight;
-      const height = cameraZ * 2 * Math.tan(fov / 2);
-      const width = height * aspect;
-      orthoCamera.left = -width / 2;
-      orthoCamera.right = width / 2;
-      orthoCamera.top = height / 2;
-      orthoCamera.bottom = -height / 2;
-      orthoCamera.zoom = 1;
-      orthoCamera.position.copy(perspCamera.position);
-      orthoCamera.lookAt(0, 0, 0);
-      orthoCamera.updateProjectionMatrix();
-
-      controls.target.set(0, 0, 0);
-      controls.update();
-      updateViewCubeRotation();
-    }
-
-    function updateStatsUI(geom) {
-      document.getElementById('statFileName').textContent = state.rawFileName;
-      const triCount = (geom.attributes.position.count / 3).toLocaleString();
-      document.getElementById('statTriangleCount').textContent = `${triCount} tri`;
-      document.getElementById('statDimX').textContent = state.dimensions.x.toFixed(1);
-      document.getElementById('statDimY').textContent = state.dimensions.y.toFixed(1);
-      document.getElementById('statDimZ').textContent = state.dimensions.z.toFixed(1);
-    }
-
-    // ──────────────────────────────────────────────────────────────
-    // RAYCASTING & GATE PICKING
-    // ──────────────────────────────────────────────────────────────
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    let pointerDownCoord = { x: 0, y: 0 };
-
-    function getClickableMeshes() {
-      if (state.viewMode === 'focus') {
-        return focusGroup.children;
-      } else {
-        return sprueGroup.children.filter(c => c.name.startsWith('spruePiece_'));
-      }
-    }
-
-    // Survol souris : affiche le curseur d'impact potentiel
-    renderer.domElement.addEventListener('pointermove', (e) => {
-      if (!state.loadedGeometry) return;
-      const rect = renderer.domElement.getBoundingClientRect();
-      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera);
-      const meshes = getClickableMeshes();
-      const intersects = raycaster.intersectObjects(meshes, false);
-
-      if (intersects.length > 0) {
-        hoverMarker.position.copy(intersects[0].point);
-        hoverMarker.visible = true;
-      } else {
-        hoverMarker.visible = false;
-      }
-    });
-
-    renderer.domElement.addEventListener('pointerdown', (e) => {
-      pointerDownCoord.x = e.clientX;
-      pointerDownCoord.y = e.clientY;
-    });
-
-    renderer.domElement.addEventListener('pointerup', (e) => {
-      const dx = Math.abs(e.clientX - pointerDownCoord.x);
-      const dy = Math.abs(e.clientY - pointerDownCoord.y);
-      if (dx < 5 && dy < 5 && state.loadedGeometry) {
-        handlePickingClick(e);
-      }
-    });
-
-    function handlePickingClick(e) {
-      const rect = renderer.domElement.getBoundingClientRect();
-      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera);
-      const meshes = getClickableMeshes();
-      const intersects = raycaster.intersectObjects(meshes, false);
-
-      if (intersects.length > 0) {
-        const hit = intersects[0];
-        const localPoint = hit.object.worldToLocal(hit.point.clone());
-        const localNormal = hit.face.normal.clone();
-
-        if (state.activeGateSlot === 1) {
-          setGate1(localPoint, localNormal);
-          selectGateSlot(2);
-        } else {
-          setGate2(localPoint, localNormal);
-        }
-      }
-    }
-
-    const inputG1X = document.getElementById('inputG1X');
-    const inputG1Y = document.getElementById('inputG1Y');
-    const inputG1Z = document.getElementById('inputG1Z');
-
-    const inputG2X = document.getElementById('inputG2X');
-    const inputG2Y = document.getElementById('inputG2Y');
-    const inputG2Z = document.getElementById('inputG2Z');
-
-    function setGate1(point, normal) {
-      state.gate1Picked = true;
-      state.gate1Point.copy(point);
-      state.gate1Normal.copy(normal).normalize();
-
-      inputG1X.value = state.gate1Point.x.toFixed(2);
-      inputG1Y.value = state.gate1Point.y.toFixed(2);
-      inputG1Z.value = state.gate1Point.z.toFixed(2);
-      document.getElementById('statusGate1').textContent = 'Défini ✓';
-      document.getElementById('statusGate1').className = 'text-emerald-400 font-mono text-[10px] font-bold';
-
-      updateMarkers();
-      rebuildSprue();
-    }
-
-    function setGate2(point, normal) {
-      state.gate2Picked = true;
-      state.gate2Point.copy(point);
-      state.gate2Normal.copy(normal).normalize();
-
-      inputG2X.value = state.gate2Point.x.toFixed(2);
-      inputG2Y.value = state.gate2Point.y.toFixed(2);
-      inputG2Z.value = state.gate2Point.z.toFixed(2);
-      document.getElementById('statusGate2').textContent = 'Défini ✓';
-      document.getElementById('statusGate2').className = 'text-rose-400 font-mono text-[10px] font-bold';
-
-      updateMarkers();
-      rebuildSprue();
-    }
-
-    // Gestion de la modification manuelle des coordonnées au clavier (X, Y, Z)
-    function onManualGate1Change() {
-      state.gate1Point.x = parseFloat(inputG1X.value) || 0;
-      state.gate1Point.y = parseFloat(inputG1Y.value) || 0;
-      state.gate1Point.z = parseFloat(inputG1Z.value) || 0;
-      state.gate1Picked = true;
-      document.getElementById('statusGate1').textContent = 'Défini ✓';
-      document.getElementById('statusGate1').className = 'text-emerald-400 font-mono text-[10px] font-bold';
-      updateMarkers();
-      rebuildSprue();
-    }
-    [inputG1X, inputG1Y, inputG1Z].forEach(inp => {
-      inp.addEventListener('input', onManualGate1Change);
-      inp.addEventListener('change', onManualGate1Change);
-    });
-
-    function onManualGate2Change() {
-      state.gate2Point.x = parseFloat(inputG2X.value) || 0;
-      state.gate2Point.y = parseFloat(inputG2Y.value) || 0;
-      state.gate2Point.z = parseFloat(inputG2Z.value) || 0;
-      state.gate2Picked = true;
-      document.getElementById('statusGate2').textContent = 'Défini ✓';
-      document.getElementById('statusGate2').className = 'text-rose-400 font-mono text-[10px] font-bold';
-      updateMarkers();
-      rebuildSprue();
-    }
-    [inputG2X, inputG2Y, inputG2Z].forEach(inp => {
-      inp.addEventListener('input', onManualGate2Change);
-      inp.addEventListener('change', onManualGate2Change);
-    });
-
-    function selectGateSlot(slot) {
-      state.activeGateSlot = slot;
-      const b1 = document.getElementById('btnSelectGate1');
-      const b2 = document.getElementById('btnSelectGate2');
-      const statusText = document.getElementById('pickingStatusText');
-      const pulseDot = document.getElementById('pickingPulseDot');
-
-      if (slot === 1) {
-        b1.className = 'py-1.5 px-2 rounded-md font-medium text-center transition bg-emerald-600 text-white flex items-center justify-center gap-1.5 shadow-sm';
-        b2.className = 'py-1.5 px-2 rounded-md font-medium text-center transition text-slate-400 hover:text-white flex items-center justify-center gap-1.5';
-        statusText.textContent = 'Cliquez pour placer le Point 1 (Attache Intérieure / Rail)';
-        pulseDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
-      } else {
-        b2.className = 'py-1.5 px-2 rounded-md font-medium text-center transition bg-rose-600 text-white flex items-center justify-center gap-1.5 shadow-sm';
-        b1.className = 'py-1.5 px-2 rounded-md font-medium text-center transition text-slate-400 hover:text-white flex items-center justify-center gap-1.5';
-        statusText.textContent = 'Cliquez pour placer le Point 2 (Attache Extérieure / Cadre)';
-        pulseDot.className = 'w-2.5 h-2.5 rounded-full bg-rose-400 animate-pulse';
-      }
-    }
-
-    document.getElementById('btnSelectGate1').addEventListener('click', () => selectGateSlot(1));
-    document.getElementById('btnSelectGate2').addEventListener('click', () => selectGateSlot(2));
-
-    // Détection automatique de deux points d'attache opposés
-    function autoDetectOppositeGates() {
-      if (!state.loadedGeometry) return;
-      const box = state.originalBBox;
-
-      const p1 = new THREE.Vector3(0, box.max.y, 0);
-      const n1 = new THREE.Vector3(0, 1, 0);
-      const p2 = new THREE.Vector3(0, box.min.y, 0);
-      const n2 = new THREE.Vector3(0, -1, 0);
-
-      const testRay = new THREE.Raycaster();
-      const focusMesh = focusGroup.getObjectByName('focusPiece');
-
-      if (focusMesh) {
-        testRay.set(new THREE.Vector3(0, box.max.y + 10, 0), new THREE.Vector3(0, -1, 0));
-        const hits1 = testRay.intersectObject(focusMesh, false);
-        if (hits1.length > 0) {
-          p1.copy(hits1[0].point);
-          n1.copy(hits1[0].face.normal);
-        }
-        testRay.set(new THREE.Vector3(0, box.min.y - 10, 0), new THREE.Vector3(0, 1, 0));
-        const hits2 = testRay.intersectObject(focusMesh, false);
-        if (hits2.length > 0) {
-          p2.copy(hits2[0].point);
-          n2.copy(hits2[0].face.normal);
-        }
-      }
-
-      setGate1(p1, n1);
-      setGate2(p2, n2);
-      selectGateSlot(1);
-    }
-
-    document.getElementById('btnAutoOpposite').addEventListener('click', () => {
-      autoDetectOppositeGates();
-    });
-
-    // Inversion des deux points d'attache (Point 1 ⇄ Point 2)
-    function swapGatePoints() {
-      if (!state.gate1Picked && !state.gate2Picked) return;
-
-      // Échange des coordonnées
-      const tempP = state.gate1Point.clone();
-      state.gate1Point.copy(state.gate2Point);
-      state.gate2Point.copy(tempP);
-
-      // Échange des normales
-      const tempN = state.gate1Normal.clone();
-      state.gate1Normal.copy(state.gate2Normal);
-      state.gate2Normal.copy(tempN);
-
-      // Échange de l'état défini
-      const tempPicked = state.gate1Picked;
-      state.gate1Picked = state.gate2Picked;
-      state.gate2Picked = tempPicked;
-
-      // Synchronisation des champs numériques
-      inputG1X.value = state.gate1Point.x.toFixed(2);
-      inputG1Y.value = state.gate1Point.y.toFixed(2);
-      inputG1Z.value = state.gate1Point.z.toFixed(2);
-      inputG2X.value = state.gate2Point.x.toFixed(2);
-      inputG2Y.value = state.gate2Point.y.toFixed(2);
-      inputG2Z.value = state.gate2Point.z.toFixed(2);
-
-      // Mise à jour des statuts
-      const s1 = document.getElementById('statusGate1');
-      const s2 = document.getElementById('statusGate2');
-      if (state.gate1Picked) {
-        s1.textContent = 'Défini ✓';
-        s1.className = 'text-emerald-400 font-mono text-[10px] font-bold';
-      } else {
-        s1.textContent = 'Non défini';
-        s1.className = 'text-slate-400 font-mono text-[10px]';
-      }
-
-      if (state.gate2Picked) {
-        s2.textContent = 'Défini ✓';
-        s2.className = 'text-rose-400 font-mono text-[10px] font-bold';
-      } else {
-        s2.textContent = 'Non défini';
-        s2.className = 'text-slate-400 font-mono text-[10px]';
-      }
-
-      updateMarkers();
-      rebuildSprue();
-    }
-
-    document.getElementById('btnSwapGates').addEventListener('click', swapGatePoints);
-
-    // Marqueurs visuels
-    function updateMarkers() {
-      while (markersGroup.children.length > 0) {
-        const obj = markersGroup.children[0];
-        markersGroup.remove(obj);
-        if (obj.geometry) obj.geometry.dispose();
-      }
-
-      if (state.gate1Picked) {
-        const s1 = new THREE.Mesh(
-          new THREE.SphereGeometry(0.7, 16, 16),
-          new THREE.MeshBasicMaterial({ color: 0x10b981 })
-        );
-        s1.position.copy(state.gate1Point);
-        markersGroup.add(s1);
-
-        const a1 = new THREE.ArrowHelper(state.gate1Normal, state.gate1Point, 6.0, 0x10b981, 1.4, 0.8);
-        markersGroup.add(a1);
-      }
-
-      if (state.gate2Picked) {
-        const s2 = new THREE.Mesh(
-          new THREE.SphereGeometry(0.7, 16, 16),
-          new THREE.MeshBasicMaterial({ color: 0xf43f5e })
-        );
-        s2.position.copy(state.gate2Point);
-        markersGroup.add(s2);
-
-        const a2 = new THREE.ArrowHelper(state.gate2Normal, state.gate2Point, 6.0, 0xf43f5e, 1.4, 0.8);
-        markersGroup.add(a2);
-      }
-    }
-
-    // ──────────────────────────────────────────────────────────────
-    // CALCUL GÉOMÉTRIQUE BASÉ SUR LA GRILLE RANGÉES (Y) × COLONNES (X)
-    // ──────────────────────────────────────────────────────────────
-    function computeSprueBounds() {
-      const rows = state.rows;
-      const cols = state.cols;
-      const totalCount = rows * cols;
-      const spanX = (cols - 1) * state.spacing;
-      const halfSizeX = state.dimensions.x / 2;
-
-      const g1y = Math.abs(state.gate1Point.y);
-      const g2y = Math.abs(state.gate2Point.y);
-      const dInt = g1y + state.gate1Length;
-      const dExt = g2y + state.gate2Length;
-
-      // Calcul des coordonnées Y pour chaque rangée
-      const rowPositions = [];
-      let currentY = 0;
-      for (let r = 0; r < rows; r++) {
-        const isOdd = (r % 2 === 1);
-        if (r === 0) {
-          currentY = 0;
-        } else if (isOdd) {
-          currentY += 2 * dInt;
-        } else {
-          currentY += 2 * dExt;
-        }
-        rowPositions.push({ rawY: currentY, isOdd });
-      }
-
-      // Centrage global en Y
-      const minY = rowPositions[0].rawY - dExt;
-      const lastRow = rowPositions[rowPositions.length - 1];
-      const maxY = lastRow.rawY + (lastRow.isOdd ? dExt : dInt);
-      const yOffset = - (minY + maxY) / 2;
-
-      const railYSet = new Set();
-      rowPositions.forEach((rp) => {
-        rp.y = rp.rawY + yOffset;
-        if (!rp.isOdd) {
-          rp.rotZ = 0;
-          rp.railIntY = rp.y + dInt;
-          rp.railExtY = rp.y - dExt;
-        } else {
-          rp.rotZ = Math.PI;
-          rp.railIntY = rp.y - dInt;
-          rp.railExtY = rp.y + dExt;
-        }
-        railYSet.add(Math.round(rp.railIntY * 1000) / 1000);
-        railYSet.add(Math.round(rp.railExtY * 1000) / 1000);
-      });
-
-      const allRailYs = Array.from(railYSet).sort((a, b) => a - b);
-      const yMin = allRailYs[0];
-      const yMax = allRailYs[allRailYs.length - 1];
-      const intermediateRails = allRailYs.filter(y => y > yMin + 0.05 && y < yMax - 0.05);
-
-      // Limites X du cadre
-      const xMargin = Math.max(state.gate2Length, 6.0);
-      const xMin = - (spanX / 2 + halfSizeX + xMargin);
-      const xMax = (spanX / 2 + halfSizeX + xMargin);
-
-      // Hauteur d'ancrage Z
-      const zAttach = (state.gate1Picked && state.gate2Picked)
-        ? (state.gate1Point.z + state.gate2Point.z) / 2
-        : 0;
-
-      return {
-        rows,
-        cols,
-        totalCount,
-        spanX,
-        rowPositions,
-        intermediateRails,
-        xMin,
-        xMax,
-        yMin,
-        yMax,
-        zAttach
-      };
-    }
-
-    function rebuildSprue() {
-      while (sprueGroup.children.length > 0) {
-        const obj = sprueGroup.children[0];
-        sprueGroup.remove(obj);
-        if (obj.geometry) obj.geometry.dispose();
-      }
-
-      if (!state.loadedGeometry) return;
-
-      const bounds = computeSprueBounds();
-      const halfFrameD = state.frameWidth / 2;
-
-      // 1. Placement des pièces et attaches pour chaque rangée
-      bounds.rowPositions.forEach((rp, rIdx) => {
-        for (let c = 0; c < bounds.cols; c++) {
-          const posX = (c - (bounds.cols - 1) / 2) * state.spacing;
-          const posY = rp.y;
-
-          const pieceMesh = new THREE.Mesh(state.loadedGeometry, pieceMaterial);
-          pieceMesh.name = `spruePiece_${rIdx}_${c}`;
-          pieceMesh.position.set(posX, posY, 0);
-          pieceMesh.rotation.z = rp.rotZ;
-          sprueGroup.add(pieceMesh);
-
-          // Attache 1 (Intérieure)
-          if (state.gate1Picked) {
-            const pLocal = state.gate1Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), rp.rotZ);
-            const pTouch = pLocal.add(new THREE.Vector3(posX, posY, 0));
-            const pSupport = new THREE.Vector3(pTouch.x, rp.railIntY, bounds.zAttach);
-            createSubdividedAttache(pSupport, pTouch, sprueGroup);
-          }
-
-          // Attache 2 (Extérieure)
-          if (state.gate2Picked && state.enableFrame) {
-            const pLocal = state.gate2Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), rp.rotZ);
-            const pTouch = pLocal.add(new THREE.Vector3(posX, posY, 0));
-            const pSupport = new THREE.Vector3(pTouch.x, rp.railExtY, bounds.zAttach);
-            createSubdividedAttache(pSupport, pTouch, sprueGroup);
-          }
-        }
-      });
-
-      // 2. Cadre rectangulaire de protection
-      if (state.enableFrame) {
-        // Barre bas
-        sprueGroup.add(createPoutreMesh(new THREE.Vector3(bounds.xMin, bounds.yMin, bounds.zAttach), new THREE.Vector3(bounds.xMax, bounds.yMin, bounds.zAttach), halfFrameD));
-        // Barre haut
-        sprueGroup.add(createPoutreMesh(new THREE.Vector3(bounds.xMin, bounds.yMax, bounds.zAttach), new THREE.Vector3(bounds.xMax, bounds.yMax, bounds.zAttach), halfFrameD));
-        // Barre gauche
-        sprueGroup.add(createPoutreMesh(new THREE.Vector3(bounds.xMin, bounds.yMin, bounds.zAttach), new THREE.Vector3(bounds.xMin, bounds.yMax, bounds.zAttach), halfFrameD));
-        // Barre droite
-        sprueGroup.add(createPoutreMesh(new THREE.Vector3(bounds.xMax, bounds.yMin, bounds.zAttach), new THREE.Vector3(bounds.xMax, bounds.yMax, bounds.zAttach), halfFrameD));
-      }
-
-      // 3. Rails horizontaux intermédiaires (entre les rangées)
-      bounds.intermediateRails.forEach(rY => {
-        sprueGroup.add(createPoutreMesh(new THREE.Vector3(bounds.xMin, rY, bounds.zAttach), new THREE.Vector3(bounds.xMax, rY, bounds.zAttach), halfFrameD));
-      });
-
-      updateViewModeVisibility();
-    }
-
-    // Helper : Attache avec col fin sécable
-    function createSubdividedAttache(pSupport, pTouch, targetGroup) {
-      const v = pTouch.clone().sub(pSupport);
-      const dist = v.length();
-      if (dist <= 0.1) return;
-
-      const dir = v.clone().normalize();
-      const neckLen = Math.min(state.neckLength, Math.max(dist - 0.5, 0.2));
-
-      // 1. Partie corps épais (côté cadre/rail)
-      const pBodyStart = pSupport.clone();
-      const pBodyEnd = pSupport.clone().addScaledVector(dir, dist - neckLen);
-      targetGroup.add(createPoutreMesh(pBodyStart, pBodyEnd, state.bodyDiameter / 2, tabMaterial));
-
-      // 2. Col fin sécable (au contact de la pièce)
-      const pNeckStart = pBodyEnd.clone();
-      const pNeckEnd = pTouch.clone().addScaledVector(dir, state.embedDepth);
-      targetGroup.add(createPoutreMesh(pNeckStart, pNeckEnd, state.neckDiameter / 2, tabMaterial));
-    }
-
-    function createPoutreMesh(p1, p2, radius, mat = frameMaterial) {
-      const geom = createCylinderGeometryBetween(p1, p2, radius);
-      return new THREE.Mesh(geom, mat);
-    }
-
-    function createCylinderGeometryBetween(p1, p2, radius) {
-      const v = p2.clone().sub(p1);
-      const len = Math.max(v.length(), 0.05);
-      const geom = new THREE.CylinderGeometry(radius, radius, len, 20);
-      geom.translate(0, len / 2, 0);
-
-      const q = new THREE.Quaternion();
-      const dir = v.clone().normalize();
-      if (dir.lengthSq() > 0.0001) {
-        q.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
-      }
-      geom.applyQuaternion(q);
-      geom.translate(p1.x, p1.y, p1.z);
-      return geom;
-    }
-
-    // ──────────────────────────────────────────────────────────────
-    // GESTION DU MODE DE VUE (FOCUS VS GRAPPE)
-    // ──────────────────────────────────────────────────────────────
-    const btnViewFocus = document.getElementById('btnViewFocus');
-    const btnViewSprue = document.getElementById('btnViewSprue');
-
-    btnViewFocus.addEventListener('click', () => {
-      state.viewMode = 'focus';
-      btnViewFocus.className = 'px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm transition flex items-center gap-1';
-      btnViewSprue.className = 'px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1';
-      updateViewModeVisibility();
-      if (state.loadedGeometry) fitCameraToObject(state.loadedGeometry);
-    });
-
-    btnViewSprue.addEventListener('click', () => {
-      state.viewMode = 'sprue';
-      btnViewSprue.className = 'px-2.5 py-1 rounded bg-indigo-600 text-white font-medium shadow-sm transition flex items-center gap-1';
-      btnViewFocus.className = 'px-2.5 py-1 rounded text-slate-400 hover:text-white font-medium transition flex items-center gap-1';
-      updateViewModeVisibility();
-      if (state.loadedGeometry) fitCameraToObject(state.loadedGeometry);
-    });
-
-    function updateViewModeVisibility() {
-      if (state.viewMode === 'focus') {
-        focusGroup.visible = true;
-        sprueGroup.visible = false;
-        markersGroup.visible = true;
-      } else {
-        focusGroup.visible = false;
-        sprueGroup.visible = true;
-        markersGroup.visible = true;
-      }
-    }
-
-    // ──────────────────────────────────────────────────────────────
-    // EXPORT STL UNIQUE DIRECT (FUSION AVEC CAGE & ATTACHES)
-    // ──────────────────────────────────────────────────────────────
-    document.getElementById('btnExportSTL').addEventListener('click', () => {
-      exportMergedSTL();
-    });
-
-    async function exportMergedSTL() {
-      if (!state.loadedGeometry) return;
-
-      const statusEl = document.getElementById('exportStatus');
-      const btnText = document.getElementById('btnExportText');
-      statusEl.classList.remove('hidden');
-      btnText.textContent = 'Fusion des maillages...';
-
-      await new Promise(r => setTimeout(r, 60));
-
-      try {
-        const bounds = computeSprueBounds();
-        const halfFrameD = state.frameWidth / 2;
-
-        const geomsToMerge = [];
-
-        // 1. Pièces et doubles attaches pour chaque rangée
-        bounds.rowPositions.forEach((rp) => {
-          for (let c = 0; c < bounds.cols; c++) {
-            const posX = (c - (bounds.cols - 1) / 2) * state.spacing;
-            const posY = rp.y;
-
-            const pGeom = state.loadedGeometry.clone();
-            if (rp.rotZ !== 0) {
-              pGeom.rotateZ(rp.rotZ);
-            }
-            pGeom.translate(posX, posY, 0);
-            geomsToMerge.push(pGeom);
-
-            // Attache 1
-            if (state.gate1Picked) {
-              const pLocal = state.gate1Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), rp.rotZ);
-              const pTouch = pLocal.add(new THREE.Vector3(posX, posY, 0));
-              const pSupport = new THREE.Vector3(pTouch.x, rp.railIntY, bounds.zAttach);
-              addSubdividedAttacheGeoms(pSupport, pTouch, geomsToMerge);
-            }
-
-            // Attache 2
-            if (state.gate2Picked && state.enableFrame) {
-              const pLocal = state.gate2Point.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), rp.rotZ);
-              const pTouch = pLocal.add(new THREE.Vector3(posX, posY, 0));
-              const pSupport = new THREE.Vector3(pTouch.x, rp.railExtY, bounds.zAttach);
-              addSubdividedAttacheGeoms(pSupport, pTouch, geomsToMerge);
-            }
-          }
-        });
-
-        // 2. Cadre rectangulaire de protection
-        if (state.enableFrame) {
-          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(bounds.xMin, bounds.yMin, bounds.zAttach), new THREE.Vector3(bounds.xMax, bounds.yMin, bounds.zAttach), halfFrameD));
-          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(bounds.xMin, bounds.yMax, bounds.zAttach), new THREE.Vector3(bounds.xMax, bounds.yMax, bounds.zAttach), halfFrameD));
-          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(bounds.xMin, bounds.yMin, bounds.zAttach), new THREE.Vector3(bounds.xMin, bounds.yMax, bounds.zAttach), halfFrameD));
-          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(bounds.xMax, bounds.yMin, bounds.zAttach), new THREE.Vector3(bounds.xMax, bounds.yMax, bounds.zAttach), halfFrameD));
-        }
-
-        // 3. Rails horizontaux intermédiaires
-        bounds.intermediateRails.forEach(rY => {
-          geomsToMerge.push(createCylinderGeometryBetween(new THREE.Vector3(bounds.xMin, rY, bounds.zAttach), new THREE.Vector3(bounds.xMax, rY, bounds.zAttach), halfFrameD));
-        });
-
-        // 4. Normalisation de toutes les sous-géométries (conversion non-indexée et uniformisation des attributs pour mergeGeometries)
-        const normalizedGeoms = geomsToMerge.map(g => {
-          const clean = g.index ? g.toNonIndexed() : g;
-          const finalGeom = new THREE.BufferGeometry();
-          finalGeom.setAttribute('position', clean.attributes.position.clone());
-          if (clean.attributes.normal) {
-            finalGeom.setAttribute('normal', clean.attributes.normal.clone());
-          } else {
-            finalGeom.computeVertexNormals();
-          }
-          return finalGeom;
-        });
-
-        // 5. Fusion globale des maillages normalisés
-        const mergedGeometry = BufferGeometryUtils.mergeGeometries(normalizedGeoms, false);
-        if (!mergedGeometry) {
-          throw new Error("Impossible de fusionner les maillages de la grappe (incompatibilité d'attributs de géométrie).");
-        }
-
-        // 6. Export binaire STL
-        const exporter = new STLExporter();
-        const binaryStlData = exporter.parse(new THREE.Mesh(mergedGeometry), { binary: true });
-
-        // Nettoyage rigoureux de la mémoire GPU / RAM
-        geomsToMerge.forEach(g => g.dispose());
-        normalizedGeoms.forEach(g => g.dispose());
-        mergedGeometry.dispose();
-
-        // Téléchargement
-        const baseName = state.rawFileName.replace(/\.[^/.]+$/, '');
-        const filename = `grappe_${state.rows}x${state.cols}_${baseName}_cage.stl`;
-        triggerDownload(new Blob([binaryStlData], { type: 'application/octet-stream' }), filename);
-
-      } catch (err) {
-        console.error(err);
-        alert('Erreur lors de la génération: ' + err.message);
-      } finally {
-        statusEl.classList.add('hidden');
-        btnText.textContent = 'Télécharger le STL de la grappe';
-      }
-    }
-
-    function addSubdividedAttacheGeoms(pSupport, pTouch, targetArray) {
-      const v = pTouch.clone().sub(pSupport);
-      const dist = v.length();
-      if (dist <= 0.1) return;
-
-      const dir = v.clone().normalize();
-      const neckLen = Math.min(state.neckLength, Math.max(dist - 0.5, 0.2));
-
-      // Corps épais
-      const pBodyStart = pSupport.clone();
-      const pBodyEnd = pSupport.clone().addScaledVector(dir, dist - neckLen);
-      targetArray.push(createCylinderGeometryBetween(pBodyStart, pBodyEnd, state.bodyDiameter / 2));
-
-      // Col fin de casse
-      const pNeckStart = pBodyEnd.clone();
-      const pNeckEnd = pTouch.clone().addScaledVector(dir, state.embedDepth);
-      targetArray.push(createCylinderGeometryBetween(pNeckStart, pNeckEnd, state.neckDiameter / 2));
-    }
-
-    // ──────────────────────────────────────────────────────────────
-    // EXPORT SCRIPT OPENSCAD (.SCAD)
-    // ──────────────────────────────────────────────────────────────
-    document.getElementById('btnExportSCAD').addEventListener('click', () => {
-      exportOpenSCADScript();
-    });
-
-    function exportOpenSCADScript() {
-      if (!state.loadedGeometry) return;
-      const bounds = computeSprueBounds();
-      const baseName = state.rawFileName.replace(/\.[^/.]+$/, '');
-
-      const scad = `// ============================================================
-// GRAPPE D'IMPRESSION 3D AVEC CAGE DE PROTECTION ET DOUBLE ATTACHE
-// Généré par 3D Sprue & Frame Generator
-// Modèle STL : ${state.rawFileName}
-// Grille : ${state.rows} rangées × ${state.cols} colonnes (${bounds.totalCount} pièces)
-// ============================================================
-
-stl_file       = "${state.rawFileName}";
-rows           = ${state.rows};
-cols           = ${state.cols};
-spacing_x      = ${state.spacing.toFixed(2)};
-frame_w        = ${state.frameWidth.toFixed(2)};
-gate1_length   = ${state.gate1Length.toFixed(2)};
-gate2_length   = ${state.gate2Length.toFixed(2)};
-neck_diam      = ${state.neckDiameter.toFixed(2)};
-body_diam      = ${state.bodyDiameter.toFixed(2)};
-neck_length    = ${state.neckLength.toFixed(2)};
-embed_depth    = ${state.embedDepth.toFixed(2)};
-
-$fn = 32;
-
-// Limites calculées de la cage
-x_min = ${bounds.xMin.toFixed(2)};
-x_max = ${bounds.xMax.toFixed(2)};
-y_min = ${bounds.yMin.toFixed(2)};
-y_max = ${bounds.yMax.toFixed(2)};
-z_att = ${bounds.zAttach.toFixed(2)};
-
-// Points d'attache sur la pièce
-g1 = [${state.gate1Point.x.toFixed(3)}, ${state.gate1Point.y.toFixed(3)}, ${state.gate1Point.z.toFixed(3)}];
-g2 = [${state.gate2Point.x.toFixed(3)}, ${state.gate2Point.y.toFixed(3)}, ${state.gate2Point.z.toFixed(3)}];
-
-module poutre(p1, p2, d) {
-    v = p2 - p1;
-    len = norm(v);
-    if (len > 0.01) {
-        translate(p1)
-        rotate([0, acos(v[2] / len), atan2(v[1], v[0]) * 180 / 3.14159265])
-        cylinder(r = d/2, h = len);
-    }
-}
-
-module attache_double(p_support, p_touch) {
-    v = p_touch - p_support;
-    len = norm(v);
-    dir = v / len;
-    p_neck = p_support + dir * (len - neck_length);
-    p_end  = p_touch + dir * embed_depth;
-    
-    poutre(p_support, p_neck, body_diam);
-    poutre(p_neck, p_end, neck_diam);
-}
-
-union() {
-    // 1. Cadre rectangulaire de protection
-    poutre([x_min, y_min, z_att], [x_max, y_min, z_att], frame_w);
-    poutre([x_min, y_max, z_att], [x_max, y_max, z_att], frame_w);
-    poutre([x_min, y_min, z_att], [x_min, y_max, z_att], frame_w);
-    poutre([x_max, y_min, z_att], [x_max, y_max, z_att], frame_w);
-
-    // 2. Rails intermédiaires
-${bounds.intermediateRails.map(rY => `    poutre([x_min, ${rY.toFixed(2)}, z_att], [x_max, ${rY.toFixed(2)}, z_att], frame_w);`).join('\n')}
-
-    // 3. Pièces et attaches
-${bounds.rowPositions.map((rp, rIdx) => `
-    // Rangée ${rIdx}
-    for (c = [0 : cols - 1]) {
-        pos_x = (c - (cols - 1) / 2) * spacing_x;
-        translate([pos_x, ${rp.y.toFixed(2)}, 0])
-        ${rp.rotZ !== 0 ? 'rotate([0, 0, 180])\n        ' : ''}import(stl_file);
-
-        pt1 = [pos_x + ${rp.rotZ === 0 ? 'g1[0]' : '-g1[0]'}, ${rp.y.toFixed(2)} + ${rp.rotZ === 0 ? 'g1[1]' : '-g1[1]'}, g1[2]];
-        pt2 = [pos_x + ${rp.rotZ === 0 ? 'g2[0]' : '-g2[0]'}, ${rp.y.toFixed(2)} + ${rp.rotZ === 0 ? 'g2[1]' : '-g2[1]'}, g2[2]];
-        attache_double([pt1[0], ${rp.railIntY.toFixed(2)}, z_att], pt1);
-        attache_double([pt2[0], ${rp.railExtY.toFixed(2)}, z_att], pt2);
-    }`).join('\n')}
-}
-`;
-      triggerDownload(new Blob([scad], { type: 'text/plain;charset=utf-8' }), `grappe_${state.rows}x${state.cols}_${baseName}_cage.scad`);
-    }
-
-    function triggerDownload(blob, filename) {
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-    }
-
-    // ──────────────────────────────────────────────────────────────
-    // ÉVÉNEMENTS UI
-    // ──────────────────────────────────────────────────────────────
-    document.getElementById('btnResetCamera').addEventListener('click', () => {
-      if (state.loadedGeometry) fitCameraToObject(state.loadedGeometry);
-    });
-
-    // Sliders de longueur séparés Attache 1 et Attache 2
-    const rangeGate1Length = document.getElementById('rangeGate1Length');
-    const valGate1Length = document.getElementById('valGate1Length');
-    rangeGate1Length.addEventListener('input', (e) => {
-      state.gate1Length = parseFloat(e.target.value);
-      valGate1Length.textContent = state.gate1Length.toFixed(1);
-      rebuildSprue();
-    });
-
-    const rangeGate2Length = document.getElementById('rangeGate2Length');
-    const valGate2Length = document.getElementById('valGate2Length');
-    rangeGate2Length.addEventListener('input', (e) => {
-      state.gate2Length = parseFloat(e.target.value);
-      valGate2Length.textContent = state.gate2Length.toFixed(1);
-      rebuildSprue();
-    });
-
-    const checkEnableFrame = document.getElementById('checkEnableFrame');
-    const frameSettings = document.getElementById('frameSettingsContainer');
-    checkEnableFrame.addEventListener('change', (e) => {
-      state.enableFrame = e.target.checked;
-      frameSettings.style.opacity = state.enableFrame ? '1' : '0.4';
-      rebuildSprue();
-    });
-
-    const rangeFrameWidth = document.getElementById('rangeFrameWidth');
-    const valFrameWidth = document.getElementById('valFrameWidth');
-    rangeFrameWidth.addEventListener('input', (e) => {
-      state.frameWidth = parseFloat(e.target.value);
-      valFrameWidth.textContent = state.frameWidth.toFixed(1);
-      rebuildSprue();
-    });
-
-    const rangeNeckLength = document.getElementById('rangeNeckLength');
-    const valNeckLength = document.getElementById('valNeckLength');
-    rangeNeckLength.addEventListener('input', (e) => {
-      state.neckLength = parseFloat(e.target.value);
-      valNeckLength.textContent = state.neckLength.toFixed(1);
-      rebuildSprue();
-    });
-
-    const rangeNeckDiameter = document.getElementById('rangeNeckDiameter');
-    const valNeckDiameter = document.getElementById('valNeckDiameter');
-    rangeNeckDiameter.addEventListener('input', (e) => {
-      state.neckDiameter = parseFloat(e.target.value);
-      valNeckDiameter.textContent = state.neckDiameter.toFixed(1);
-      rebuildSprue();
-    });
-
-    const rangeBodyDiameter = document.getElementById('rangeBodyDiameter');
-    const valBodyDiameter = document.getElementById('valBodyDiameter');
-    rangeBodyDiameter.addEventListener('input', (e) => {
-      state.bodyDiameter = parseFloat(e.target.value);
-      valBodyDiameter.textContent = state.bodyDiameter.toFixed(1);
-      rebuildSprue();
-    });
-
-    // ── ÉCOUTEURS GRILLE RANGÉES (Y) × COLONNES (X) ────────────
-    const inputRows = document.getElementById('inputRows');
-    const rangeRows = document.getElementById('rangeRows');
-    const inputCols = document.getElementById('inputCols');
-    const rangeCols = document.getElementById('rangeCols');
-    const badgeTotalPieces = document.getElementById('badgeTotalPieces');
-
-    function updateGrid(r, c) {
-      r = Math.max(1, Math.min(10, parseInt(r) || 1));
-      c = Math.max(1, Math.min(25, parseInt(c) || 1));
-      state.rows = r;
-      state.cols = c;
-      inputRows.value = r;
-      rangeRows.value = r;
-      inputCols.value = c;
-      rangeCols.value = c;
-      const total = r * c;
-      badgeTotalPieces.textContent = `${total} pièce${total > 1 ? 's' : ''} (${r} × ${c})`;
-      rebuildSprue();
-    }
-
-    inputRows.addEventListener('change', (e) => updateGrid(e.target.value, state.cols));
-    rangeRows.addEventListener('input', (e) => updateGrid(e.target.value, state.cols));
-    inputCols.addEventListener('change', (e) => updateGrid(state.rows, e.target.value));
-    rangeCols.addEventListener('input', (e) => updateGrid(state.rows, e.target.value));
-
-    const rangeSpacing = document.getElementById('rangeSpacing');
-    const valSpacing = document.getElementById('valSpacing');
-    rangeSpacing.addEventListener('input', (e) => {
-      state.spacing = parseFloat(e.target.value);
-      valSpacing.textContent = state.spacing.toFixed(1);
-      rebuildSprue();
-    });
-    document.getElementById('btnAutoSpacing').addEventListener('click', () => {
-      const suggestedSpacing = Math.round((Math.max(state.dimensions.x, state.dimensions.y) + 6.0) * 2) / 2;
-      state.spacing = Math.max(suggestedSpacing, 14.0);
-      rangeSpacing.value = state.spacing;
-      valSpacing.textContent = state.spacing.toFixed(1);
-      rebuildSprue();
-    });
-
-    // ──────────────────────────────────────────────────────────────
-    // VIEWCUBE 3D & NAVIGATION D'ORIENTATION CAMÉRA
-    // ──────────────────────────────────────────────────────────────
-    const viewCubeEl = document.getElementById('viewCube');
-
-    function updateViewCubeRotation() {
-      if (!viewCubeEl) return;
-      const m = camera.matrixWorldInverse.elements;
-      // Conversion Three.js -> CSS 3D (avec S = diag(1, -1, 1))
-      // M_css = S * V * S -> det = +1 (pure rotation, orientation du texte naturelle)
-      viewCubeEl.style.transform = `matrix3d(
-        ${m[0].toFixed(6)}, ${(-m[1]).toFixed(6)}, ${m[2].toFixed(6)}, 0,
-        ${(-m[4]).toFixed(6)}, ${m[5].toFixed(6)}, ${(-m[6]).toFixed(6)}, 0,
-        ${m[8].toFixed(6)}, ${(-m[9]).toFixed(6)}, ${m[10].toFixed(6)}, 0,
-        0, 0, 0, 1
-      )`;
-    }
-
-    let isCameraAnimating = false;
-    let cameraAnimId = null;
-
-    controls.addEventListener('start', () => {
-      if (isCameraAnimating) {
-        if (cameraAnimId) cancelAnimationFrame(cameraAnimId);
-        cameraAnimId = null;
-        isCameraAnimating = false;
-      }
-    });
-
-    function setCameraView(viewName) {
-      const target = controls.target.clone();
-      const dist = Math.max(camera.position.distanceTo(target), 45);
-
-      let toPos = new THREE.Vector3();
-
-      const eps = Math.max(dist * 0.01, 0.4);
-
-      switch (viewName) {
-        case 'top':
-          // Décalage stable en Z pour éviter la singularité polaire avec camera.up (0, 1, 0)
-          toPos.set(target.x, target.y + dist, target.z + eps);
-          break;
-        case 'bottom':
-          toPos.set(target.x, target.y - dist, target.z + eps);
-          break;
-        case 'front':
-          toPos.set(target.x, target.y, target.z + dist);
-          break;
-        case 'back':
-          toPos.set(target.x, target.y, target.z - dist);
-          break;
-        case 'left':
-          toPos.set(target.x - dist, target.y, target.z);
-          break;
-        case 'right':
-          toPos.set(target.x + dist, target.y, target.z);
-          break;
-        case 'iso':
-        default:
-          const dIso = dist * 0.65;
-          toPos.set(target.x + dIso, target.y + dIso * 1.1, target.z + dIso * 1.2);
-          break;
-      }
-      animateCameraTo(toPos, target);
-    }
-
-    function animateCameraTo(toPos, toTarget) {
-      if (cameraAnimId) {
-        cancelAnimationFrame(cameraAnimId);
-        cameraAnimId = null;
-      }
-
-      isCameraAnimating = true;
-
-      const fromPos = camera.position.clone();
-      const startTime = performance.now();
-      const duration = 300;
-
-      // Trajectoire en arc sphérique autour de la cible pour éviter les trajectoires linéaires à travers l'objet
-      const vFrom = fromPos.clone().sub(toTarget);
-      const vTo = toPos.clone().sub(toTarget);
-      const rFrom = vFrom.length();
-      const rTo = vTo.length();
-      vFrom.normalize();
-      vTo.normalize();
-
-      const q = new THREE.Quaternion().setFromUnitVectors(vFrom, vTo);
-      const qIdent = new THREE.Quaternion();
-
-      function step(now) {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1.0);
-        const ease = 1 - Math.pow(1 - progress, 3); // Ease out cubic
-
-        const currentQ = qIdent.clone().slerp(q, ease);
-        const currentDir = vFrom.clone().applyQuaternion(currentQ);
-        const currentRadius = THREE.MathUtils.lerp(rFrom, rTo, ease);
-
-        camera.position.copy(toTarget).addScaledVector(currentDir, currentRadius);
-        camera.up.set(0, 1, 0); // camera.up reste rigoureusement fixe pour OrbitControls
-        camera.lookAt(toTarget);
-
-        if (progress < 1.0) {
-          cameraAnimId = requestAnimationFrame(step);
-        } else {
-          cameraAnimId = null;
-          isCameraAnimating = false;
-          controls.target.copy(toTarget);
-          controls.update();
-        }
-      }
-      cameraAnimId = requestAnimationFrame(step);
-    }
-
-    // Clic sur les faces du ViewCube 3D
-    document.querySelectorAll('[data-view]').forEach(elem => {
-      elem.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const v = elem.getAttribute('data-view');
-        if (v) setCameraView(v);
-      });
-    });
-
-    // ──────────────────────────────────────────────────────────────
-    // MODAL GUIDE TECHNIQUE & FAQ SEO
-    // ──────────────────────────────────────────────────────────────
-    const faqModal = document.getElementById('faqModal');
-    const btnOpenFaq = document.getElementById('btnOpenFaq');
-    const btnCloseFaq = document.getElementById('btnCloseFaq');
-    const btnFaqUnderstood = document.getElementById('btnFaqUnderstood');
-
-    function openFaqModal() {
-      if (faqModal) faqModal.classList.remove('hidden');
-    }
-    function closeFaqModal() {
-      if (faqModal) faqModal.classList.add('hidden');
-    }
-
-    if (btnOpenFaq) btnOpenFaq.addEventListener('click', openFaqModal);
-    if (btnCloseFaq) btnCloseFaq.addEventListener('click', closeFaqModal);
-    if (btnFaqUnderstood) btnFaqUnderstood.addEventListener('click', closeFaqModal);
-    if (faqModal) {
-      faqModal.addEventListener('click', (e) => {
-        if (e.target === faqModal) closeFaqModal();
-      });
-    }
-
-    // ──────────────────────────────────────────────────────────────
-    // BOUCLE DE RENDU (60 FPS)
-    // ──────────────────────────────────────────────────────────────
-    function animate() {
-      requestAnimationFrame(animate);
-      if (!isCameraAnimating) {
-        controls.update();
-      }
-      updateViewCubeRotation();
-      renderer.render(scene, camera);
-    }
-    animate();
-
-  </script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
