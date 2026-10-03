@@ -223,6 +223,7 @@ const btnToggleGuides = document.getElementById('btnToggleGuides');
 const labelToggleGuides = document.getElementById('labelToggleGuides');
 btnToggleGuides?.addEventListener('click', () => {
   state.showGuides = !state.showGuides;
+  state.enableSnapping = state.showGuides;
   updateGuides();
   if (state.showGuides) {
     btnToggleGuides.className = 'px-2.5 py-1.5 rounded-lg bg-sky-50 text-sky-600 font-medium text-xs transition flex items-center gap-1.5 border border-sky-200 cursor-pointer';
@@ -619,7 +620,7 @@ renderer.domElement.addEventListener('pointermove', (e) => {
     let isSnappedX = false;
     let isSnappedY = false;
 
-    if (state.enableSnapping) {
+    if (state.enableSnapping && state.showGuides) {
       const snapThreshold = 1.2;
       if (Math.abs(localPoint.x) < snapThreshold) {
         localPoint.x = 0;
@@ -680,7 +681,7 @@ function handlePickingClick(e) {
     let localPoint = hit.object.worldToLocal(hit.point.clone());
     let localNormal = hit.face.normal.clone();
 
-    if (state.enableSnapping) {
+    if (state.enableSnapping && state.showGuides) {
       const snapThreshold = 1.2;
       if (Math.abs(localPoint.x) < snapThreshold) localPoint.x = 0;
       if (Math.abs(localPoint.y) < snapThreshold) localPoint.y = 0;
