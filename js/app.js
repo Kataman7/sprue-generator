@@ -1323,7 +1323,7 @@ function animate() {
   if (activeControls && (!viewCubeManager || !viewCubeManager.isAnimating())) {
     activeControls.update();
   }
-  if (viewCubeManager) {
+  if (viewCubeManager?.updateViewCubeRotation) {
     viewCubeManager.updateViewCubeRotation();
   }
   renderer.render(scene, camera);

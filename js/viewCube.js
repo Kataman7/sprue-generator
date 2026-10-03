@@ -16,21 +16,29 @@ export function setupViewCube(getCamera, controls) {
   });
 
   function updateViewCubeRotation() {
-    const cam = getCam();
-    if (!el || !cam) return;
-    cam.updateMatrixWorld();
-    const m = cam.matrixWorldInverse.elements;
-    // Three.js -> CSS 3D (diag(1, -1, 1))
-    el.style.transform = `matrix3d(
-      ${m[0].toFixed(6)}, ${(-m[1]).toFixed(6)}, ${m[2].toFixed(6)}, 0,
-      ${(-m[4]).toFixed(6)}, ${m[5].toFixed(6)}, ${(-m[6]).toFixed(6)}, 0,
-      ${m[8].toFixed(6)}, ${(-m[9]).toFixed(6)}, ${m[10].toFixed(6)}, 0,
-      0, 0, 0, 1
-    )`;
+    const cam = getCam ? getCam() : null;
+    if (!el || !cam || !cam.matrixWorldInverse || !cam.matrixWorldInverse.elements) return;
+    try {
+      if (typeof cam.updateMatrixWorld === 'function') {
+        cam.updateMatrixWorld();
+      }
+      const m = cam.matrixWorldInverse.elements;
+      if (!m || m.length < 16) return;
+      // Three.js -> CSS 3D (diag(1, -1, 1))
+      el.style.transform = `matrix3d(
+        ${m[0].toFixed(6)}, ${(-m[1]).toFixed(6)}, ${m[2].toFixed(6)}, 0,
+        ${(-m[4]).toFixed(6)}, ${m[5].toFixed(6)}, ${(-m[6]).toFixed(6)}, 0,
+        ${m[8].toFixed(6)}, ${(-m[9]).toFixed(6)}, ${m[10].toFixed(6)}, 0,
+        0, 0, 0, 1
+      )`;
+    } catch (e) {
+      // gracefully ignore if matrix is momentarily invalid
+    }
   }
 
   function setCameraView(viewName) {
-    const cam = getCam();
+    const cam = getCam ? getCam() : null;
+    if (!cam || !controls || !controls.target) return;
     const target = controls.target.clone();
     const dist = Math.max(cam.position.distanceTo(target), 45);
     let toPos = new THREE.Vector3();
@@ -71,7 +79,11 @@ export function setupViewCube(getCamera, controls) {
     }
 
     isCameraAnimating = true;
-    const cam = getCam();
+    const cam = getCam ? getCam() : null;
+    if (!cam) {
+      isCameraAnimating = false;
+      return;
+    }
     const fromPos = cam.position.clone();
     const startTime = performance.now();
     const duration = 280;
@@ -80,13 +92,22 @@ export function setupViewCube(getCamera, controls) {
     const vTo = toPos.clone().sub(toTarget);
     const rFrom = vFrom.length();
     const rTo = vTo.length();
+    if (rFrom < 0.0001 || rTo < 0.0001) {
+      isCameraAnimating = false;
+      return;
+    }
     vFrom.normalize();
     vTo.normalize();
 
     let q = new THREE.Quaternion();
-    const dot = vFrom.dot(vTo);
-    if (dot < -0.99999) {
-      q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI);
+    const dot = Math.max(-1, Math.min(1, vFrom.dot(vTo)));
+    if (dot < -0.9999) {
+      let axis = new THREE.Vector3(0, 1, 0).cross(vFrom);
+      if (axis.lengthSq() < 0.001) {
+        axis = new THREE.Vector3(1, 0, 0).cross(vFrom);
+      }
+      axis.normalize();
+      q.setFromAxisAngle(axis, Math.PI);
     } else {
       q.setFromUnitVectors(vFrom, vTo);
     }
@@ -101,13 +122,18 @@ export function setupViewCube(getCamera, controls) {
       const currentDir = vFrom.clone().applyQuaternion(currentQ);
       const currentRadius = THREE.MathUtils.lerp(rFrom, rTo, ease);
 
-      const activeCam = getCam();
+      const activeCam = getCam ? getCam() : null;
+      if (!activeCam) return;
       activeCam.position.copy(toTarget).addScaledVector(currentDir, currentRadius);
       activeCam.up.set(0, 1, 0);
       activeCam.lookAt(toTarget);
-      activeCam.updateProjectionMatrix();
+      if (typeof activeCam.updateProjectionMatrix === 'function') {
+        activeCam.updateProjectionMatrix();
+      }
 
-      controls.target.copy(toTarget);
+      if (controls && controls.target) {
+        controls.target.copy(toTarget);
+      }
       updateViewCubeRotation();
 
       if (progress < 1.0) {
@@ -115,8 +141,12 @@ export function setupViewCube(getCamera, controls) {
       } else {
         cameraAnimId = null;
         isCameraAnimating = false;
-        controls.target.copy(toTarget);
-        controls.update();
+        if (controls && controls.target) {
+          controls.target.copy(toTarget);
+          if (typeof controls.update === 'function') {
+            controls.update();
+          }
+        }
         updateViewCubeRotation();
       }
     }
