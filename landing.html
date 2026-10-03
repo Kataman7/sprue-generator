@@ -114,17 +114,17 @@
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
         </span>
-        <span>JLCPCB &amp; PCBWay minimum fees charged per part? Never again.</span>
+        <span>Factory setup fees per piece? Slash them by ~73% on SLS &amp; MJF orders.</span>
       </div>
 
-      <!-- Main Headline: Hit Their Wallet Hard -->
+      <!-- Main Headline: Realistic & Punchy -->
       <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1] max-w-4xl mx-auto">
-        Slash your prototyping bills on JLCPCB &amp; PCBWay by <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-indigo-500">10x</span>.
+        Cut your 3D printing prototyping bills by <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-indigo-500">73%</span>.
       </h1>
 
       <!-- Subheadline / The Promise -->
       <p class="mt-6 text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal">
-        Factory minimum setup fees drain hardware budgets. Pack 10 to 50 parts into a unified, production-grade sprue cage with clean breakaway contact points. <strong class="text-slate-900 font-semibold">Zero account needed, instant ROI on order #1.</strong>
+        From <strong class="text-slate-900 font-semibold">~0.30€ down to ~0.08€ per piece</strong> on JLCPCB &amp; PCBWay. Pack 10 to 40 parts into a unified sprue cage with break-away contact necks. <strong class="text-slate-900 font-semibold">Zero account required, instant ROI on order #1.</strong>
       </p>
 
       <!-- Action CTAs -->
@@ -155,90 +155,135 @@
         </div>
       </div>
 
-      <!-- Live App Mockup / Visual Proof -->
-      <div class="mt-12 relative max-w-5xl mx-auto rounded-2xl border border-slate-200/90 shadow-2xl bg-white p-2 sm:p-3 overflow-hidden">
-        <div class="bg-slate-900 rounded-xl overflow-hidden aspect-[16/9] relative flex items-center justify-center">
+      <!-- Clean Minimalist CAD Preview Mockup -->
+      <div class="mt-12 relative max-w-4xl mx-auto rounded-2xl border border-slate-200/90 shadow-2xl bg-white p-2.5 sm:p-3 overflow-hidden">
+        
+        <!-- App Window Header -->
+        <div class="bg-slate-900 rounded-xl overflow-hidden relative border border-slate-800 flex flex-col">
           
-          <!-- Mockup Background Grid & 3D Elements -->
-          <div class="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-850 to-slate-950 opacity-95"></div>
-          
-          <!-- Live Preview Graphics Simulation -->
-          <div class="relative z-10 w-full h-full flex flex-col justify-between p-4 sm:p-6 text-left">
+          <div class="h-10 bg-slate-950 px-4 flex items-center justify-between border-b border-slate-800/80">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+              <span class="text-xs font-mono text-slate-400 ml-2">batch_sprue_matrix_2x5.stl</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Watertight STL</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">10 Parts • 1 Frame</span>
+            </div>
+          </div>
+
+          <!-- 3D Schematic Viewport -->
+          <div class="relative py-12 px-6 sm:px-12 flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-950">
             
-            <!-- Floating Header in UI Mockup -->
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div class="flex items-center gap-3">
-                <span class="w-3 h-3 rounded-full bg-rose-500/80"></span>
-                <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
-                <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
-                <span class="text-xs font-mono text-slate-400 ml-2">batch_sprue_10x_matrix.stl — 3D Viewport</span>
-              </div>
-              <div class="hidden sm:flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded text-[11px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Watertight 0 Non-Manifold</span>
-                <span class="px-2.5 py-0.5 rounded text-[11px] font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">10 Parts Merged</span>
-              </div>
+            <!-- Isometric CAD Wireframe SVG -->
+            <div class="w-full max-w-lg mx-auto py-4">
+              <svg viewBox="0 0 540 240" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto drop-shadow-md">
+                <!-- Ground Grid Lines -->
+                <path d="M40 180 L270 230 L500 180 L270 130 Z" stroke="#334155" stroke-width="1" stroke-dasharray="3 3"/>
+                <path d="M97 167 L327 217" stroke="#1e293b" stroke-width="1"/>
+                <path d="M154 155 L384 205" stroke="#1e293b" stroke-width="1"/>
+                <path d="M212 142 L442 192" stroke="#1e293b" stroke-width="1"/>
+
+                <!-- Perimeter Sprue Cage Rails -->
+                <rect x="70" y="45" width="400" height="130" rx="6" stroke="#6366f1" stroke-width="3.5" fill="none" opacity="0.9"/>
+                <line x1="70" y1="110" x2="470" y2="110" stroke="#6366f1" stroke-width="2.5" opacity="0.6"/>
+
+                <!-- Runner Columns -->
+                <line x1="150" y1="45" x2="150" y2="175" stroke="#6366f1" stroke-width="2.5" opacity="0.6"/>
+                <line x1="230" y1="45" x2="230" y2="175" stroke="#6366f1" stroke-width="2.5" opacity="0.6"/>
+                <line x1="310" y1="45" x2="310" y2="175" stroke="#6366f1" stroke-width="2.5" opacity="0.6"/>
+                <line x1="390" y1="45" x2="390" y2="175" stroke="#6366f1" stroke-width="2.5" opacity="0.6"/>
+
+                <!-- Part 1 Row 1 -->
+                <rect x="92" y="65" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
+                <line x1="110" y1="45" x2="110" y2="65" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
+                <circle cx="110" cy="65" r="2.5" fill="#10b981"/>
+
+                <!-- Part 2 Row 1 -->
+                <rect x="172" y="65" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
+                <line x1="190" y1="45" x2="190" y2="65" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
+                <circle cx="190" cy="65" r="2.5" fill="#10b981"/>
+
+                <!-- Part 3 Row 1 -->
+                <rect x="252" y="65" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
+                <line x1="270" y1="45" x2="270" y2="65" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
+                <circle cx="270" cy="65" r="2.5" fill="#10b981"/>
+
+                <!-- Part 4 Row 1 -->
+                <rect x="332" y="65" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
+                <line x1="350" y1="45" x2="350" y2="65" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
+                <circle cx="350" cy="65" r="2.5" fill="#10b981"/>
+
+                <!-- Part 5 Row 1 -->
+                <rect x="412" y="65" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
+                <line x1="430" y1="45" x2="430" y2="65" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
+                <circle cx="430" cy="65" r="2.5" fill="#10b981"/>
+
+                <!-- Part 6 Row 2 -->
+                <rect x="92" y="130" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
+                <line x1="110" y1="156" x2="110" y2="175" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
+                <circle cx="110" cy="156" r="2.5" fill="#10b981"/>
+
+                <!-- Part 7 Row 2 -->
+                <rect x="172" y="130" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
+                <line x1="190" y1="156" x2="190" y2="175" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
+                <circle cx="190" cy="156" r="2.5" fill="#10b981"/>
+
+                <!-- Part 8 Row 2 -->
+                <rect x="252" y="130" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
+                <line x1="270" y1="156" x2="270" y2="175" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
+                <circle cx="270" cy="156" r="2.5" fill="#10b981"/>
+
+                <!-- Part 9 Row 2 -->
+                <rect x="332" y="130" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
+                <line x1="350" y1="156" x2="350" y2="175" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
+                <circle cx="350" cy="156" r="2.5" fill="#10b981"/>
+
+                <!-- Part 10 Row 2 -->
+                <rect x="412" y="130" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
+                <line x1="430" y1="156" x2="430" y2="175" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
+                <circle cx="430" cy="156" r="2.5" fill="#10b981"/>
+              </svg>
             </div>
 
-            <!-- Central 3D Visual Diagram -->
-            <div class="my-auto grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-              
-              <!-- Left: The Cost Reality Comparison Card -->
-              <div class="bg-slate-800/80 backdrop-blur-md rounded-xl p-4 sm:p-5 border border-slate-700/80 shadow-lg">
-                <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Real Factory Price Tag (JLCPCB SLS Nylon PA12)</div>
-                <div class="space-y-3">
-                  <div class="flex justify-between items-center text-sm border-b border-slate-700 pb-2">
-                    <span class="text-slate-300">10 Loose Parts ($1.50 setup each):</span>
-                    <span class="font-mono text-rose-400 font-bold">$15.00 Base Fee</span>
-                  </div>
-                  <div class="flex justify-between items-center text-sm border-b border-slate-700 pb-2">
-                    <span class="text-slate-300">1 SprueGen Frame (1 unified part):</span>
-                    <span class="font-mono text-emerald-400 font-bold">$1.50 Total Fee</span>
-                  </div>
-                  <div class="flex justify-between items-center text-sm pt-1">
-                    <span class="text-white font-bold">Instant Savings on Setup:</span>
-                    <span class="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-mono font-extrabold text-xs">-90% DISCOUNT</span>
-                  </div>
+            <!-- Ultra-Clean Floating Benchmark Comparison Pill -->
+            <div class="mt-4 bg-slate-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 border border-slate-700/80 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4 w-full max-w-xl">
+              <div class="flex items-center gap-6">
+                <div>
+                  <div class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Sans sprue</div>
+                  <div class="text-base sm:text-lg font-mono font-bold text-rose-400">~0.30€ <span class="text-xs font-normal text-slate-400">/ pièce</span></div>
+                </div>
+                <div class="text-slate-500 font-bold">&rarr;</div>
+                <div>
+                  <div class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Avec sprue</div>
+                  <div class="text-base sm:text-lg font-mono font-bold text-emerald-400">~0.08€ <span class="text-xs font-normal text-slate-400">/ pièce</span></div>
                 </div>
               </div>
 
-              <!-- Right: Visual CAD Wireframe & Feature Highlights -->
-              <div class="hidden md:flex flex-col gap-3">
-                <div class="flex items-center gap-3 bg-slate-800/60 p-3 rounded-lg border border-slate-700/60">
-                  <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                  </div>
-                  <div>
-                    <div class="text-xs font-bold text-white">Smart 1-Click Symmetry</div>
-                    <div class="text-[11px] text-slate-400">Click 1 face; second gate anchors symmetrically on bounding axis.</div>
-                  </div>
-                </div>
-
-                <div class="flex items-center gap-3 bg-slate-800/60 p-3 rounded-lg border border-slate-700/60">
-                  <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                  </div>
-                  <div>
-                    <div class="text-xs font-bold text-white">Breakaway 1.2mm Neck</div>
-                    <div class="text-[11px] text-slate-400">Snaps cleanly by hand with zero surface scarring or sanding marks.</div>
-                  </div>
-                </div>
+              <div class="flex items-center gap-2 bg-emerald-500/15 border border-emerald-500/30 px-3 py-1.5 rounded-lg">
+                <span class="text-xs font-mono font-bold text-emerald-300">-73% D'ÉCONOMIE</span>
+                <span class="text-[10px] text-emerald-400 font-medium">(Coût ÷ 4)</span>
               </div>
-
-            </div>
-
-            <!-- Footer Toolbar in UI Mockup -->
-            <div class="flex items-center justify-between border-t border-slate-800 pt-3 text-xs text-slate-400">
-              <span class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                Ready for SLS / MJF / SLA Batch Print
-              </span>
-              <a href="index.html" class="inline-flex items-center gap-1.5 text-indigo-400 hover:text-indigo-300 font-semibold underline underline-offset-4">
-                Open interactive 3D studio &rarr;
-              </a>
             </div>
 
           </div>
+
+          <!-- Bottom Footer Bar -->
+          <div class="h-9 bg-slate-950 px-4 flex items-center justify-between border-t border-slate-800/80 text-[11px] text-slate-400">
+            <span class="flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              Breakaway Necks 1.2mm • Zero Mesh Distortion
+            </span>
+            <a href="index.html" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
+              <span>Open Studio</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </a>
+          </div>
+
         </div>
+
       </div>
 
     </div>
@@ -337,21 +382,21 @@
         <!-- Controls Column (7 Cols) -->
         <div class="p-6 sm:p-8 lg:col-span-7 flex flex-col justify-between space-y-6">
           
-          <!-- Vendor Selection -->
+          <!-- Part Scale Selection -->
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Select Fabrication Partner</label>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Part Scale &amp; Prototyping Baseline</label>
             <div class="grid grid-cols-3 gap-2.5" id="vendorButtons">
-              <button type="button" data-fee="1.50" data-vendor="jlcpcb" class="vendor-btn active py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-indigo-600 bg-indigo-50/80 text-indigo-700">
-                <span>JLCPCB</span>
-                <span class="text-[10px] font-normal text-slate-500">~$1.50 fee/part</span>
+              <button type="button" data-loose="0.30" data-sprue="0.08" class="vendor-btn active py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-indigo-600 bg-indigo-50/80 text-indigo-700">
+                <span>Small Parts</span>
+                <span class="text-[10px] font-normal text-slate-500">~0.30€ ➔ ~0.08€</span>
               </button>
-              <button type="button" data-fee="3.00" data-vendor="pcbway" class="vendor-btn py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-slate-200 bg-white text-slate-700 hover:border-slate-300">
-                <span>PCBWay</span>
-                <span class="text-[10px] font-normal text-slate-500">~$3.00 fee/part</span>
+              <button type="button" data-loose="0.75" data-sprue="0.20" class="vendor-btn py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-slate-200 bg-white text-slate-700 hover:border-slate-300">
+                <span>Medium Parts</span>
+                <span class="text-[10px] font-normal text-slate-500">~0.75€ ➔ ~0.20€</span>
               </button>
-              <button type="button" data-fee="6.00" data-vendor="protolabs" class="vendor-btn py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-slate-200 bg-white text-slate-700 hover:border-slate-300">
-                <span>Protolabs / Local</span>
-                <span class="text-[10px] font-normal text-slate-500">~$6.00 fee/part</span>
+              <button type="button" data-loose="1.50" data-sprue="0.40" class="vendor-btn py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-slate-200 bg-white text-slate-700 hover:border-slate-300">
+                <span>Larger Parts</span>
+                <span class="text-[10px] font-normal text-slate-500">~1.50€ ➔ ~0.40€</span>
               </button>
             </div>
           </div>
@@ -362,12 +407,12 @@
               <label for="partsSlider" class="text-xs font-bold uppercase tracking-wider text-slate-700">Parts Per Batch / Sprue</label>
               <span id="partsCountDisplay" class="font-mono font-extrabold text-indigo-600 text-sm bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-100">10 parts</span>
             </div>
-            <input type="range" id="partsSlider" min="2" max="40" value="10" step="1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+            <input type="range" id="partsSlider" min="2" max="50" value="10" step="1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
             <div class="flex justify-between text-[11px] text-slate-400 mt-1 font-mono">
               <span>2 parts</span>
               <span>10 parts</span>
-              <span>20 parts</span>
-              <span>40 parts</span>
+              <span>25 parts</span>
+              <span>50 parts</span>
             </div>
           </div>
 
@@ -388,7 +433,7 @@
           <!-- Quick Tip -->
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/80 text-xs text-slate-500 flex items-center gap-2">
             <svg class="w-4 h-4 text-indigo-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span>Factories treat 1 connected sprue cage as 1 single mechanical part, bypassing individual item handling fees.</span>
+            <span>Based on empirical PA12 SLS batch benchmarks (~0.30€ loose vs ~0.08€ with sprue cage).</span>
           </div>
 
         </div>
@@ -399,18 +444,18 @@
           <div>
             <div class="flex items-center justify-between border-b border-indigo-800/80 pb-3">
               <span class="text-xs font-mono uppercase tracking-wider text-indigo-300">Savings Analysis</span>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">Immediate ROI</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">~73% Savings</span>
             </div>
 
             <div class="mt-6 space-y-4">
               <div>
-                <span class="text-xs text-slate-400 block mb-1">Standard factory fees without sprue:</span>
-                <span id="standardCostDisplay" class="font-mono text-2xl font-bold text-rose-400 line-through">$60.00 / mo</span>
+                <span class="text-xs text-slate-400 block mb-1">Estimated factory cost without sprue:</span>
+                <span id="standardCostDisplay" class="font-mono text-2xl font-bold text-rose-400 line-through">12.00 € / mo</span>
               </div>
 
               <div>
-                <span class="text-xs text-slate-400 block mb-1">Total fees with SprueGen single cage:</span>
-                <span id="sprueCostDisplay" class="font-mono text-2xl font-bold text-indigo-200">$6.00 / mo</span>
+                <span class="text-xs text-slate-400 block mb-1">Unified cost with SprueGen:</span>
+                <span id="sprueCostDisplay" class="font-mono text-2xl font-bold text-emerald-300">3.20 € / mo</span>
               </div>
             </div>
           </div>
@@ -418,7 +463,7 @@
           <div class="mt-8 pt-6 border-t border-indigo-800/80">
             <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400 block">Annual Cash Saved</span>
             <div class="mt-1 flex items-baseline gap-2">
-              <span id="annualSavingsDisplay" class="font-mono text-4xl sm:text-5xl font-extrabold text-white tracking-tight">$648</span>
+              <span id="annualSavingsDisplay" class="font-mono text-4xl sm:text-5xl font-extrabold text-white tracking-tight">105 €</span>
               <span class="text-xs text-slate-400 font-mono">/ year</span>
             </div>
             
@@ -943,7 +988,8 @@
   <!-- ============================================================== -->
   <script>
     // 1. Live ROI Calculator Logic
-    let currentFeePerPart = 1.50;
+    let looseCostPerPart = 0.30;
+    let sprueCostPerPart = 0.08;
     const partsSlider = document.getElementById('partsSlider');
     const ordersSlider = document.getElementById('ordersSlider');
     const partsCountDisplay = document.getElementById('partsCountDisplay');
@@ -957,24 +1003,22 @@
       const orders = parseInt(ordersSlider.value, 10);
 
       partsCountDisplay.textContent = `${parts} parts`;
-      ordersCountDisplay.textContent = `${orders} order${orders > 1 ? 's' : ''}`;
+      ordersCountDisplay.textContent = `${orders} batch${orders > 1 ? 'es' : ''}/mo`;
 
-      // Standard factory fee: parts * feePerPart * orders
-      const standardMonthly = parts * currentFeePerPart * orders;
-
-      // Sprue fee: 1 sprue cage counts as 1 part = 1 * feePerPart * orders
-      const sprueMonthly = 1 * currentFeePerPart * orders;
+      // Monthly cost
+      const standardMonthly = parts * looseCostPerPart * orders;
+      const sprueMonthly = parts * sprueCostPerPart * orders;
 
       // Monthly & Annual savings
       const monthlySaved = Math.max(standardMonthly - sprueMonthly, 0);
       const annualSaved = monthlySaved * 12;
 
-      standardCostDisplay.textContent = `$${standardMonthly.toFixed(2)} / mo`;
-      sprueCostDisplay.textContent = `$${sprueMonthly.toFixed(2)} / mo`;
-      annualSavingsDisplay.textContent = `$${Math.round(annualSaved).toLocaleString('en-US')}`;
+      standardCostDisplay.textContent = `${standardMonthly.toFixed(2)} € / mo`;
+      sprueCostDisplay.textContent = `${sprueMonthly.toFixed(2)} € / mo`;
+      annualSavingsDisplay.textContent = `${Math.round(annualSaved).toLocaleString('fr-FR')} €`;
     }
 
-    // Vendor selection buttons
+    // Part Profile buttons
     const vendorButtons = document.querySelectorAll('.vendor-btn');
     vendorButtons.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -982,7 +1026,8 @@
           b.className = 'vendor-btn py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-slate-200 bg-white text-slate-700 hover:border-slate-300';
         });
         btn.className = 'vendor-btn active py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-indigo-600 bg-indigo-50/80 text-indigo-700';
-        currentFeePerPart = parseFloat(btn.getAttribute('data-fee')) || 1.50;
+        looseCostPerPart = parseFloat(btn.getAttribute('data-loose')) || 0.30;
+        sprueCostPerPart = parseFloat(btn.getAttribute('data-sprue')) || 0.08;
         updateCalculations();
       });
     });
