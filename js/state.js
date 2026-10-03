@@ -8,7 +8,7 @@ export const state = {
   
   // View mode: 'sprue' (batch sprue) | 'focus' (single part focus)
   viewMode: 'focus',
-  showGrid: true,
+  showGrid: false,
   cameraMode: 'orthographic', // 'perspective' | 'orthographic'
 
   // 2 Gate points per part
