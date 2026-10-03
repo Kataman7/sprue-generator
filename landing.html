@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SprueGen — Slash JLCPCB &amp; PCBWay 3D Printing Costs by 10x</title>
+
+  <!-- SEO & Social Graph -->
+  <meta name="description" content="Turn individual STL parts into unified industrial production sprues with breakaway gates. Bypass per-part setup fees on JLCPCB & PCBWay. 100% client-side, zero cloud uploads.">
+  <meta name="keywords" content="sprue generator, 3d printing sprue, jlcpcb 3d printing, pcbway 3d printing, sls batching, mjf sprue, stl runner cage, breakaway neck, hardware prototyping cost">
+  <meta name="author" content="Picokeebs">
+  <link rel="canonical" href="https://kataman7.github.io/sprue-generator/landing.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SprueGen — Slash 3D Printing Prototyping Bills by 10x">
+  <meta property="og:description" content="Pack 10 to 50 parts into a single watertight sprue cage with breakaway contact necks. Tested on JLCPCB, PCBWay, and Protolabs.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234f46e5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10'/%3E%3C/svg%3E">
+
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Subtle mesh gradient background */
+    .bg-grid-pattern {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(226, 232, 240, 0.4) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(226, 232, 240, 0.4) 1px, transparent 1px);
+    }
+    .hero-glow {
+      background: radial-gradient(circle at 50% 30%, rgba(99, 102, 241, 0.15) 0%, rgba(248, 250, 252, 0) 70%);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 antialiased font-sans flex flex-col min-h-screen selection:bg-indigo-500 selection:text-white">
+
+  <!-- ============================================================== -->
+  <!-- 1. NAVIGATION BAR -->
+  <!-- ============================================================== -->
+  <header class="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-slate-200/80 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="landing.html" class="flex items-center gap-2.5 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition transform">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+        </div>
+        <div>
+          <span class="font-extrabold text-slate-900 text-lg tracking-tight">Sprue<span class="text-indigo-600">Gen</span></span>
+          <span class="hidden sm:inline-block ml-1.5 px-2 py-0.5 text-[10px] font-semibold bg-emerald-100 text-emerald-700 rounded-full border border-emerald-200">100% Client-Side</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-semibold text-slate-600">
+        <a href="#calculator" class="hover:text-indigo-600 transition">ROI Calculator</a>
+        <a href="#magic" class="hover:text-indigo-600 transition">Core Technology</a>
+        <a href="#zero-risk" class="hover:text-indigo-600 transition">Zero-Risk Model</a>
+        <a href="#security" class="hover:text-indigo-600 transition">IP Security</a>
+        <a href="#pricing" class="hover:text-indigo-600 transition">Pricing</a>
+        <a href="#faq" class="hover:text-indigo-600 transition">FAQ</a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-sm hover:shadow-md hover:shadow-indigo-500/25 transition transform active:scale-95">
+          <span>Launch Generator</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ============================================================== -->
+  <!-- 2. HERO SECTION (THE HOOK & PROMISE) -->
+  <!-- ============================================================== -->
+  <section class="relative overflow-hidden pt-16 pb-20 md:pt-24 md:pb-28 bg-grid-pattern hero-glow border-b border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      
+      <!-- Trust Badge / Hook Pill -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-xs sm:text-sm font-semibold mb-6 shadow-sm">
+        <span class="flex h-2 w-2 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        </span>
+        <span>JLCPCB &amp; PCBWay minimum fees charged per part? Never again.</span>
+      </div>
+
+      <!-- Main Headline: Hit Their Wallet Hard -->
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1] max-w-4xl mx-auto">
+        Slash your prototyping bills on JLCPCB &amp; PCBWay by <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-indigo-500">10x</span>.
+      </h1>
+
+      <!-- Subheadline / The Promise -->
+      <p class="mt-6 text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal">
+        Factory minimum setup fees drain hardware budgets. Pack 10 to 50 parts into a unified, production-grade sprue cage with clean breakaway contact points. <strong class="text-slate-900 font-semibold">Zero account needed, instant ROI on order #1.</strong>
+      </p>
+
+      <!-- Action CTAs -->
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5">
+        <a href="index.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base shadow-lg shadow-indigo-600/25 hover:shadow-indigo-600/40 transition transform active:scale-95">
+          <span>Try Free in Browser (No Signup)</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+        </a>
+        <a href="#calculator" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-base border border-slate-200 shadow-sm transition">
+          <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+          <span>Calculate Your Savings</span>
+        </a>
+      </div>
+
+      <!-- Frictionless Proof Pills -->
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-semibold text-slate-500">
+        <div class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+          <span>100% In-Browser (Zero Cloud Uploads)</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+          <span>Zero Mesh Penetration Guarantee</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+          <span>Watertight Binary STL Output</span>
+        </div>
+      </div>
+
+      <!-- Live App Mockup / Visual Proof -->
+      <div class="mt-12 relative max-w-5xl mx-auto rounded-2xl border border-slate-200/90 shadow-2xl bg-white p-2 sm:p-3 overflow-hidden">
+        <div class="bg-slate-900 rounded-xl overflow-hidden aspect-[16/9] relative flex items-center justify-center">
+          
+          <!-- Mockup Background Grid & 3D Elements -->
+          <div class="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-850 to-slate-950 opacity-95"></div>
+          
+          <!-- Live Preview Graphics Simulation -->
+          <div class="relative z-10 w-full h-full flex flex-col justify-between p-4 sm:p-6 text-left">
+            
+            <!-- Floating Header in UI Mockup -->
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-3">
+                <span class="w-3 h-3 rounded-full bg-rose-500/80"></span>
+                <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+                <span class="text-xs font-mono text-slate-400 ml-2">batch_sprue_10x_matrix.stl — 3D Viewport</span>
+              </div>
+              <div class="hidden sm:flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded text-[11px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Watertight 0 Non-Manifold</span>
+                <span class="px-2.5 py-0.5 rounded text-[11px] font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">10 Parts Merged</span>
+              </div>
+            </div>
+
+            <!-- Central 3D Visual Diagram -->
+            <div class="my-auto grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+              
+              <!-- Left: The Cost Reality Comparison Card -->
+              <div class="bg-slate-800/80 backdrop-blur-md rounded-xl p-4 sm:p-5 border border-slate-700/80 shadow-lg">
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Real Factory Price Tag (JLCPCB SLS Nylon PA12)</div>
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center text-sm border-b border-slate-700 pb-2">
+                    <span class="text-slate-300">10 Loose Parts ($1.50 setup each):</span>
+                    <span class="font-mono text-rose-400 font-bold">$15.00 Base Fee</span>
+                  </div>
+                  <div class="flex justify-between items-center text-sm border-b border-slate-700 pb-2">
+                    <span class="text-slate-300">1 SprueGen Frame (1 unified part):</span>
+                    <span class="font-mono text-emerald-400 font-bold">$1.50 Total Fee</span>
+                  </div>
+                  <div class="flex justify-between items-center text-sm pt-1">
+                    <span class="text-white font-bold">Instant Savings on Setup:</span>
+                    <span class="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-mono font-extrabold text-xs">-90% DISCOUNT</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Visual CAD Wireframe & Feature Highlights -->
+              <div class="hidden md:flex flex-col gap-3">
+                <div class="flex items-center gap-3 bg-slate-800/60 p-3 rounded-lg border border-slate-700/60">
+                  <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold text-white">Smart 1-Click Symmetry</div>
+                    <div class="text-[11px] text-slate-400">Click 1 face; second gate anchors symmetrically on bounding axis.</div>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-3 bg-slate-800/60 p-3 rounded-lg border border-slate-700/60">
+                  <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold text-white">Breakaway 1.2mm Neck</div>
+                    <div class="text-[11px] text-slate-400">Snaps cleanly by hand with zero surface scarring or sanding marks.</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Footer Toolbar in UI Mockup -->
+            <div class="flex items-center justify-between border-t border-slate-800 pt-3 text-xs text-slate-400">
+              <span class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                Ready for SLS / MJF / SLA Batch Print
+              </span>
+              <a href="index.html" class="inline-flex items-center gap-1.5 text-indigo-400 hover:text-indigo-300 font-semibold underline underline-offset-4">
+                Open interactive 3D studio &rarr;
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- 3. THE PAIN: WHY FACTORY FEES DRAIN HARDWARE TEAMS -->
+  <!-- ============================================================== -->
+  <section class="py-16 sm:py-20 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-indigo-600">The Prototyping Tax</h2>
+        <p class="mt-2 text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          Why are you paying 5 separate setup fees for 5 copies of the same part?
+        </p>
+        <p class="mt-4 text-base sm:text-lg text-slate-600">
+          When you upload loose STLs to automated print farms like JLCPCB, PCBWay, or Protolabs, their automated quotation engines charge a <strong class="text-slate-800">per-part minimum fee ($1.50 to $5.00+ each)</strong> for labor, washing, indexing, and packaging.
+        </p>
+      </div>
+
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Pain Card 1 -->
+        <div class="p-6 rounded-2xl bg-rose-50/50 border border-rose-100 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-lg mb-4">
+              💸
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">Per-Part Minimum Trap</h3>
+            <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+              Order 20 keycaps or tiny brackets? The raw nylon material costs $2.00, but the factory bills you $30.00 just for handling 20 individual files.
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-rose-200/60 text-xs font-mono text-rose-700 font-bold">
+            Solution: Merge 20 parts into 1 frame file.
+          </div>
+        </div>
+
+        <!-- Pain Card 2 -->
+        <div class="p-6 rounded-2xl bg-amber-50/50 border border-amber-100 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-lg mb-4">
+              ⏳
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">Lost &amp; Broken Parts</h3>
+            <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+              Loose microscopic parts fall through vibrating cleaning screens or get sucked into industrial depowdering vacuums.
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-amber-200/60 text-xs font-mono text-amber-700 font-bold">
+            Solution: Rigid cage guards fragile edges during tumbling.
+          </div>
+        </div>
+
+        <!-- Pain Card 3 -->
+        <div class="p-6 rounded-2xl bg-slate-100/70 border border-slate-200 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-lg mb-4">
+              📐
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">Painful Manual CAD Modeling</h3>
+            <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+              Modeling sprues, runners, cylinders, and tapered gates by hand in SolidWorks or Fusion 360 takes 45 minutes of tedious boolean operations every single iteration.
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-300 text-xs font-mono text-slate-800 font-bold">
+            Solution: SprueGen builds it in 15 seconds.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- 4. INTERACTIVE ROI CALCULATOR (CONVERSION ENGINE) -->
+  <!-- ============================================================== -->
+  <section id="calculator" class="py-16 sm:py-24 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-indigo-600">Live Cost Calculator</h2>
+        <p class="mt-2 text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          See your exact savings before touching a file
+        </p>
+        <p class="mt-3 text-slate-600 text-sm sm:text-base">
+          Drag the sliders below to calculate how much hard cash SprueGen keeps in your pocket on your next production run.
+        </p>
+      </div>
+
+      <!-- Calculator Card Container -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+        
+        <!-- Controls Column (7 Cols) -->
+        <div class="p-6 sm:p-8 lg:col-span-7 flex flex-col justify-between space-y-6">
+          
+          <!-- Vendor Selection -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Select Fabrication Partner</label>
+            <div class="grid grid-cols-3 gap-2.5" id="vendorButtons">
+              <button type="button" data-fee="1.50" data-vendor="jlcpcb" class="vendor-btn active py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-indigo-600 bg-indigo-50/80 text-indigo-700">
+                <span>JLCPCB</span>
+                <span class="text-[10px] font-normal text-slate-500">~$1.50 fee/part</span>
+              </button>
+              <button type="button" data-fee="3.00" data-vendor="pcbway" class="vendor-btn py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-slate-200 bg-white text-slate-700 hover:border-slate-300">
+                <span>PCBWay</span>
+                <span class="text-[10px] font-normal text-slate-500">~$3.00 fee/part</span>
+              </button>
+              <button type="button" data-fee="6.00" data-vendor="protolabs" class="vendor-btn py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-slate-200 bg-white text-slate-700 hover:border-slate-300">
+                <span>Protolabs / Local</span>
+                <span class="text-[10px] font-normal text-slate-500">~$6.00 fee/part</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Slider 1: Parts Per Batch -->
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <label for="partsSlider" class="text-xs font-bold uppercase tracking-wider text-slate-700">Parts Per Batch / Sprue</label>
+              <span id="partsCountDisplay" class="font-mono font-extrabold text-indigo-600 text-sm bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-100">10 parts</span>
+            </div>
+            <input type="range" id="partsSlider" min="2" max="40" value="10" step="1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+            <div class="flex justify-between text-[11px] text-slate-400 mt-1 font-mono">
+              <span>2 parts</span>
+              <span>10 parts</span>
+              <span>20 parts</span>
+              <span>40 parts</span>
+            </div>
+          </div>
+
+          <!-- Slider 2: Orders Per Month -->
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <label for="ordersSlider" class="text-xs font-bold uppercase tracking-wider text-slate-700">Batch Orders Per Month</label>
+              <span id="ordersCountDisplay" class="font-mono font-extrabold text-indigo-600 text-sm bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-100">4 orders</span>
+            </div>
+            <input type="range" id="ordersSlider" min="1" max="25" value="4" step="1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+            <div class="flex justify-between text-[11px] text-slate-400 mt-1 font-mono">
+              <span>1 order/mo</span>
+              <span>10 orders/mo</span>
+              <span>25 orders/mo</span>
+            </div>
+          </div>
+
+          <!-- Quick Tip -->
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/80 text-xs text-slate-500 flex items-center gap-2">
+            <svg class="w-4 h-4 text-indigo-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>Factories treat 1 connected sprue cage as 1 single mechanical part, bypassing individual item handling fees.</span>
+          </div>
+
+        </div>
+
+        <!-- Real-Time Results Column (5 Cols) -->
+        <div class="bg-gradient-to-br from-indigo-900 to-slate-900 p-6 sm:p-8 lg:col-span-5 text-white flex flex-col justify-between">
+          
+          <div>
+            <div class="flex items-center justify-between border-b border-indigo-800/80 pb-3">
+              <span class="text-xs font-mono uppercase tracking-wider text-indigo-300">Savings Analysis</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">Immediate ROI</span>
+            </div>
+
+            <div class="mt-6 space-y-4">
+              <div>
+                <span class="text-xs text-slate-400 block mb-1">Standard factory fees without sprue:</span>
+                <span id="standardCostDisplay" class="font-mono text-2xl font-bold text-rose-400 line-through">$60.00 / mo</span>
+              </div>
+
+              <div>
+                <span class="text-xs text-slate-400 block mb-1">Total fees with SprueGen single cage:</span>
+                <span id="sprueCostDisplay" class="font-mono text-2xl font-bold text-indigo-200">$6.00 / mo</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-6 border-t border-indigo-800/80">
+            <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400 block">Annual Cash Saved</span>
+            <div class="mt-1 flex items-baseline gap-2">
+              <span id="annualSavingsDisplay" class="font-mono text-4xl sm:text-5xl font-extrabold text-white tracking-tight">$648</span>
+              <span class="text-xs text-slate-400 font-mono">/ year</span>
+            </div>
+            
+            <a href="index.html" class="mt-6 w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition transform active:scale-95 shadow-lg shadow-emerald-500/20">
+              <span>Start Saving Now (Free)</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- 5. THE "ZERO RISK" MODEL (TRANSPARENT VALUE) -->
+  <!-- ============================================================== -->
+  <section id="zero-risk" class="py-16 sm:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-indigo-600">Zero-Risk Workflow</h2>
+        <p class="mt-2 text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          See the savings with your own eyes before spending a single cent.
+        </p>
+        <p class="mt-4 text-base sm:text-lg text-slate-600">
+          The 3D studio is 100% free to use. Inspect geometry, verify mesh integrity, and test break-away necks in 3D without creating an account or entering a credit card.
+        </p>
+      </div>
+
+      <div class="mt-16 grid grid-cols-1 md:grid-cols-4 gap-6">
+        
+        <!-- Step 1 -->
+        <div class="relative bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between">
+          <div class="absolute -top-3 left-6 px-3 py-0.5 rounded-full bg-indigo-600 text-white font-mono text-xs font-bold shadow-sm">
+            STEP 01
+          </div>
+          <div class="mt-2">
+            <h3 class="text-base font-bold text-slate-900">Drag &amp; Drop STL</h3>
+            <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Drop any industrial STL part. Rendered instantly locally at 60 FPS using client-side Three.js.
+            </p>
+          </div>
+          <div class="mt-4 text-xs font-semibold text-indigo-600 flex items-center gap-1">
+            <span>Free &amp; instant</span>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="relative bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between">
+          <div class="absolute -top-3 left-6 px-3 py-0.5 rounded-full bg-indigo-600 text-white font-mono text-xs font-bold shadow-sm">
+            STEP 02
+          </div>
+          <div class="mt-2">
+            <h3 class="text-base font-bold text-slate-900">1-Click Symmetric Gate</h3>
+            <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Click anywhere on your model. SprueGen snaps tapered breakaway gates with mathematical zero penetration.
+            </p>
+          </div>
+          <div class="mt-4 text-xs font-semibold text-indigo-600 flex items-center gap-1">
+            <span>Free &amp; interactive</span>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="relative bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between">
+          <div class="absolute -top-3 left-6 px-3 py-0.5 rounded-full bg-indigo-600 text-white font-mono text-xs font-bold shadow-sm">
+            STEP 03
+          </div>
+          <div class="mt-2">
+            <h3 class="text-base font-bold text-slate-900">Batch Sprue Matrix</h3>
+            <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Set row &amp; column pitch. Automatically connects parts to a perimeter cage rail resting flat on the printer bed.
+            </p>
+          </div>
+          <div class="mt-4 text-xs font-semibold text-indigo-600 flex items-center gap-1">
+            <span>Free &amp; real-time 3D</span>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="relative bg-indigo-50/70 p-6 rounded-2xl border border-indigo-200 flex flex-col justify-between">
+          <div class="absolute -top-3 left-6 px-3 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-mono text-xs font-extrabold shadow-sm">
+            STEP 04
+          </div>
+          <div class="mt-2">
+            <h3 class="text-base font-bold text-slate-900">Download Watertight STL</h3>
+            <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Inspect the final merged binary mesh. When 100% satisfied with geometry and savings, export your production file.
+            </p>
+          </div>
+          <div class="mt-4 text-xs font-semibold text-emerald-700 flex items-center gap-1">
+            <span>Only pay on export</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- 6. THE MAGIC & CORE TECHNOLOGY -->
+  <!-- ============================================================== -->
+  <section id="magic" class="py-16 sm:py-24 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left: Copy & Explanations -->
+        <div class="lg:col-span-6 space-y-6">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-indigo-600">The Magic of the Engine</h2>
+          <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            Automated by default for speed. Fully customizable for power users.
+          </h3>
+          <p class="text-slate-600 text-base leading-relaxed">
+            Standard boolean operations in traditional CAD often produce degenerate micro-faces, self-intersections, and non-manifold edges that fail factory slicers. SprueGen builds clean geometric primitives with dedicated breakaway necks.
+          </p>
+
+          <div class="space-y-4 pt-2">
+            
+            <div class="flex items-start gap-3.5">
+              <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-slate-900">Zero Part Penetration (<code class="text-indigo-600 font-mono text-xs">embedDepth = 0.0</code>)</h4>
+                <p class="text-xs sm:text-sm text-slate-600 mt-1">
+                  The attach neck strictly docks against the outer normal boundary of your model. No cylinder enters your hollow cavities or distorts critical internal screw threads.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3.5">
+              <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-slate-900">Tapered Breakaway Neck (1.2 mm Ø)</h4>
+                <p class="text-xs sm:text-sm text-slate-600 mt-1">
+                  Conical neck transition focuses shear stress precisely at the gate surface. Break off parts by hand or with flush cutters in 1 second without sanding.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3.5">
+              <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-slate-900">Flat-Bed Z-Resting Alignment</h4>
+                <p class="text-xs sm:text-sm text-slate-600 mt-1">
+                  Parts align perfectly to Z=0 flat against the printer bed, preventing vertical build height inflation and minimizing support material usage.
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="pt-4">
+            <a href="index.html" class="inline-flex items-center gap-2 font-bold text-indigo-600 hover:text-indigo-700 text-sm">
+              <span>Test the geometric engine live</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Right: Technical Specification Visual Card -->
+        <div class="lg:col-span-6 bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-xl space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <span class="font-extrabold text-slate-900 text-base">SLS / MJF Production Specs</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Factory Verified</span>
+          </div>
+
+          <!-- Parameter Spec Table -->
+          <div class="space-y-3 font-mono text-xs">
+            <div class="flex justify-between items-center py-2 border-b border-slate-100">
+              <span class="text-slate-500 font-sans">Breakaway Neck Diameter:</span>
+              <span class="text-slate-900 font-bold">1.2 mm (Optimized for PA12)</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-slate-100">
+              <span class="text-slate-500 font-sans">Stem Tab Diameter:</span>
+              <span class="text-slate-900 font-bold">2.1 mm (0.7 × frame width)</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-slate-100">
+              <span class="text-slate-500 font-sans">Perimeter Cage Rail:</span>
+              <span class="text-slate-900 font-bold">3.0 mm (Rigid handling guard)</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-slate-100">
+              <span class="text-slate-500 font-sans">STL Mesh Encoding:</span>
+              <span class="text-slate-900 font-bold">Binary Watertight (IEEE 754)</span>
+            </div>
+            <div class="flex justify-between items-center py-2">
+              <span class="text-slate-500 font-sans">Service Compatibility:</span>
+              <span class="text-indigo-600 font-bold">JLCPCB, PCBWay, Protolabs</span>
+            </div>
+          </div>
+
+          <div class="bg-indigo-50/60 p-4 rounded-xl border border-indigo-100 text-xs text-indigo-900 leading-relaxed">
+            <strong>Pro Tip:</strong> Most online slicers automatically validate sprue rails with Ø &ge; 2.5mm and will not flag your order as multiple parts during pre-flight review.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- 7. THE 3 MARKETING PILLARS -->
+  <!-- ============================================================== -->
+  <section class="py-16 sm:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-indigo-600">Built for Hardware Teams</h2>
+        <p class="mt-2 text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          Engineered for velocity, security, and relentless iteration.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Pillar 1 -->
+        <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-indigo-200 transition">
+          <div class="w-12 h-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-indigo-600/20 mb-6">
+            1
+          </div>
+          <h3 class="text-xl font-bold text-slate-900">Immediate ROI</h3>
+          <p class="mt-3 text-sm text-slate-600 leading-relaxed">
+            Slash fixed setup fees down to the cost of a single piece. When ordering a 10-part batch, you instantly recoup 100% of your tooling cost on order #1.
+          </p>
+          <ul class="mt-4 space-y-2 text-xs font-semibold text-slate-700">
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              <span>Turn 10 parts into 1 billable unit</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              <span>Save $20 to $100+ per design revision</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div id="security" class="p-8 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-indigo-200 transition">
+          <div class="w-12 h-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-indigo-600/20 mb-6">
+            2
+          </div>
+          <h3 class="text-xl font-bold text-slate-900">100% In-Browser IP Privacy</h3>
+          <p class="mt-3 text-sm text-slate-600 leading-relaxed">
+            Your proprietary CAD geometry never leaves your computer. Computation runs locally via WebGL &amp; Web Workers. Zero files are uploaded to our servers.
+          </p>
+          <ul class="mt-4 space-y-2 text-xs font-semibold text-slate-700">
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              <span>Strict compliance with client NDAs</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              <span>No cloud leaks or data harvesting</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-indigo-200 transition">
+          <div class="w-12 h-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-indigo-600/20 mb-6">
+            3
+          </div>
+          <h3 class="text-xl font-bold text-slate-900">Rapid Iterative Prototyping</h3>
+          <p class="mt-3 text-sm text-slate-600 leading-relaxed">
+            Test 10 snap-fit variations or hole tolerances in a single order without cataloging loose microscopic parts. Label each runner for frictionless QA.
+          </p>
+          <ul class="mt-4 space-y-2 text-xs font-semibold text-slate-700">
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              <span>A/B test snap-fits in a single print</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              <span>Zero lost parts during bead blasting</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- 8. TRANSPARENT PRICING SECTION -->
+  <!-- ============================================================== -->
+  <section id="pricing" class="py-16 sm:py-24 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-indigo-600">Transparent Pricing</h2>
+        <p class="mt-2 text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          Pay only when you save money.
+        </p>
+        <p class="mt-3 text-slate-600 text-sm sm:text-base">
+          Test everything completely free. Unlock the final watertight production STL only when you're 100% ready to order.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+        
+        <!-- Tier 1: Free Studio -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-8 flex flex-col justify-between shadow-sm">
+          <div>
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-bold text-slate-900">Interactive Studio</h3>
+              <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-700">100% Free</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-1">
+              <span class="text-4xl font-extrabold text-slate-900">$0</span>
+              <span class="text-xs text-slate-500 font-semibold">/ forever</span>
+            </div>
+            <p class="mt-4 text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Perfect for exploring geometry, placing gates, testing symmetry, and previewing the sprue frame in full 3D.
+            </p>
+
+            <ul class="mt-6 space-y-3 text-xs sm:text-sm text-slate-700">
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span>Full 3D WebGL Studio &amp; ViewCube</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span>1-Click Symmetric Gate Placement</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span>NxM Batch Matrix Layout Config</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span>Zero signup or credit card required</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-8 pt-6 border-t border-slate-100">
+            <a href="index.html" class="w-full inline-flex items-center justify-center py-3 px-4 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-800 font-bold text-sm transition">
+              Open Free Studio
+            </a>
+          </div>
+        </div>
+
+        <!-- Tier 2: Pro Production Export -->
+        <div class="bg-gradient-to-b from-indigo-900 to-slate-900 text-white rounded-2xl border border-indigo-700/80 p-8 flex flex-col justify-between shadow-xl relative overflow-hidden">
+          <div class="absolute top-4 right-4 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-emerald-400 text-slate-950 uppercase tracking-wider">
+            Most Popular
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-bold text-white">Production Export</h3>
+            </div>
+            <div class="mt-2 flex items-baseline gap-1">
+              <span class="text-4xl font-extrabold text-white">$3.90</span>
+              <span class="text-xs text-indigo-300 font-semibold">/ export (or $19/mo unlimited)</span>
+            </div>
+            <p class="mt-4 text-xs sm:text-sm text-indigo-200 leading-relaxed">
+              Unlock the final watertight binary STL. Instantly save $15 to $50 on your factory invoice.
+            </p>
+
+            <ul class="mt-6 space-y-3 text-xs sm:text-sm text-indigo-100">
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span>Watertight Binary Merged STL File</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span>Full Commercial Fabrication License</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span>Zero Mesh Penetration Guarantee</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                <span>100% Money-Back Print Compatibility Guarantee</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-8 pt-6 border-t border-indigo-800">
+            <a href="index.html" class="w-full inline-flex items-center justify-center py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition transform active:scale-95 shadow-lg shadow-emerald-500/25">
+              Launch &amp; Export Model &rarr;
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- 9. FREQUENTLY ASKED QUESTIONS (FAQ ACCORDION) -->
+  <!-- ============================================================== -->
+  <section id="faq" class="py-16 sm:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-14">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-indigo-600">Got Questions?</h2>
+        <p class="mt-2 text-3xl font-extrabold text-slate-900 tracking-tight">
+          Frequently Asked Questions
+        </p>
+      </div>
+
+      <div class="space-y-4" id="faqAccordion">
+        
+        <!-- FAQ 1 -->
+        <div class="border border-slate-200 rounded-xl overflow-hidden transition">
+          <button type="button" class="faq-toggle w-full px-5 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
+            <span>Why do factories like JLCPCB and PCBWay charge per part?</span>
+            <svg class="faq-icon w-5 h-5 text-slate-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div class="faq-content hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+            Every separate 3D model uploaded requires human labor: orienting in the slicer tray, checking for wall thickness, post-print washing/sandblasting, counting parts, bagging, and barcode scanning. Connecting them into a single rigid frame lets the factory handle the whole batch as 1 single piece with zero extra manual sorting.
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="border border-slate-200 rounded-xl overflow-hidden transition">
+          <button type="button" class="faq-toggle w-full px-5 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
+            <span>Will the sprue leave marks or burrs on my finished parts?</span>
+            <svg class="faq-icon w-5 h-5 text-slate-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div class="faq-content hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+            No. SprueGen generates conical breakaway neck joints (default 1.2 mm diameter) that dock tangentially to the part surface without penetrating internal geometry (<code class="text-indigo-600 font-mono text-xs">embedDepth = 0.0</code>). The neck snaps cleanly flush by hand or with standard side cutters.
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="border border-slate-200 rounded-xl overflow-hidden transition">
+          <button type="button" class="faq-toggle w-full px-5 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
+            <span>Is my proprietary 3D CAD design secure?</span>
+            <svg class="faq-icon w-5 h-5 text-slate-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div class="faq-content hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+            Yes, 100%. SprueGen runs completely in client-side WebGL / JavaScript directly in your web browser. Your CAD file is never sent over the internet or uploaded to any server. You can even disconnect your Wi-Fi after loading the page and the generator will work flawlessly offline.
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="border border-slate-200 rounded-xl overflow-hidden transition">
+          <button type="button" class="faq-toggle w-full px-5 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
+            <span>Does the exported STL pass automated slicer checks?</span>
+            <svg class="faq-icon w-5 h-5 text-slate-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div class="faq-content hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+            Yes. The exporter synthesizes an industry-standard binary STL with correct normal vectors and 0 non-manifold edges. Tested across JLCPCB DFM, PCBWay automated quote analyzer, PrusaSlicer, and Materialise Magics.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- 10. FINAL CONVERSION HERO (BOTTOM CTA) -->
+  <!-- ============================================================== -->
+  <section class="py-16 sm:py-20 bg-slate-900 text-white relative overflow-hidden">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-bold mb-6">
+        <span>Instant ROI on order #1</span>
+      </div>
+
+      <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight max-w-2xl mx-auto">
+        Stop paying the factory handling fee tax.
+      </h2>
+      <p class="mt-4 text-base sm:text-lg text-slate-400 max-w-xl mx-auto">
+        Drop your STL into the studio now. Build your production sprue in 15 seconds.
+      </p>
+
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="index.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-base shadow-xl shadow-indigo-600/30 transition transform active:scale-95">
+          <span>Launch Generator (Free, No Signup)</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </a>
+      </div>
+
+      <div class="mt-6 text-xs text-slate-400">
+        100% private in-browser tool &bull; Zero credit card &bull; Compatible with JLCPCB, PCBWay, Protolabs
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- 11. FOOTER -->
+  <!-- ============================================================== -->
+  <footer class="bg-slate-950 border-t border-slate-900 text-slate-500 text-xs py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-300">SprueGen</span>
+        <span>&copy; 2026 Picokeebs. All rights reserved.</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="index.html" class="hover:text-slate-300 transition">3D Generator Studio</a>
+        <a href="#calculator" class="hover:text-slate-300 transition">ROI Calculator</a>
+        <a href="#security" class="hover:text-slate-300 transition">IP Privacy</a>
+        <a href="https://github.com/Kataman7/sprue-generator" target="_blank" rel="noopener noreferrer" class="hover:text-slate-300 transition flex items-center gap-1">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================== -->
+  <!-- INTERACTIVE LOGIC (CALCULATOR + FAQ TOGGLES) -->
+  <!-- ============================================================== -->
+  <script>
+    // 1. Live ROI Calculator Logic
+    let currentFeePerPart = 1.50;
+    const partsSlider = document.getElementById('partsSlider');
+    const ordersSlider = document.getElementById('ordersSlider');
+    const partsCountDisplay = document.getElementById('partsCountDisplay');
+    const ordersCountDisplay = document.getElementById('ordersCountDisplay');
+    const standardCostDisplay = document.getElementById('standardCostDisplay');
+    const sprueCostDisplay = document.getElementById('sprueCostDisplay');
+    const annualSavingsDisplay = document.getElementById('annualSavingsDisplay');
+
+    function updateCalculations() {
+      const parts = parseInt(partsSlider.value, 10);
+      const orders = parseInt(ordersSlider.value, 10);
+
+      partsCountDisplay.textContent = `${parts} parts`;
+      ordersCountDisplay.textContent = `${orders} order${orders > 1 ? 's' : ''}`;
+
+      // Standard factory fee: parts * feePerPart * orders
+      const standardMonthly = parts * currentFeePerPart * orders;
+
+      // Sprue fee: 1 sprue cage counts as 1 part = 1 * feePerPart * orders
+      const sprueMonthly = 1 * currentFeePerPart * orders;
+
+      // Monthly & Annual savings
+      const monthlySaved = Math.max(standardMonthly - sprueMonthly, 0);
+      const annualSaved = monthlySaved * 12;
+
+      standardCostDisplay.textContent = `$${standardMonthly.toFixed(2)} / mo`;
+      sprueCostDisplay.textContent = `$${sprueMonthly.toFixed(2)} / mo`;
+      annualSavingsDisplay.textContent = `$${Math.round(annualSaved).toLocaleString('en-US')}`;
+    }
+
+    // Vendor selection buttons
+    const vendorButtons = document.querySelectorAll('.vendor-btn');
+    vendorButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        vendorButtons.forEach(b => {
+          b.className = 'vendor-btn py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-slate-200 bg-white text-slate-700 hover:border-slate-300';
+        });
+        btn.className = 'vendor-btn active py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-indigo-600 bg-indigo-50/80 text-indigo-700';
+        currentFeePerPart = parseFloat(btn.getAttribute('data-fee')) || 1.50;
+        updateCalculations();
+      });
+    });
+
+    partsSlider?.addEventListener('input', updateCalculations);
+    ordersSlider?.addEventListener('input', updateCalculations);
+    updateCalculations();
+
+    // 2. FAQ Accordion Toggle Logic
+    const faqToggles = document.querySelectorAll('.faq-toggle');
+    faqToggles.forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const content = toggle.nextElementSibling;
+        const icon = toggle.querySelector('.faq-icon');
+        const isOpen = !content.classList.contains('hidden');
+
+        // Close all
+        document.querySelectorAll('.faq-content').forEach(c => c.classList.add('hidden'));
+        document.querySelectorAll('.faq-icon').forEach(i => i.classList.remove('rotate-180'));
+
+        if (!isOpen) {
+          content.classList.remove('hidden');
+          icon.classList.add('rotate-180');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
