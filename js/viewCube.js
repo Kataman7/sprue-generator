@@ -1,9 +1,11 @@
 import * as THREE from 'three';
 
-export function setupViewCube(camera, controls) {
+export function setupViewCube(getCamera, controls) {
   const el = document.getElementById('viewCube');
   let isCameraAnimating = false;
   let cameraAnimId = null;
+
+  const getCam = typeof getCamera === 'function' ? getCamera : () => getCamera;
 
   controls.addEventListener('start', () => {
     if (isCameraAnimating) {
@@ -14,8 +16,10 @@ export function setupViewCube(camera, controls) {
   });
 
   function updateViewCubeRotation() {
-    if (!el || !camera) return;
-    const m = camera.matrixWorldInverse.elements;
+    const cam = getCam();
+    if (!el || !cam) return;
+    cam.updateMatrixWorld();
+    const m = cam.matrixWorldInverse.elements;
     // Three.js -> CSS 3D (diag(1, -1, 1))
     el.style.transform = `matrix3d(
       ${m[0].toFixed(6)}, ${(-m[1]).toFixed(6)}, ${m[2].toFixed(6)}, 0,
@@ -26,8 +30,9 @@ export function setupViewCube(camera, controls) {
   }
 
   function setCameraView(viewName) {
+    const cam = getCam();
     const target = controls.target.clone();
-    const dist = Math.max(camera.position.distanceTo(target), 45);
+    const dist = Math.max(cam.position.distanceTo(target), 45);
     let toPos = new THREE.Vector3();
     const eps = Math.max(dist * 0.01, 0.4);
 
@@ -66,9 +71,10 @@ export function setupViewCube(camera, controls) {
     }
 
     isCameraAnimating = true;
-    const fromPos = camera.position.clone();
+    const cam = getCam();
+    const fromPos = cam.position.clone();
     const startTime = performance.now();
-    const duration = 300;
+    const duration = 280;
 
     const vFrom = fromPos.clone().sub(toTarget);
     const vTo = toPos.clone().sub(toTarget);
@@ -77,7 +83,13 @@ export function setupViewCube(camera, controls) {
     vFrom.normalize();
     vTo.normalize();
 
-    const q = new THREE.Quaternion().setFromUnitVectors(vFrom, vTo);
+    let q = new THREE.Quaternion();
+    const dot = vFrom.dot(vTo);
+    if (dot < -0.99999) {
+      q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI);
+    } else {
+      q.setFromUnitVectors(vFrom, vTo);
+    }
     const qIdent = new THREE.Quaternion();
 
     function step(now) {
@@ -89,9 +101,14 @@ export function setupViewCube(camera, controls) {
       const currentDir = vFrom.clone().applyQuaternion(currentQ);
       const currentRadius = THREE.MathUtils.lerp(rFrom, rTo, ease);
 
-      camera.position.copy(toTarget).addScaledVector(currentDir, currentRadius);
-      camera.up.set(0, 1, 0);
-      camera.lookAt(toTarget);
+      const activeCam = getCam();
+      activeCam.position.copy(toTarget).addScaledVector(currentDir, currentRadius);
+      activeCam.up.set(0, 1, 0);
+      activeCam.lookAt(toTarget);
+      activeCam.updateProjectionMatrix();
+
+      controls.target.copy(toTarget);
+      updateViewCubeRotation();
 
       if (progress < 1.0) {
         cameraAnimId = requestAnimationFrame(step);
@@ -100,6 +117,7 @@ export function setupViewCube(camera, controls) {
         isCameraAnimating = false;
         controls.target.copy(toTarget);
         controls.update();
+        updateViewCubeRotation();
       }
     }
     cameraAnimId = requestAnimationFrame(step);

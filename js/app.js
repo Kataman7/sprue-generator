@@ -45,7 +45,7 @@ activeControls.dampingFactor = 0.05;
 activeControls.maxDistance = 1400;
 activeControls.minDistance = 2;
 
-const viewCubeManager = setupViewCube(camera, activeControls);
+const viewCubeManager = setupViewCube(() => camera, activeControls);
 
 // Lighting
 scene.add(new THREE.AmbientLight(0xffffff, 0.85));
@@ -331,6 +331,8 @@ export function loadSTLBuffer(buffer) {
   document.getElementById('floatingStats')?.classList.remove('hidden');
   const btnExportSTL = document.getElementById('btnExportSTL');
   if (btnExportSTL) btnExportSTL.disabled = false;
+  const btnNextStep = document.getElementById('btnNextStep');
+  if (btnNextStep) btnNextStep.disabled = false;
 
   // 6. Switch to Part Focus mode immediately
   setViewMode('focus');
@@ -681,13 +683,19 @@ function handlePickingClick(e) {
       if (Math.abs(localPoint.y) < snapThreshold) localPoint.y = 0;
     }
 
-    if (state.activeGateSlot === 1) {
+    if (state.autoSymmetry) {
       setGate1(localPoint, localNormal);
-      if (state.autoSymmetry) {
-        applyAutoSymmetricGate2(localPoint, localNormal);
+      applyAutoSymmetricGate2(localPoint, localNormal);
+      const pickingStatusText = document.getElementById('pickingStatusText');
+      if (pickingStatusText) {
+        pickingStatusText.textContent = 'Symmetric gates placed successfully ✓';
       }
     } else {
-      setGate2(localPoint, localNormal);
+      if (state.activeGateSlot === 1) {
+        setGate1(localPoint, localNormal);
+      } else {
+        setGate2(localPoint, localNormal);
+      }
     }
   }
 }
@@ -1091,8 +1099,12 @@ export function setViewMode(mode) {
   if (pickingNotice && pickingStatusText) {
     pickingNotice.classList.remove('hidden');
     if (mode === 'focus') {
-      const activeGate = state.activeGateSlot === 1 ? 'Gate 1' : 'Gate 2';
-      pickingStatusText.textContent = `Click on part to place ${activeGate} • Connects to nearest runner`;
+      if (state.autoSymmetry) {
+        pickingStatusText.textContent = 'Click model to place gate • Opposite side auto-mirrored';
+      } else {
+        const activeGate = state.activeGateSlot === 1 ? 'Gate 1' : 'Gate 2';
+        pickingStatusText.textContent = `Click on part to place ${activeGate} • Connects to nearest runner`;
+      }
     } else {
       pickingStatusText.textContent = `Batch sprue (${state.rows} × ${state.cols} = ${state.rows * state.cols} parts) • Ready for direct STL export`;
     }
@@ -1103,18 +1115,28 @@ export function setViewMode(mode) {
   const sectionGrid = document.getElementById('sectionGrid');
   const costSavingsWidget = document.getElementById('costSavingsWidget');
   const titleDimensionsSection = document.getElementById('titleDimensionsSection');
-  const btnExportText = document.getElementById('btnExportText');
+  const btnNextStep = document.getElementById('btnNextStep');
+  const btnExportSTL = document.getElementById('btnExportSTL');
+  const btnPrevStep = document.getElementById('btnPrevStep');
 
   if (sectionPoints) sectionPoints.classList.toggle('hidden', !isFocus);
   if (sectionGrid) sectionGrid.classList.toggle('hidden', isFocus);
   if (costSavingsWidget) costSavingsWidget.classList.toggle('hidden', isFocus);
 
-  if (titleDimensionsSection) {
-    titleDimensionsSection.textContent = isFocus ? '2. Tab & Runner Dimensions' : '2. Frame & Tab Dimensions';
+  if (btnNextStep && btnExportSTL && btnPrevStep) {
+    if (isFocus) {
+      btnNextStep.classList.remove('hidden');
+      btnExportSTL.classList.add('hidden');
+      btnPrevStep.classList.add('hidden');
+    } else {
+      btnNextStep.classList.add('hidden');
+      btnExportSTL.classList.remove('hidden');
+      btnPrevStep.classList.remove('hidden');
+    }
   }
 
-  if (btnExportText) {
-    btnExportText.textContent = isFocus ? 'Download Part Cage STL' : 'Download Batch Sprue STL';
+  if (titleDimensionsSection) {
+    titleDimensionsSection.textContent = isFocus ? '2. Tab & Runner Dimensions' : '2. Frame & Tab Dimensions';
   }
 
   updateViewModeVisibility();
@@ -1205,30 +1227,56 @@ document.getElementById('btnIncCols')?.addEventListener('click', () => updateGri
 // Part Orientation (Z axis only)
 document.getElementById('btnRotZPlus')?.addEventListener('click', () => rotateGeometry('z', Math.PI / 2));
 
-// Symmetry Toggle
-const btnToggleSymmetry = document.getElementById('btnToggleSymmetry');
-const dotSymmetry = document.getElementById('dotSymmetry');
-const labelSymmetry = document.getElementById('labelSymmetry');
+// Gate Placement Mode Switcher (Symmetric 1-Point vs Independent 2-Points)
+const btnModeSymmetric = document.getElementById('btnModeSymmetric');
+const btnModeIndependent = document.getElementById('btnModeIndependent');
+const containerSymmetricHelp = document.getElementById('containerSymmetricHelp');
+const containerIndependentGates = document.getElementById('containerIndependentGates');
 
-function updateSymmetryUI() {
-  if (!btnToggleSymmetry) return;
-  if (state.autoSymmetry) {
-    btnToggleSymmetry.className = 'px-2 py-0.5 rounded text-[10px] font-semibold transition border flex items-center gap-1 bg-indigo-50 text-indigo-600 border-indigo-200 cursor-pointer shadow-sm';
-    if (dotSymmetry) dotSymmetry.className = 'w-1.5 h-1.5 rounded-full bg-indigo-600';
-    if (labelSymmetry) labelSymmetry.textContent = 'Mirror: On';
+export function setSymmetryMode(enabled) {
+  state.autoSymmetry = enabled;
+  if (enabled) {
+    if (btnModeSymmetric) {
+      btnModeSymmetric.className = 'flex-1 py-1 px-2 rounded-md bg-white text-indigo-600 font-semibold shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer';
+    }
+    if (btnModeIndependent) {
+      btnModeIndependent.className = 'flex-1 py-1 px-2 rounded-md text-slate-500 hover:text-slate-800 font-medium flex items-center justify-center gap-1.5 transition cursor-pointer';
+    }
+    if (containerSymmetricHelp) containerSymmetricHelp.classList.remove('hidden');
+    if (containerIndependentGates) containerIndependentGates.classList.add('hidden');
+
+    state.activeGateSlot = 1;
+    if (state.gate1Picked) {
+      applyAutoSymmetricGate2(state.gate1Point, state.gate1Normal);
+    }
+    const pickingStatusText = document.getElementById('pickingStatusText');
+    if (pickingStatusText && state.viewMode === 'focus') {
+      pickingStatusText.textContent = 'Click model to place gate • Opposite side auto-mirrored';
+    }
   } else {
-    btnToggleSymmetry.className = 'px-2 py-0.5 rounded text-[10px] font-medium transition border flex items-center gap-1 bg-slate-50 text-slate-500 border-slate-200 hover:text-slate-800 cursor-pointer';
-    if (dotSymmetry) dotSymmetry.className = 'w-1.5 h-1.5 rounded-full bg-slate-400';
-    if (labelSymmetry) labelSymmetry.textContent = 'Mirror: Off';
+    if (btnModeIndependent) {
+      btnModeIndependent.className = 'flex-1 py-1 px-2 rounded-md bg-white text-indigo-600 font-semibold shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer';
+    }
+    if (btnModeSymmetric) {
+      btnModeSymmetric.className = 'flex-1 py-1 px-2 rounded-md text-slate-500 hover:text-slate-800 font-medium flex items-center justify-center gap-1.5 transition cursor-pointer';
+    }
+    if (containerSymmetricHelp) containerSymmetricHelp.classList.add('hidden');
+    if (containerIndependentGates) containerIndependentGates.classList.remove('hidden');
+
+    selectGateSlot(state.activeGateSlot || 1);
   }
 }
 
-btnToggleSymmetry?.addEventListener('click', () => {
-  state.autoSymmetry = !state.autoSymmetry;
-  updateSymmetryUI();
-  if (state.autoSymmetry && state.gate1Picked) {
-    applyAutoSymmetricGate2(state.gate1Point, state.gate1Normal);
-  }
+btnModeSymmetric?.addEventListener('click', () => setSymmetryMode(true));
+btnModeIndependent?.addEventListener('click', () => setSymmetryMode(false));
+setSymmetryMode(true);
+
+// Step Navigation Listeners
+document.getElementById('btnNextStep')?.addEventListener('click', () => {
+  setViewMode('sprue');
+});
+document.getElementById('btnPrevStep')?.addEventListener('click', () => {
+  setViewMode('focus');
 });
 
 // STL Export Click

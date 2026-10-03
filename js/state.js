@@ -45,7 +45,7 @@ export const state = {
   // Smart helpers & Symmetry
   showGuides: true,
   enableSnapping: true,
-  autoSymmetry: false,
+  autoSymmetry: true,
 
   // Z-level alignment
   structureZMode: 'flat_bottom' // 'flat_bottom': resting flat on bed (Z=0) | 'centered'

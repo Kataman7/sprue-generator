@@ -391,25 +391,46 @@
           <div class="flex items-center justify-between">
             <span class="font-bold text-slate-800 text-xs flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-              1. Attachment Gate Points
+              1. Attachment Gates
             </span>
-            <button id="btnToggleSymmetry" type="button" class="px-2 py-0.5 rounded text-[10px] font-medium transition border flex items-center gap-1 bg-slate-50 text-slate-500 border-slate-200 hover:text-slate-800 cursor-pointer" title="Automatically mirrors Gate 1 to Gate 2 across the central axis">
-              <span id="dotSymmetry" class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-              <span id="labelSymmetry">Mirror: Off</span>
+          </div>
+
+          <!-- Placement Mode Switcher (Symmetric 1-Point vs Independent 2-Points) -->
+          <div class="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs">
+            <button id="btnModeSymmetric" type="button" class="flex-1 py-1 px-2 rounded-md bg-white text-indigo-600 font-semibold shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer">
+              <span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+              <span>Symmetric (1 Point)</span>
+            </button>
+            <button id="btnModeIndependent" type="button" class="flex-1 py-1 px-2 rounded-md text-slate-500 hover:text-slate-800 font-medium flex items-center justify-center gap-1.5 transition cursor-pointer">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+              <span>Independent (2 Points)</span>
             </button>
           </div>
-          <p class="text-[11px] text-slate-500">Click on the 3D model to place gate points. With mirror mode enabled, placing Gate 1 instantly generates its symmetric counterpart.</p>
 
-          <!-- Active Gate Selection Buttons -->
-          <div class="grid grid-cols-2 gap-2 bg-slate-100/70 p-1 rounded-xl">
-            <button id="btnSelectGate1" class="py-1.5 px-2 rounded-lg font-semibold text-center transition bg-emerald-600 text-white flex items-center justify-center gap-1.5 text-xs shadow-sm cursor-pointer">
-              <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-              <span>Gate 1</span>
-            </button>
-            <button id="btnSelectGate2" class="py-1.5 px-2 rounded-lg font-medium text-center transition bg-slate-50 text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs border border-slate-200 cursor-pointer">
-              <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
-              <span>Gate 2</span>
-            </button>
+          <!-- Symmetric Mode Container (Default: 1 Point needed) -->
+          <div id="containerSymmetricHelp" class="bg-indigo-50/70 border border-indigo-100 rounded-lg p-3 space-y-1">
+            <div class="flex items-center gap-2 text-indigo-900 font-semibold text-xs">
+              <span class="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
+              <span>Click model to place gate</span>
+            </div>
+            <p class="text-[11px] text-indigo-700/80 leading-normal">
+              Place a single attachment point on the model. The opposite gate is automatically calculated and mirrored to the other runner.
+            </p>
+          </div>
+
+          <!-- Independent Mode Container (Hidden by default) -->
+          <div id="containerIndependentGates" class="space-y-2 hidden">
+            <p class="text-[11px] text-slate-500">Place both attachment gates individually on the model:</p>
+            <div class="grid grid-cols-2 gap-2 bg-slate-100/70 p-1 rounded-xl">
+              <button id="btnSelectGate1" class="py-1.5 px-2 rounded-lg font-semibold text-center transition bg-emerald-600 text-white flex items-center justify-center gap-1.5 text-xs shadow-sm cursor-pointer">
+                <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+                <span>Gate 1</span>
+              </button>
+              <button id="btnSelectGate2" class="py-1.5 px-2 rounded-lg font-medium text-center transition bg-slate-50 text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs border border-slate-200 cursor-pointer">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                <span>Gate 2</span>
+              </button>
+            </div>
           </div>
 
           <!-- Part Orientation (Z-axis only) -->
@@ -560,13 +581,25 @@
 
       </div>
 
-      <!-- SIDEBAR FOOTER (EXPORT ACTION) -->
+      <!-- SIDEBAR FOOTER (WORKFLOW & EXPORT ACTION) -->
       <div class="p-4 bg-white border-t border-slate-200 space-y-2 shrink-0">
         
-        <!-- Primary STL Download Button -->
-        <button id="btnExportSTL" disabled class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 disabled:from-slate-200 disabled:to-slate-200 disabled:text-slate-400 text-white font-bold text-xs tracking-wide shadow-md shadow-indigo-600/20 disabled:shadow-none transition flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed">
+        <!-- Step 1 Primary Action: Proceed to Batch Sprue -->
+        <button id="btnNextStep" disabled class="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold text-xs tracking-wide shadow-md shadow-indigo-600/20 disabled:shadow-none transition flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed">
+          <span>Proceed to Step 2: Batch Sprue</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </button>
+
+        <!-- Step 2 Primary Action: Download Merged STL -->
+        <button id="btnExportSTL" disabled class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 disabled:from-slate-200 disabled:to-slate-200 disabled:text-slate-400 text-white font-bold text-xs tracking-wide shadow-md shadow-indigo-600/20 disabled:shadow-none transition flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed hidden">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
           <span id="btnExportText">Download Batch Sprue STL</span>
+        </button>
+
+        <!-- Step 2 Secondary Action: Back to Step 1 -->
+        <button id="btnPrevStep" class="w-full py-1.5 px-3 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 font-medium text-xs transition flex items-center justify-center gap-1.5 cursor-pointer hidden">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          <span>Back to Part Setup</span>
         </button>
 
         <div id="exportStatus" class="hidden text-center text-[11px] text-indigo-600 font-medium">
