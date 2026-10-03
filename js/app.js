@@ -593,15 +593,17 @@ let pointerDownCoord = { x: 0, y: 0 };
 
 function getClickableMeshes() {
   if (state.viewMode === 'focus') {
-    return focusGroup.children;
-  } else {
-    return sprueGroup.children.filter(c => c.name.startsWith('spruePiece_'));
+    return focusGroup.children.filter(c => c.name === 'focusPiece');
   }
+  return [];
 }
 
-// Hover cursor with smart axis snapping
+// Hover cursor with smart axis snapping (active in Part Focus mode only)
 renderer.domElement.addEventListener('pointermove', (e) => {
-  if (!state.loadedGeometry) return;
+  if (!state.loadedGeometry || state.viewMode !== 'focus') {
+    hoverMarker.visible = false;
+    return;
+  }
   const rect = renderer.domElement.getBoundingClientRect();
   mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
   mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -658,12 +660,13 @@ renderer.domElement.addEventListener('pointerdown', (e) => {
 renderer.domElement.addEventListener('pointerup', (e) => {
   const dx = Math.abs(e.clientX - pointerDownCoord.x);
   const dy = Math.abs(e.clientY - pointerDownCoord.y);
-  if (dx < 5 && dy < 5 && state.loadedGeometry) {
+  if (dx < 5 && dy < 5 && state.loadedGeometry && state.viewMode === 'focus') {
     handlePickingClick(e);
   }
 });
 
 function handlePickingClick(e) {
+  if (!state.loadedGeometry || state.viewMode !== 'focus') return;
   const rect = renderer.domElement.getBoundingClientRect();
   mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
   mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -1094,11 +1097,21 @@ export function setViewMode(mode) {
     }
   }
 
+  const viewportContainer = document.getElementById('viewportContainer');
+  if (viewportContainer) {
+    if (mode === 'focus') {
+      viewportContainer.classList.add('crosshair-cursor');
+    } else {
+      viewportContainer.classList.remove('crosshair-cursor');
+      hoverMarker.visible = false;
+    }
+  }
+
   const pickingNotice = document.getElementById('pickingNotice');
   const pickingStatusText = document.getElementById('pickingStatusText');
   if (pickingNotice && pickingStatusText) {
-    pickingNotice.classList.remove('hidden');
     if (mode === 'focus') {
+      pickingNotice.classList.remove('hidden');
       if (state.autoSymmetry) {
         pickingStatusText.textContent = 'Click model to place gate • Opposite side auto-mirrored';
       } else {
@@ -1106,7 +1119,7 @@ export function setViewMode(mode) {
         pickingStatusText.textContent = `Click on part to place ${activeGate} • Connects to nearest runner`;
       }
     } else {
-      pickingStatusText.textContent = `Batch sprue (${state.rows} × ${state.cols} = ${state.rows * state.cols} parts) • Ready for direct STL export`;
+      pickingNotice.classList.add('hidden');
     }
   }
 
