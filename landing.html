@@ -83,7 +83,6 @@
 
       <!-- Navigation Links -->
       <nav class="hidden md:flex items-center gap-7 text-sm font-semibold text-slate-600">
-        <a href="#calculator" class="hover:text-indigo-600 transition">ROI Calculator</a>
         <a href="#magic" class="hover:text-indigo-600 transition">Core Technology</a>
         <a href="#zero-risk" class="hover:text-indigo-600 transition">Zero-Risk Model</a>
         <a href="#security" class="hover:text-indigo-600 transition">IP Security</a>
@@ -129,13 +128,9 @@
 
       <!-- Action CTAs -->
       <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5">
-        <a href="index.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base shadow-lg shadow-indigo-600/25 hover:shadow-indigo-600/40 transition transform active:scale-95">
+        <a href="index.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base shadow-lg shadow-indigo-600/25 hover:shadow-indigo-600/40 transition transform active:scale-95">
           <span>Try Free in Browser (No Signup)</span>
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-        </a>
-        <a href="#calculator" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-base border border-slate-200 shadow-sm transition">
-          <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-          <span>Calculate Your Savings</span>
         </a>
       </div>
 
@@ -155,135 +150,41 @@
         </div>
       </div>
 
-      <!-- Clean Minimalist CAD Preview Mockup -->
-      <div class="mt-12 relative max-w-4xl mx-auto rounded-2xl border border-slate-200/90 shadow-2xl bg-white p-2.5 sm:p-3 overflow-hidden">
-        
-        <!-- App Window Header -->
-        <div class="bg-slate-900 rounded-xl overflow-hidden relative border border-slate-800 flex flex-col">
-          
-          <div class="h-10 bg-slate-950 px-4 flex items-center justify-between border-b border-slate-800/80">
-            <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
-              <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
-              <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
-              <span class="text-xs font-mono text-slate-400 ml-2">batch_sprue_matrix_2x5.stl</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Watertight STL</span>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">10 Parts • 1 Frame</span>
-            </div>
-          </div>
-
-          <!-- 3D Schematic Viewport -->
-          <div class="relative py-12 px-6 sm:px-12 flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-950">
-            
-            <!-- Isometric CAD Wireframe SVG -->
-            <div class="w-full max-w-lg mx-auto py-4">
-              <svg viewBox="0 0 540 240" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto drop-shadow-md">
-                <!-- Ground Grid Lines -->
-                <path d="M40 180 L270 230 L500 180 L270 130 Z" stroke="#334155" stroke-width="1" stroke-dasharray="3 3"/>
-                <path d="M97 167 L327 217" stroke="#1e293b" stroke-width="1"/>
-                <path d="M154 155 L384 205" stroke="#1e293b" stroke-width="1"/>
-                <path d="M212 142 L442 192" stroke="#1e293b" stroke-width="1"/>
-
-                <!-- Perimeter Sprue Cage Rails -->
-                <rect x="70" y="45" width="400" height="130" rx="6" stroke="#6366f1" stroke-width="3.5" fill="none" opacity="0.9"/>
-                <line x1="70" y1="110" x2="470" y2="110" stroke="#6366f1" stroke-width="2.5" opacity="0.6"/>
-
-                <!-- Runner Columns -->
-                <line x1="150" y1="45" x2="150" y2="175" stroke="#6366f1" stroke-width="2.5" opacity="0.6"/>
-                <line x1="230" y1="45" x2="230" y2="175" stroke="#6366f1" stroke-width="2.5" opacity="0.6"/>
-                <line x1="310" y1="45" x2="310" y2="175" stroke="#6366f1" stroke-width="2.5" opacity="0.6"/>
-                <line x1="390" y1="45" x2="390" y2="175" stroke="#6366f1" stroke-width="2.5" opacity="0.6"/>
-
-                <!-- Part 1 Row 1 -->
-                <rect x="92" y="65" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
-                <line x1="110" y1="45" x2="110" y2="65" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
-                <circle cx="110" cy="65" r="2.5" fill="#10b981"/>
-
-                <!-- Part 2 Row 1 -->
-                <rect x="172" y="65" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
-                <line x1="190" y1="45" x2="190" y2="65" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
-                <circle cx="190" cy="65" r="2.5" fill="#10b981"/>
-
-                <!-- Part 3 Row 1 -->
-                <rect x="252" y="65" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
-                <line x1="270" y1="45" x2="270" y2="65" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
-                <circle cx="270" cy="65" r="2.5" fill="#10b981"/>
-
-                <!-- Part 4 Row 1 -->
-                <rect x="332" y="65" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
-                <line x1="350" y1="45" x2="350" y2="65" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
-                <circle cx="350" cy="65" r="2.5" fill="#10b981"/>
-
-                <!-- Part 5 Row 1 -->
-                <rect x="412" y="65" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
-                <line x1="430" y1="45" x2="430" y2="65" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
-                <circle cx="430" cy="65" r="2.5" fill="#10b981"/>
-
-                <!-- Part 6 Row 2 -->
-                <rect x="92" y="130" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
-                <line x1="110" y1="156" x2="110" y2="175" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
-                <circle cx="110" cy="156" r="2.5" fill="#10b981"/>
-
-                <!-- Part 7 Row 2 -->
-                <rect x="172" y="130" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
-                <line x1="190" y1="156" x2="190" y2="175" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
-                <circle cx="190" cy="156" r="2.5" fill="#10b981"/>
-
-                <!-- Part 8 Row 2 -->
-                <rect x="252" y="130" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
-                <line x1="270" y1="156" x2="270" y2="175" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
-                <circle cx="270" cy="156" r="2.5" fill="#10b981"/>
-
-                <!-- Part 9 Row 2 -->
-                <rect x="332" y="130" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
-                <line x1="350" y1="156" x2="350" y2="175" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
-                <circle cx="350" cy="156" r="2.5" fill="#10b981"/>
-
-                <!-- Part 10 Row 2 -->
-                <rect x="412" y="130" width="36" height="26" rx="4" fill="#3b82f6" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.8"/>
-                <line x1="430" y1="156" x2="430" y2="175" stroke="#10b981" stroke-width="1.8" stroke-dasharray="2 1"/>
-                <circle cx="430" cy="156" r="2.5" fill="#10b981"/>
-              </svg>
-            </div>
-
-            <!-- Ultra-Clean Floating Benchmark Comparison Pill -->
-            <div class="mt-4 bg-slate-800/90 backdrop-blur-md rounded-xl p-3 sm:p-4 border border-slate-700/80 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4 w-full max-w-xl">
-              <div class="flex items-center gap-6">
-                <div>
-                  <div class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Sans sprue</div>
-                  <div class="text-base sm:text-lg font-mono font-bold text-rose-400">~0.30€ <span class="text-xs font-normal text-slate-400">/ pièce</span></div>
-                </div>
-                <div class="text-slate-500 font-bold">&rarr;</div>
-                <div>
-                  <div class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Avec sprue</div>
-                  <div class="text-base sm:text-lg font-mono font-bold text-emerald-400">~0.08€ <span class="text-xs font-normal text-slate-400">/ pièce</span></div>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-2 bg-emerald-500/15 border border-emerald-500/30 px-3 py-1.5 rounded-lg">
-                <span class="text-xs font-mono font-bold text-emerald-300">-73% D'ÉCONOMIE</span>
-                <span class="text-[10px] text-emerald-400 font-medium">(Coût ÷ 4)</span>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Bottom Footer Bar -->
-          <div class="h-9 bg-slate-950 px-4 flex items-center justify-between border-t border-slate-800/80 text-[11px] text-slate-400">
-            <span class="flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-              Breakaway Necks 1.2mm • Zero Mesh Distortion
-            </span>
-            <a href="index.html" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
-              <span>Open Studio</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            </a>
-          </div>
-
+      <!-- Real Benchmark Savings Card -->
+      <div class="mt-10 max-w-xl mx-auto bg-white rounded-2xl border border-slate-200 shadow-xl p-5 sm:p-6 transition hover:shadow-2xl text-left">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center justify-between">
+          <span>Benchmark réel d'impression 3D série (Nylon PA12)</span>
+          <span class="text-indigo-600 font-semibold">JLCPCB &bull; PCBWay</span>
         </div>
 
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 py-1">
+          <!-- Sans sprue -->
+          <div class="w-full sm:w-auto">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide block">Sans sprue</span>
+            <div class="text-2xl sm:text-3xl font-mono font-bold text-rose-500 tracking-tight">
+              ~0.30€ <span class="text-xs font-medium text-slate-400">/ pièce</span>
+            </div>
+          </div>
+
+          <!-- Arrow -->
+          <div class="hidden sm:flex text-slate-300">
+            <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </div>
+
+          <!-- Avec sprue -->
+          <div class="w-full sm:w-auto">
+            <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wide block">Avec sprue</span>
+            <div class="text-2xl sm:text-3xl font-mono font-bold text-emerald-600 tracking-tight">
+              ~0.08€ <span class="text-xs font-medium text-emerald-600/70">/ pièce</span>
+            </div>
+          </div>
+
+          <!-- Badge -->
+          <div class="w-full sm:w-auto bg-emerald-50 border border-emerald-200 px-3.5 py-2 rounded-xl flex sm:flex-col items-center justify-between sm:justify-center gap-0.5">
+            <span class="text-xs font-mono font-extrabold text-emerald-700">-73% D'ÉCONOMIE</span>
+            <span class="text-[11px] font-semibold text-emerald-600">(Coût &divide; 4)</span>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -360,125 +261,7 @@
     </div>
   </section>
 
-  <!-- ============================================================== -->
-  <!-- 4. INTERACTIVE ROI CALCULATOR (CONVERSION ENGINE) -->
-  <!-- ============================================================== -->
-  <section id="calculator" class="py-16 sm:py-24 bg-slate-50 border-b border-slate-200">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <h2 class="text-xs font-bold uppercase tracking-wider text-indigo-600">Live Cost Calculator</h2>
-        <p class="mt-2 text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-          See your exact savings before touching a file
-        </p>
-        <p class="mt-3 text-slate-600 text-sm sm:text-base">
-          Drag the sliders below to calculate how much hard cash SprueGen keeps in your pocket on your next production run.
-        </p>
-      </div>
 
-      <!-- Calculator Card Container -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12">
-        
-        <!-- Controls Column (7 Cols) -->
-        <div class="p-6 sm:p-8 lg:col-span-7 flex flex-col justify-between space-y-6">
-          
-          <!-- Part Scale Selection -->
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Part Scale &amp; Prototyping Baseline</label>
-            <div class="grid grid-cols-3 gap-2.5" id="vendorButtons">
-              <button type="button" data-loose="0.30" data-sprue="0.08" class="vendor-btn active py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-indigo-600 bg-indigo-50/80 text-indigo-700">
-                <span>Small Parts</span>
-                <span class="text-[10px] font-normal text-slate-500">~0.30€ ➔ ~0.08€</span>
-              </button>
-              <button type="button" data-loose="0.75" data-sprue="0.20" class="vendor-btn py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-slate-200 bg-white text-slate-700 hover:border-slate-300">
-                <span>Medium Parts</span>
-                <span class="text-[10px] font-normal text-slate-500">~0.75€ ➔ ~0.20€</span>
-              </button>
-              <button type="button" data-loose="1.50" data-sprue="0.40" class="vendor-btn py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-slate-200 bg-white text-slate-700 hover:border-slate-300">
-                <span>Larger Parts</span>
-                <span class="text-[10px] font-normal text-slate-500">~1.50€ ➔ ~0.40€</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Slider 1: Parts Per Batch -->
-          <div>
-            <div class="flex justify-between items-center mb-2">
-              <label for="partsSlider" class="text-xs font-bold uppercase tracking-wider text-slate-700">Parts Per Batch / Sprue</label>
-              <span id="partsCountDisplay" class="font-mono font-extrabold text-indigo-600 text-sm bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-100">10 parts</span>
-            </div>
-            <input type="range" id="partsSlider" min="2" max="50" value="10" step="1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
-            <div class="flex justify-between text-[11px] text-slate-400 mt-1 font-mono">
-              <span>2 parts</span>
-              <span>10 parts</span>
-              <span>25 parts</span>
-              <span>50 parts</span>
-            </div>
-          </div>
-
-          <!-- Slider 2: Orders Per Month -->
-          <div>
-            <div class="flex justify-between items-center mb-2">
-              <label for="ordersSlider" class="text-xs font-bold uppercase tracking-wider text-slate-700">Batch Orders Per Month</label>
-              <span id="ordersCountDisplay" class="font-mono font-extrabold text-indigo-600 text-sm bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-100">4 orders</span>
-            </div>
-            <input type="range" id="ordersSlider" min="1" max="25" value="4" step="1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
-            <div class="flex justify-between text-[11px] text-slate-400 mt-1 font-mono">
-              <span>1 order/mo</span>
-              <span>10 orders/mo</span>
-              <span>25 orders/mo</span>
-            </div>
-          </div>
-
-          <!-- Quick Tip -->
-          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/80 text-xs text-slate-500 flex items-center gap-2">
-            <svg class="w-4 h-4 text-indigo-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span>Based on empirical PA12 SLS batch benchmarks (~0.30€ loose vs ~0.08€ with sprue cage).</span>
-          </div>
-
-        </div>
-
-        <!-- Real-Time Results Column (5 Cols) -->
-        <div class="bg-gradient-to-br from-indigo-900 to-slate-900 p-6 sm:p-8 lg:col-span-5 text-white flex flex-col justify-between">
-          
-          <div>
-            <div class="flex items-center justify-between border-b border-indigo-800/80 pb-3">
-              <span class="text-xs font-mono uppercase tracking-wider text-indigo-300">Savings Analysis</span>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">~73% Savings</span>
-            </div>
-
-            <div class="mt-6 space-y-4">
-              <div>
-                <span class="text-xs text-slate-400 block mb-1">Estimated factory cost without sprue:</span>
-                <span id="standardCostDisplay" class="font-mono text-2xl font-bold text-rose-400 line-through">12.00 € / mo</span>
-              </div>
-
-              <div>
-                <span class="text-xs text-slate-400 block mb-1">Unified cost with SprueGen:</span>
-                <span id="sprueCostDisplay" class="font-mono text-2xl font-bold text-emerald-300">3.20 € / mo</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-8 pt-6 border-t border-indigo-800/80">
-            <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400 block">Annual Cash Saved</span>
-            <div class="mt-1 flex items-baseline gap-2">
-              <span id="annualSavingsDisplay" class="font-mono text-4xl sm:text-5xl font-extrabold text-white tracking-tight">105 €</span>
-              <span class="text-xs text-slate-400 font-mono">/ year</span>
-            </div>
-            
-            <a href="index.html" class="mt-6 w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition transform active:scale-95 shadow-lg shadow-emerald-500/20">
-              <span>Start Saving Now (Free)</span>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-            </a>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-  </section>
 
   <!-- ============================================================== -->
   <!-- 5. THE "ZERO RISK" MODEL (TRANSPARENT VALUE) -->
@@ -973,7 +756,7 @@
       </div>
       <div class="flex items-center gap-6">
         <a href="index.html" class="hover:text-slate-300 transition">3D Generator Studio</a>
-        <a href="#calculator" class="hover:text-slate-300 transition">ROI Calculator</a>
+        <a href="#magic" class="hover:text-slate-300 transition">Core Technology</a>
         <a href="#security" class="hover:text-slate-300 transition">IP Privacy</a>
         <a href="https://github.com/Kataman7/sprue-generator" target="_blank" rel="noopener noreferrer" class="hover:text-slate-300 transition flex items-center gap-1">
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
@@ -984,59 +767,9 @@
   </footer>
 
   <!-- ============================================================== -->
-  <!-- INTERACTIVE LOGIC (CALCULATOR + FAQ TOGGLES) -->
+  <!-- FAQ ACCORDION TOGGLE LOGIC -->
   <!-- ============================================================== -->
   <script>
-    // 1. Live ROI Calculator Logic
-    let looseCostPerPart = 0.30;
-    let sprueCostPerPart = 0.08;
-    const partsSlider = document.getElementById('partsSlider');
-    const ordersSlider = document.getElementById('ordersSlider');
-    const partsCountDisplay = document.getElementById('partsCountDisplay');
-    const ordersCountDisplay = document.getElementById('ordersCountDisplay');
-    const standardCostDisplay = document.getElementById('standardCostDisplay');
-    const sprueCostDisplay = document.getElementById('sprueCostDisplay');
-    const annualSavingsDisplay = document.getElementById('annualSavingsDisplay');
-
-    function updateCalculations() {
-      const parts = parseInt(partsSlider.value, 10);
-      const orders = parseInt(ordersSlider.value, 10);
-
-      partsCountDisplay.textContent = `${parts} parts`;
-      ordersCountDisplay.textContent = `${orders} batch${orders > 1 ? 'es' : ''}/mo`;
-
-      // Monthly cost
-      const standardMonthly = parts * looseCostPerPart * orders;
-      const sprueMonthly = parts * sprueCostPerPart * orders;
-
-      // Monthly & Annual savings
-      const monthlySaved = Math.max(standardMonthly - sprueMonthly, 0);
-      const annualSaved = monthlySaved * 12;
-
-      standardCostDisplay.textContent = `${standardMonthly.toFixed(2)} € / mo`;
-      sprueCostDisplay.textContent = `${sprueMonthly.toFixed(2)} € / mo`;
-      annualSavingsDisplay.textContent = `${Math.round(annualSaved).toLocaleString('fr-FR')} €`;
-    }
-
-    // Part Profile buttons
-    const vendorButtons = document.querySelectorAll('.vendor-btn');
-    vendorButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        vendorButtons.forEach(b => {
-          b.className = 'vendor-btn py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-slate-200 bg-white text-slate-700 hover:border-slate-300';
-        });
-        btn.className = 'vendor-btn active py-2.5 px-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer border-indigo-600 bg-indigo-50/80 text-indigo-700';
-        looseCostPerPart = parseFloat(btn.getAttribute('data-loose')) || 0.30;
-        sprueCostPerPart = parseFloat(btn.getAttribute('data-sprue')) || 0.08;
-        updateCalculations();
-      });
-    });
-
-    partsSlider?.addEventListener('input', updateCalculations);
-    ordersSlider?.addEventListener('input', updateCalculations);
-    updateCalculations();
-
-    // 2. FAQ Accordion Toggle Logic
     const faqToggles = document.querySelectorAll('.faq-toggle');
     faqToggles.forEach(toggle => {
       toggle.addEventListener('click', () => {
