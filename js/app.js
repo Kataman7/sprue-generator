@@ -14,7 +14,7 @@ const container = document.getElementById('viewportContainer');
 const canvas = document.getElementById('webglCanvas');
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xf4f4f0);
+scene.background = new THREE.Color(0xf8fafc);
 
 const aspect = container.clientWidth / container.clientHeight;
 const perspCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 2000);
@@ -49,15 +49,15 @@ const viewCubeManager = setupViewCube(camera, activeControls);
 
 // Lighting
 scene.add(new THREE.AmbientLight(0xffffff, 0.85));
-const dir1 = new THREE.DirectionalLight(0xffffff, 0.95);
+const dir1 = new THREE.DirectionalLight(0xffffff, 1.1);
 dir1.position.set(100, 160, 100);
 scene.add(dir1);
-const dir2 = new THREE.DirectionalLight(0xd4d8dc, 0.45);
+const dir2 = new THREE.DirectionalLight(0xcfd5e1, 0.5);
 dir2.position.set(-100, -50, -100);
 scene.add(dir2);
 
 // Ground Grid (Off by default)
-const gridHelper = new THREE.GridHelper(300, 60, 0x9ca3af, 0xdcded7);
+const gridHelper = new THREE.GridHelper(300, 60, 0x6366f1, 0xe2e8f0);
 gridHelper.position.y = -0.01;
 gridHelper.visible = state.showGrid;
 scene.add(gridHelper);
@@ -80,43 +80,43 @@ scene.add(hoverMarker);
 // Hover Cursor
 const hoverSphere = new THREE.Mesh(
   new THREE.SphereGeometry(0.7, 16, 16),
-  new THREE.MeshBasicMaterial({ color: 0x3d6e4c, wireframe: true })
+  new THREE.MeshBasicMaterial({ color: 0x4f46e5, wireframe: true })
 );
 hoverMarker.add(hoverSphere);
 hoverMarker.visible = false;
 
-// Standard Materials
+// Standard Materials (Clean & Vibrant)
 const pieceMaterial = new THREE.MeshStandardMaterial({
-  color: 0xd8dad8,
-  roughness: 0.38,
+  color: 0xe2e8f0,
+  roughness: 0.35,
   metalness: 0.05
 });
 
 const frameMaterial = new THREE.MeshStandardMaterial({
-  color: 0x3d6e4c,
-  roughness: 0.38,
-  metalness: 0.08
+  color: 0x4f46e5,
+  roughness: 0.3,
+  metalness: 0.1
 });
 
 const tabMaterial = new THREE.MeshStandardMaterial({
-  color: 0x4d8a5f,
-  roughness: 0.42,
-  metalness: 0.08
+  color: 0x6366f1,
+  roughness: 0.35,
+  metalness: 0.1
 });
 
 const ghostFrameMaterial = new THREE.MeshStandardMaterial({
-  color: 0x3d6e4c,
-  roughness: 0.38,
-  metalness: 0.08,
+  color: 0x4f46e5,
+  roughness: 0.3,
+  metalness: 0.1,
   transparent: true,
   opacity: 0.28,
   depthWrite: false
 });
 
 const ghostTabMaterial = new THREE.MeshStandardMaterial({
-  color: 0x4d8a5f,
-  roughness: 0.42,
-  metalness: 0.08,
+  color: 0x6366f1,
+  roughness: 0.35,
+  metalness: 0.1,
   transparent: true,
   opacity: 0.38,
   depthWrite: false
@@ -169,8 +169,8 @@ export function setCameraMode(mode) {
     camera = orthoCamera;
     if (activeControls) activeControls.object = orthoCamera;
 
-    if (btnCamOrtho) btnCamOrtho.className = 'px-2.5 py-1 bg-[#3d6e4c] text-white font-bold transition flex items-center gap-1 cursor-pointer';
-    if (btnCamPersp) btnCamPersp.className = 'px-2.5 py-1 text-[#555a64] hover:text-[#191c21] font-medium transition flex items-center gap-1 cursor-pointer';
+    if (btnCamOrtho) btnCamOrtho.className = 'px-2.5 py-1 rounded-md bg-indigo-600 text-white font-medium text-xs shadow-sm transition flex items-center gap-1 cursor-pointer';
+    if (btnCamPersp) btnCamPersp.className = 'px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-800 font-medium text-xs transition flex items-center gap-1 cursor-pointer';
   } else {
     const orthoHeight = (orthoCamera.top - orthoCamera.bottom) / orthoCamera.zoom;
     const fovRad = THREE.MathUtils.degToRad(perspCamera.fov * 0.5);
@@ -187,8 +187,8 @@ export function setCameraMode(mode) {
     camera = perspCamera;
     if (activeControls) activeControls.object = perspCamera;
 
-    if (btnCamPersp) btnCamPersp.className = 'px-2.5 py-1 bg-[#3d6e4c] text-white font-bold transition flex items-center gap-1 cursor-pointer';
-    if (btnCamOrtho) btnCamOrtho.className = 'px-2.5 py-1 text-[#555a64] hover:text-[#191c21] font-medium transition flex items-center gap-1 cursor-pointer';
+    if (btnCamPersp) btnCamPersp.className = 'px-2.5 py-1 rounded-md bg-indigo-600 text-white font-medium text-xs shadow-sm transition flex items-center gap-1 cursor-pointer';
+    if (btnCamOrtho) btnCamOrtho.className = 'px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-800 font-medium text-xs transition flex items-center gap-1 cursor-pointer';
   }
 
   if (activeControls) {
@@ -211,10 +211,10 @@ btnToggleGrid?.addEventListener('click', () => {
   state.showGrid = !state.showGrid;
   gridHelper.visible = state.showGrid;
   if (state.showGrid) {
-    btnToggleGrid.className = 'px-3 py-1.5 bg-[#3d6e4c] text-white font-medium transition flex items-center gap-1.5 border border-[#31573c] cursor-pointer';
+    btnToggleGrid.className = 'px-2.5 py-1.5 rounded-lg bg-indigo-50 text-indigo-600 font-medium text-xs transition flex items-center gap-1.5 border border-indigo-200 cursor-pointer';
     if (labelToggleGrid) labelToggleGrid.textContent = 'Grid: On';
   } else {
-    btnToggleGrid.className = 'px-3 py-1.5 bg-[#eaeae5] hover:bg-[#e0e0da] text-[#555a64] font-medium transition flex items-center gap-1.5 border border-[#cfd1ca] cursor-pointer';
+    btnToggleGrid.className = 'px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-600 font-medium text-xs transition flex items-center gap-1.5 border border-slate-200 cursor-pointer';
     if (labelToggleGrid) labelToggleGrid.textContent = 'Grid: Off';
   }
 });
@@ -225,10 +225,10 @@ btnToggleGuides?.addEventListener('click', () => {
   state.showGuides = !state.showGuides;
   updateGuides();
   if (state.showGuides) {
-    btnToggleGuides.className = 'px-3 py-1.5 bg-[#3d6e4c] text-white font-medium transition flex items-center gap-1.5 border border-[#31573c] cursor-pointer';
+    btnToggleGuides.className = 'px-2.5 py-1.5 rounded-lg bg-sky-50 text-sky-600 font-medium text-xs transition flex items-center gap-1.5 border border-sky-200 cursor-pointer';
     if (labelToggleGuides) labelToggleGuides.textContent = 'Guides: On';
   } else {
-    btnToggleGuides.className = 'px-3 py-1.5 bg-[#eaeae5] hover:bg-[#e0e0da] text-[#555a64] font-medium transition flex items-center gap-1.5 border border-[#cfd1ca] cursor-pointer';
+    btnToggleGuides.className = 'px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-600 font-medium text-xs transition flex items-center gap-1.5 border border-slate-200 cursor-pointer';
     if (labelToggleGuides) labelToggleGuides.textContent = 'Guides: Off';
   }
 });
@@ -480,12 +480,12 @@ export function updateGuides() {
   const size = state.dimensions;
   const maxSpan = Math.max(size.x, size.y, size.z) * 1.5;
 
-  // 1. Plane Y=0 (Muted sage translucent)
+  // 1. Plane Y=0 (Sky blue translucent)
   const planeYGeom = new THREE.PlaneGeometry(maxSpan, maxSpan);
   const planeYMat = new THREE.MeshBasicMaterial({
-    color: 0x3d6e4c,
+    color: 0x0ea5e9,
     transparent: true,
-    opacity: 0.08,
+    opacity: 0.10,
     side: THREE.DoubleSide,
     depthWrite: false
   });
@@ -495,17 +495,17 @@ export function updateGuides() {
 
   const edgesY = new THREE.LineSegments(
     new THREE.EdgesGeometry(planeYGeom),
-    new THREE.LineBasicMaterial({ color: 0x3d6e4c, transparent: true, opacity: 0.35 })
+    new THREE.LineBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.40 })
   );
   edgesY.rotation.x = Math.PI / 2;
   guidesGroup.add(edgesY);
 
-  // 2. Plane X=0 (Dark slate translucent)
+  // 2. Plane X=0 (Violet translucent)
   const planeXGeom = new THREE.PlaneGeometry(maxSpan, maxSpan);
   const planeXMat = new THREE.MeshBasicMaterial({
-    color: 0x5a6578,
+    color: 0x8b5cf6,
     transparent: true,
-    opacity: 0.08,
+    opacity: 0.10,
     side: THREE.DoubleSide,
     depthWrite: false
   });
@@ -515,16 +515,16 @@ export function updateGuides() {
 
   const edgesX = new THREE.LineSegments(
     new THREE.EdgesGeometry(planeXGeom),
-    new THREE.LineBasicMaterial({ color: 0x5a6578, transparent: true, opacity: 0.35 })
+    new THREE.LineBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.40 })
   );
   edgesX.rotation.y = Math.PI / 2;
   guidesGroup.add(edgesX);
 
-  // 3. Wireframe BBox
+  // 3. Wireframe BBox (Indigo)
   const bboxGeom = new THREE.BoxGeometry(size.x, size.y, size.z);
   const bboxWire = new THREE.LineSegments(
     new THREE.EdgesGeometry(bboxGeom),
-    new THREE.LineBasicMaterial({ color: 0x3d6e4c, transparent: true, opacity: 0.35 })
+    new THREE.LineBasicMaterial({ color: 0x6366f1, transparent: true, opacity: 0.40 })
   );
   guidesGroup.add(bboxWire);
 
@@ -804,15 +804,15 @@ export function selectGateSlot(slot) {
   const pulseDot = document.getElementById('pickingPulseDot');
 
   if (slot === 1) {
-    if (b1) b1.className = 'py-1.5 px-2 font-bold text-center transition bg-[#3d6e4c] text-white flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider cursor-pointer border border-[#31573c]';
-    if (b2) b2.className = 'py-1.5 px-2 font-semibold text-center transition bg-[#f4f4f0] text-[#5e6573] hover:text-[#191c21] flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider cursor-pointer border border-[#cfd1ca]';
+    if (b1) b1.className = 'py-1.5 px-2 rounded-lg font-semibold text-center transition bg-emerald-600 text-white flex items-center justify-center gap-1.5 text-xs shadow-sm cursor-pointer';
+    if (b2) b2.className = 'py-1.5 px-2 rounded-lg font-medium text-center transition bg-slate-50 text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs border border-slate-200 cursor-pointer';
     if (statusText) statusText.textContent = 'Click on model to place Gate 1 • Connects to nearest runner';
-    if (pulseDot) pulseDot.className = 'w-2 h-2 bg-[#3d6e4c]';
+    if (pulseDot) pulseDot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
   } else {
-    if (b2) b2.className = 'py-1.5 px-2 font-bold text-center transition bg-[#99473b] text-white flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider cursor-pointer border border-[#80382e]';
-    if (b1) b1.className = 'py-1.5 px-2 font-semibold text-center transition bg-[#f4f4f0] text-[#5e6573] hover:text-[#191c21] flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider cursor-pointer border border-[#cfd1ca]';
+    if (b2) b2.className = 'py-1.5 px-2 rounded-lg font-semibold text-center transition bg-rose-600 text-white flex items-center justify-center gap-1.5 text-xs shadow-sm cursor-pointer';
+    if (b1) b1.className = 'py-1.5 px-2 rounded-lg font-medium text-center transition bg-slate-50 text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs border border-slate-200 cursor-pointer';
     if (statusText) statusText.textContent = 'Click on model to place Gate 2 • Connects to nearest runner';
-    if (pulseDot) pulseDot.className = 'w-2 h-2 bg-[#99473b]';
+    if (pulseDot) pulseDot.className = 'w-2 h-2 rounded-full bg-rose-500 animate-pulse';
   }
 }
 
@@ -894,24 +894,24 @@ export function updateMarkers() {
   if (state.gate1Picked) {
     const s1 = new THREE.Mesh(
       new THREE.SphereGeometry(0.7, 16, 16),
-      new THREE.MeshBasicMaterial({ color: 0x3d6e4c })
+      new THREE.MeshBasicMaterial({ color: 0x10b981 })
     );
     s1.position.copy(state.gate1Point);
     markersGroup.add(s1);
 
-    const a1 = new THREE.ArrowHelper(state.gate1Normal, state.gate1Point, 6.0, 0x3d6e4c, 1.4, 0.8);
+    const a1 = new THREE.ArrowHelper(state.gate1Normal, state.gate1Point, 6.0, 0x10b981, 1.4, 0.8);
     markersGroup.add(a1);
   }
 
   if (state.gate2Picked) {
     const s2 = new THREE.Mesh(
       new THREE.SphereGeometry(0.7, 16, 16),
-      new THREE.MeshBasicMaterial({ color: 0x99473b })
+      new THREE.MeshBasicMaterial({ color: 0xf43f5e })
     );
     s2.position.copy(state.gate2Point);
     markersGroup.add(s2);
 
-    const a2 = new THREE.ArrowHelper(state.gate2Normal, state.gate2Point, 6.0, 0x99473b, 1.4, 0.8);
+    const a2 = new THREE.ArrowHelper(state.gate2Normal, state.gate2Point, 6.0, 0xf43f5e, 1.4, 0.8);
     markersGroup.add(a2);
   }
 }
@@ -991,8 +991,8 @@ export function rebuildSprue() {
     if (elBadge) {
       elBadge.textContent = state.structureZMode === 'flat_bottom' ? 'Optimal Z Minimal ✓' : 'Centered Mode';
       elBadge.className = state.structureZMode === 'flat_bottom'
-        ? 'text-[10px] font-mono font-semibold px-2 py-0.5 bg-[#e2ede4] text-[#31573c] border border-[#c5dcca]'
-        : 'text-[10px] font-mono font-semibold px-2 py-0.5 bg-[#f4f4f0] text-[#5e6573] border border-[#cfd1ca]';
+        ? 'text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200'
+        : 'text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200';
     }
   }
 
@@ -1068,21 +1068,21 @@ export function setViewMode(mode) {
 
   if (btnViewFocus && btnViewSprue) {
     if (mode === 'focus') {
-      btnViewFocus.className = 'px-2.5 py-1 bg-[#3d6e4c] text-white font-bold transition flex items-center gap-1 cursor-pointer';
-      btnViewSprue.className = 'px-2.5 py-1 text-[#555a64] hover:text-[#191c21] font-medium transition flex items-center gap-1 cursor-pointer';
+      btnViewFocus.className = 'px-2.5 py-1 rounded-md bg-indigo-600 text-white font-medium text-xs shadow-sm transition flex items-center gap-1 cursor-pointer';
+      btnViewSprue.className = 'px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-800 font-medium text-xs transition flex items-center gap-1 cursor-pointer';
     } else {
-      btnViewSprue.className = 'px-2.5 py-1 bg-[#3d6e4c] text-white font-bold transition flex items-center gap-1 cursor-pointer';
-      btnViewFocus.className = 'px-2.5 py-1 text-[#555a64] hover:text-[#191c21] font-medium transition flex items-center gap-1 cursor-pointer';
+      btnViewSprue.className = 'px-2.5 py-1 rounded-md bg-indigo-600 text-white font-medium text-xs shadow-sm transition flex items-center gap-1 cursor-pointer';
+      btnViewFocus.className = 'px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-800 font-medium text-xs transition flex items-center gap-1 cursor-pointer';
     }
   }
 
   if (tabModeFocus && tabModeSprue) {
     if (mode === 'focus') {
-      tabModeFocus.className = 'flex-1 py-2 px-3 bg-[#3d6e4c] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition cursor-pointer border border-[#31573c]';
-      tabModeSprue.className = 'flex-1 py-2 px-3 bg-[#ffffff] hover:bg-[#f9f9f7] text-[#5e6573] hover:text-[#191c21] font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition border border-[#d4d6ce] cursor-pointer';
+      tabModeFocus.className = 'flex-1 py-2 px-3 rounded-lg bg-white text-indigo-600 font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm border border-slate-200/80 cursor-pointer transition';
+      tabModeSprue.className = 'flex-1 py-2 px-3 rounded-lg text-slate-500 hover:text-slate-800 font-medium text-xs flex items-center justify-center gap-1.5 hover:bg-white/50 cursor-pointer transition';
     } else {
-      tabModeSprue.className = 'flex-1 py-2 px-3 bg-[#3d6e4c] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition cursor-pointer border border-[#31573c]';
-      tabModeFocus.className = 'flex-1 py-2 px-3 bg-[#ffffff] hover:bg-[#f9f9f7] text-[#5e6573] hover:text-[#191c21] font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition border border-[#d4d6ce] cursor-pointer';
+      tabModeSprue.className = 'flex-1 py-2 px-3 rounded-lg bg-white text-indigo-600 font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm border border-slate-200/80 cursor-pointer transition';
+      tabModeFocus.className = 'flex-1 py-2 px-3 rounded-lg text-slate-500 hover:text-slate-800 font-medium text-xs flex items-center justify-center gap-1.5 hover:bg-white/50 cursor-pointer transition';
     }
   }
 
@@ -1213,12 +1213,12 @@ const labelSymmetry = document.getElementById('labelSymmetry');
 function updateSymmetryUI() {
   if (!btnToggleSymmetry) return;
   if (state.autoSymmetry) {
-    btnToggleSymmetry.className = 'px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider transition border flex items-center gap-1 bg-[#3d6e4c] text-white border-[#31573c] cursor-pointer';
-    if (dotSymmetry) dotSymmetry.className = 'w-1.5 h-1.5 bg-white';
+    btnToggleSymmetry.className = 'px-2 py-0.5 rounded text-[10px] font-semibold transition border flex items-center gap-1 bg-indigo-50 text-indigo-600 border-indigo-200 cursor-pointer shadow-sm';
+    if (dotSymmetry) dotSymmetry.className = 'w-1.5 h-1.5 rounded-full bg-indigo-600';
     if (labelSymmetry) labelSymmetry.textContent = 'Mirror: On';
   } else {
-    btnToggleSymmetry.className = 'px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider transition border flex items-center gap-1 bg-[#f4f4f0] text-[#5e6573] border-[#cfd1ca] hover:text-[#191c21] cursor-pointer';
-    if (dotSymmetry) dotSymmetry.className = 'w-1.5 h-1.5 bg-[#888e99]';
+    btnToggleSymmetry.className = 'px-2 py-0.5 rounded text-[10px] font-medium transition border flex items-center gap-1 bg-slate-50 text-slate-500 border-slate-200 hover:text-slate-800 cursor-pointer';
+    if (dotSymmetry) dotSymmetry.className = 'w-1.5 h-1.5 rounded-full bg-slate-400';
     if (labelSymmetry) labelSymmetry.textContent = 'Mirror: Off';
   }
 }

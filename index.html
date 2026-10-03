@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3D Sprue Generator — Industrial SLS &amp; MJF Batch Framing CAD Tool</title>
 
-  <!-- SEO Référencement & Indexation Google / Bing -->
+  <!-- SEO & Metadata -->
   <meta name="description" content="Precision 3D Sprue & Protective Frame CAD Generator for industrial SLS & MJF 3D printing (JLCPCB, PCBWay). Merged binary watertight STL export, breakaway tapered gate necks, 100% private in-browser tool.">
   <meta name="keywords" content="sprue generator, 3d printing sprue, 3d sprue, jlcpcb 3d printing, pcbway 3d, sls, mjf, nylon pa12, breakaway tabs, protective cage, runner frame, gates, batch 3d print, stl merger, cad tool">
   <meta name="author" content="Picokeebs">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#f4f4f0">
+  <meta name="theme-color" content="#ffffff">
   <link rel="canonical" href="https://kataman7.github.io/sprue-generator/">
 
-  <!-- Open Graph / Réseaux sociaux -->
+  <!-- Open Graph / Social -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://kataman7.github.io/sprue-generator/">
   <meta property="og:title" content="3D Sprue Generator — Industrial SLS &amp; MJF Batch Framing CAD Tool">
@@ -21,45 +21,13 @@
   <meta property="og:site_name" content="3D Sprue Generator">
   <meta property="og:locale" content="en_US">
 
-  <!-- Twitter Cards -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://kataman7.github.io/sprue-generator/">
-  <meta name="twitter:title" content="3D Sprue Generator — Industrial SLS &amp; MJF Batch Framing CAD Tool">
-  <meta name="twitter:description" content="Generate industrial merged STL sprues with breakaway gates for SLS &amp; MJF. 100% client-side privacy.">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234f46e5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10'/%3E%3C/svg%3E">
 
-  <!-- Favicon SVG intégré (Zero requête externe) -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233d6e4c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10'/%3E%3C/svg%3E">
-
-  <!-- Typographie Géométrique : Inter -->
+  <!-- Inter Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-  <!-- Données Structurées Schema.org JSON-LD (WebApplication + FAQPage) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "@id": "https://kataman7.github.io/sprue-generator/#webapp",
-        "name": "3D Sprue & Frame Generator",
-        "url": "https://kataman7.github.io/sprue-generator/",
-        "description": "Browser-based CAD utility for arranging 3D STL models into protective runner frames (sprues) with break-away tabs for industrial SLS & MJF nylon 3D printing.",
-        "applicationCategory": "DesignApplication",
-        "operatingSystem": "All modern web browsers supporting WebGL",
-        "browserRequirements": "Requires WebGL",
-        "softwareVersion": "2.0.0",
-        "inLanguage": "en",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "EUR"
-        }
-      }
-    ]
-  }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -68,29 +36,12 @@
       theme: {
         extend: {
           colors: {
-            stone: {
-              50: '#fafaf8',
-              100: '#f4f4f0',
-              200: '#eaeae4',
-              300: '#dcded7',
-              400: '#b8bab2',
-              500: '#888e99',
-              600: '#5e6573',
-              700: '#383e4a',
-              800: '#23272e',
-              900: '#191c21',
-            },
-            sage: {
-              50: '#f2f6f3',
-              100: '#e2ede4',
-              200: '#c5dcca',
-              300: '#9ec4a7',
-              400: '#72a781',
-              500: '#4d8a5f',
-              600: '#3d6e4c',
-              700: '#31573c',
-              800: '#284631',
-              900: '#213928',
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca'
             }
           }
         }
@@ -99,42 +50,35 @@
   </script>
 
   <style>
-    /* RÈGLE ABSOLUE SWISS DESIGN : AUCUN COIN ARRONDI */
-    *, *::before, *::after {
-      border-radius: 0 !important;
-    }
-
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       letter-spacing: -0.01em;
-      background-color: #f4f4f0;
-      color: #191c21;
     }
 
-    /* Scrollbars architecturales épurées */
     ::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
+      width: 6px;
+      height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #eaeae4;
+      background: #f1f5f9;
     }
     ::-webkit-scrollbar-thumb {
-      background: #c0c2bb;
+      background: #cbd5e1;
+      border-radius: 3px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #888e99;
+      background: #94a3b8;
     }
 
     input[type=range] {
-      accent-color: #3d6e4c;
+      accent-color: #4f46e5;
     }
 
     .crosshair-cursor {
       cursor: crosshair !important;
     }
 
-    /* Styles ViewCube 3D Swiss Light */
+    /* 3D ViewCube Widget */
     .cube-scene {
       perspective: 320px;
     }
@@ -148,25 +92,28 @@
       height: 56px;
       left: 12px;
       top: 12px;
-      background: rgba(244, 244, 240, 0.95);
-      border: 1px solid #cfd1ca;
-      color: #191c21;
-      font-size: 8.5px;
-      font-weight: 800;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      color: #334155;
+      font-size: 9px;
+      font-weight: 700;
       letter-spacing: 0.5px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       user-select: none;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
     }
     .cube-face:hover {
-      background: #3d6e4c;
+      background: #4f46e5;
       color: #ffffff;
-      border-color: #31573c;
+      border-color: #4338ca;
+      box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.25);
     }
     .cube-front  { transform: translateZ(28px); }
     .cube-back   { transform: rotateY(180deg) translateZ(28px); }
@@ -176,7 +123,7 @@
     .cube-bottom { transform: rotateX(-90deg) translateZ(28px); }
   </style>
 
-  <!-- Import Map pour Three.js et ses addons officiels via unpkg -->
+  <!-- Import Map for Three.js -->
   <script type="importmap">
   {
     "imports": {
@@ -186,24 +133,24 @@
   }
   </script>
 </head>
-<body class="bg-[#f4f4f0] text-[#191c21] flex flex-col h-screen overflow-hidden select-none">
+<body class="bg-slate-50 text-slate-800 flex flex-col h-screen overflow-hidden select-none">
 
   <!-- ============================================================== -->
-  <!-- BARRE SUPÉRIEURE (HEADER SWISS MINIMALIST) -->
+  <!-- BARRE SUPÉRIEURE (HEADER CLASSIC & DISCREET) -->
   <!-- ============================================================== -->
-  <header class="h-14 bg-[#eaeae5] border-b border-[#d4d6ce] px-6 flex items-center justify-between z-20 shrink-0">
-    <div class="flex items-center space-x-3.5">
-      <div class="w-7 h-7 bg-[#191c21] text-white flex items-center justify-center font-black text-xs">
+  <header class="h-14 bg-white border-b border-slate-200 px-5 flex items-center justify-between z-20 shrink-0 shadow-sm">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-sm shadow-indigo-500/25">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
         </svg>
       </div>
       <div>
-        <h1 class="text-xs font-black tracking-widest uppercase text-[#191c21] flex items-center gap-2.5">
-          3D Sprue &amp; Frame Generator
-          <span class="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 bg-[#e2ede4] text-[#31573c] border border-[#c5dcca]">MJF / SLS Batch Cage</span>
+        <h1 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+          3D Sprue Generator
+          <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100">SLS / MJF</span>
         </h1>
-        <p class="text-[11px] font-normal text-[#5e6573]">Industrial breakaway tabs &amp; protective runner frames for 3D printing</p>
+        <p class="text-[11px] text-slate-500">Breakaway gates &amp; protective frames for batch 3D printing</p>
       </div>
     </div>
 
@@ -211,41 +158,41 @@
     <div class="flex items-center space-x-2 text-xs">
       
       <!-- Toggle Ground Grid (Off by default) -->
-      <button id="btnToggleGrid" title="Toggle ground reference grid" class="px-3 py-1.5 bg-[#eaeae5] hover:bg-[#e0e0da] text-[#555a64] font-medium transition flex items-center gap-1.5 border border-[#cfd1ca] cursor-pointer">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16M9 4v16m6-16v16"></path></svg>
+      <button id="btnToggleGrid" title="Toggle ground reference grid" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-600 font-medium transition flex items-center gap-1.5 border border-slate-200 cursor-pointer shadow-sm">
+        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16M9 4v16m6-16v16"></path></svg>
         <span id="labelToggleGrid">Grid: Off</span>
       </button>
 
       <!-- Toggle Guides -->
-      <button id="btnToggleGuides" title="Toggle 3D guide planes and axes" class="px-3 py-1.5 bg-[#3d6e4c] text-white font-medium transition flex items-center gap-1.5 border border-[#31573c] cursor-pointer">
+      <button id="btnToggleGuides" title="Toggle 3D guide planes and axes" class="px-2.5 py-1.5 rounded-lg bg-sky-50 text-sky-600 font-medium transition flex items-center gap-1.5 border border-sky-200 cursor-pointer shadow-sm">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path></svg>
         <span id="labelToggleGuides">Guides: On</span>
       </button>
 
       <!-- Camera Mode (Perspective vs Orthographic CAD) -->
-      <div class="flex bg-[#e0e0da] p-0.5 border border-[#cfd1ca]" title="Projection Mode: Perspective or Isometric (Ortho CAD)">
-        <button id="btnCamPersp" class="px-2.5 py-1 text-[#555a64] hover:text-[#191c21] font-medium transition flex items-center gap-1 cursor-pointer">
+      <div class="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200" title="Projection Mode: Perspective or Isometric (Ortho CAD)">
+        <button id="btnCamPersp" class="px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-800 font-medium transition flex items-center gap-1 cursor-pointer">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
           <span>Persp</span>
         </button>
-        <button id="btnCamOrtho" class="px-2.5 py-1 bg-[#3d6e4c] text-white font-bold transition flex items-center gap-1 cursor-pointer">
+        <button id="btnCamOrtho" class="px-2.5 py-1 rounded-md bg-indigo-600 text-white font-medium shadow-sm transition flex items-center gap-1 cursor-pointer">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
           <span>Iso (Ortho)</span>
         </button>
       </div>
 
-      <button id="btnResetCamera" title="Center camera on model" class="px-3 py-1.5 bg-[#eaeae5] hover:bg-[#e0e0da] text-[#191c21] transition flex items-center gap-1.5 border border-[#cfd1ca] cursor-pointer">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+      <button id="btnResetCamera" title="Center camera on model" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-600 transition flex items-center gap-1.5 border border-slate-200 cursor-pointer shadow-sm">
+        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
         <span>Center</span>
       </button>
 
       <!-- Technical Guide & FAQ Button -->
-      <button id="btnOpenFaq" title="Manufacturing Guide &amp; SLS / MJF FAQ" class="px-3 py-1.5 bg-[#eaeae5] hover:bg-[#e0e0da] text-[#191c21] font-medium transition flex items-center gap-1.5 border border-[#cfd1ca] cursor-pointer">
-        <svg class="w-3.5 h-3.5 text-[#3d6e4c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      <button id="btnOpenFaq" title="Manufacturing Guide &amp; SLS / MJF FAQ" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-600 font-medium transition flex items-center gap-1.5 border border-slate-200 cursor-pointer shadow-sm">
+        <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         <span>Guide &amp; FAQ</span>
       </button>
 
-      <label class="px-4 py-1.5 bg-[#191c21] hover:bg-[#2c313a] text-white font-bold text-xs uppercase tracking-wider cursor-pointer transition flex items-center gap-2 border border-[#191c21]">
+      <label class="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold cursor-pointer transition flex items-center gap-1.5 shadow-sm shadow-indigo-600/25">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
         <span>Upload STL</span>
         <input type="file" id="fileInput" accept=".stl" class="hidden">
@@ -254,29 +201,29 @@
   </header>
 
   <!-- MANUFACTURING GUIDE & FAQ MODAL -->
-  <div id="faqModal" class="fixed inset-0 z-50 bg-[#191c21]/40 backdrop-blur-sm flex items-center justify-center p-6 hidden">
-    <div class="bg-white border border-[#cfd1ca] max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+  <div id="faqModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-6 hidden">
+    <div class="bg-white border border-slate-200 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
       <!-- Modal Header -->
-      <div class="px-6 py-4 border-b border-[#e0e0da] flex items-center justify-between shrink-0 bg-[#f4f4f0]">
+      <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-slate-50/50">
         <div class="flex items-center gap-3">
-          <div class="w-7 h-7 bg-[#e2ede4] text-[#31573c] flex items-center justify-center border border-[#c5dcca]">
+          <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
           </div>
           <div>
-            <h2 class="text-xs font-black uppercase tracking-widest text-[#191c21]">Industrial Manufacturing Guide &amp; FAQ (SLS / MJF)</h2>
-            <p class="text-[11px] text-[#5e6573]">Design guidelines for bulk ordering on JLCPCB, PCBWay &amp; Nylon PA12 services</p>
+            <h2 class="text-sm font-bold text-slate-800">Industrial Manufacturing Guide &amp; FAQ (SLS / MJF)</h2>
+            <p class="text-[11px] text-slate-500">Design guidelines for bulk ordering on JLCPCB, PCBWay &amp; Nylon PA12 services</p>
           </div>
         </div>
-        <button id="btnCloseFaq" class="p-1.5 text-[#5e6573] hover:text-[#191c21] hover:bg-[#e0e0da] transition cursor-pointer">
+        <button id="btnCloseFaq" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition cursor-pointer">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
       </div>
 
       <!-- Modal Body -->
-      <div class="p-6 overflow-y-auto space-y-5 text-xs text-[#383e4a] leading-relaxed">
+      <div class="p-6 overflow-y-auto space-y-5 text-xs text-slate-600 leading-relaxed">
         <article class="space-y-4">
           <section>
-            <h3 class="text-xs font-bold uppercase tracking-wider text-[#191c21] flex items-center gap-2 mb-1.5">
+            <h3 class="text-xs font-bold text-slate-800 flex items-center gap-2 mb-1.5">
               <span>🏭</span> Why use a sprue with a protective cage?
             </h3>
             <p>
@@ -287,22 +234,22 @@
             </p>
           </section>
 
-          <section class="border-t border-[#e0e0da] pt-3">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-[#191c21] flex items-center gap-2 mb-1.5">
+          <section class="border-t border-slate-100 pt-3">
+            <h3 class="text-xs font-bold text-slate-800 flex items-center gap-2 mb-1.5">
               <span>✂️</span> Break-Away Gate &amp; Runner Design
             </h3>
             <p>
               Designed for fast, clean, tool-free post-processing upon arrival:
             </p>
-            <ul class="list-disc list-inside space-y-1 mt-1 text-[#5e6573]">
-              <li><strong class="text-[#191c21]">Breakaway Neck (Ø 0.5 to 1.5 mm):</strong> Located directly at the contact junction with the part surface, concentrating mechanical stress so tabs snap off cleanly with minimal witness marks.</li>
-              <li><strong class="text-[#191c21]">Tab Stem Body:</strong> Robust section automatically proportioned to 70% of runner diameter, ensuring parts do not vibrate or detach prematurely during industrial de-powdering and bead-blasting.</li>
-              <li><strong class="text-[#191c21]">Protective Outer Frame:</strong> Rigid boundary perimeter that absorbs shipping and handling impacts.</li>
+            <ul class="list-disc list-inside space-y-1 mt-1 text-slate-500">
+              <li><strong class="text-slate-700">Breakaway Neck (Ø 0.5 to 1.5 mm):</strong> Located directly at the contact junction with the part surface, concentrating mechanical stress so tabs snap off cleanly with minimal witness marks.</li>
+              <li><strong class="text-slate-700">Tab Stem Body:</strong> Robust section automatically proportioned to 70% of runner diameter, ensuring parts do not vibrate or detach prematurely during industrial de-powdering and bead-blasting.</li>
+              <li><strong class="text-slate-700">Protective Outer Frame:</strong> Rigid boundary perimeter that absorbs shipping and handling impacts.</li>
             </ul>
           </section>
 
-          <section class="border-t border-[#e0e0da] pt-3">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-[#191c21] flex items-center gap-2 mb-1.5">
+          <section class="border-t border-slate-100 pt-3">
+            <h3 class="text-xs font-bold text-slate-800 flex items-center gap-2 mb-1.5">
               <span>🔒</span> 100% Client-Side Privacy
             </h3>
             <p>
@@ -310,8 +257,8 @@
             </p>
           </section>
 
-          <section class="border-t border-[#e0e0da] pt-3">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-[#191c21] flex items-center gap-2 mb-1.5">
+          <section class="border-t border-slate-100 pt-3">
+            <h3 class="text-xs font-bold text-slate-800 flex items-center gap-2 mb-1.5">
               <span>💡</span> Available Export Format
             </h3>
             <p>
@@ -322,9 +269,9 @@
       </div>
 
       <!-- Modal Footer -->
-      <div class="px-6 py-3.5 border-t border-[#e0e0da] flex justify-end bg-[#f4f4f0]">
-        <button id="btnFaqUnderstood" class="px-5 py-2 bg-[#191c21] hover:bg-[#2c313a] text-white font-bold text-xs uppercase tracking-wider cursor-pointer transition">
-          Close Guide
+      <div class="px-6 py-3.5 border-t border-slate-200 flex justify-end bg-slate-50/50">
+        <button id="btnFaqUnderstood" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs cursor-pointer transition">
+          Got it
         </button>
       </div>
     </div>
@@ -336,62 +283,61 @@
   <div class="flex-1 flex overflow-hidden relative">
 
     <!-- 1. 3D VIEWPORT -->
-    <div id="viewportContainer" class="flex-1 h-full relative bg-[#f4f4f0] overflow-hidden crosshair-cursor">
+    <div id="viewportContainer" class="flex-1 h-full relative bg-slate-100 overflow-hidden crosshair-cursor">
       <canvas id="webglCanvas" class="w-full h-full block"></canvas>
 
       <!-- Drag & Drop Overlay -->
-      <div id="dropOverlay" class="absolute inset-6 border-2 border-dashed border-[#3d6e4c] bg-[#e2ede4]/80 backdrop-blur-sm hidden flex-col items-center justify-center z-30 transition pointer-events-none">
-        <div class="p-4 bg-[#3d6e4c] text-white mb-3">
+      <div id="dropOverlay" class="absolute inset-6 rounded-2xl border-2 border-dashed border-indigo-400 bg-indigo-50/80 backdrop-blur-sm hidden flex-col items-center justify-center z-30 transition pointer-events-none">
+        <div class="p-4 rounded-2xl bg-indigo-600 text-white mb-3 shadow-lg shadow-indigo-600/30">
           <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
         </div>
-        <p class="text-sm font-black uppercase tracking-wider text-[#191c21]">Drop your .STL file here</p>
-        <p class="text-xs text-[#31573c] mt-1 font-medium">100% private in-browser client-side processing</p>
+        <p class="text-base font-bold text-slate-800">Drop your .STL file here</p>
+        <p class="text-xs text-indigo-600 mt-1 font-medium">100% private in-browser processing</p>
       </div>
 
-      <!-- Initial Empty State Notice (Architectural Swiss Frame) -->
+      <!-- Initial Empty State Notice -->
       <div id="emptyNotice" class="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none p-6 text-center">
-        <div class="pointer-events-auto bg-white border border-[#cfd1ca] p-8 max-w-sm w-full text-center shadow-sm space-y-4">
-          <div class="w-12 h-12 bg-[#f4f4f0] border border-[#dcded7] flex items-center justify-center text-[#191c21] mx-auto">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
+        <div class="pointer-events-auto bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-8 max-w-sm w-full text-center shadow-lg space-y-4">
+          <div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 mx-auto shadow-sm">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
           </div>
           <div>
-            <span class="text-[10px] font-bold uppercase tracking-widest text-[#888e99] block mb-1">3D CAD Environment</span>
-            <h2 class="text-sm font-black text-[#191c21] uppercase tracking-wide">No 3D Model Loaded</h2>
-            <p class="text-xs text-[#5e6573] mt-2 leading-relaxed">
-              Drag and drop an STL file directly onto the canvas, or select one from your computer.
+            <h2 class="text-base font-bold text-slate-800 tracking-tight">Load 3D Model</h2>
+            <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+              Drag &amp; drop an STL file here, or browse from your computer to generate a production sprue.
             </p>
           </div>
-          <button id="btnEmptyUpload" type="button" class="w-full py-2.5 px-4 bg-[#3d6e4c] hover:bg-[#31573c] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition border border-[#31573c]">
+          <button id="btnEmptyUpload" type="button" class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold text-xs shadow-sm shadow-indigo-600/25 flex items-center justify-center gap-2 cursor-pointer transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-            <span>Upload STL File</span>
+            <span>Select STL File</span>
           </button>
         </div>
       </div>
 
       <!-- Floating Dimensions Badge -->
-      <div id="floatingStats" class="absolute top-4 left-4 z-10 bg-white/95 border border-[#cfd1ca] p-3 text-xs shadow-sm hidden space-y-2 min-w-[210px]">
-        <div class="flex items-center justify-between border-b border-[#e0e0da] pb-1.5 mb-1.5">
-          <span class="font-bold text-[#191c21] truncate max-w-[120px]" id="statFileName">piece.stl</span>
-          <span class="text-[10px] font-mono text-[#31573c] bg-[#e2ede4] px-1.5 py-0.5 border border-[#c5dcca]" id="statTriangleCount">0 tri</span>
+      <div id="floatingStats" class="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-md border border-slate-200 rounded-xl p-3 text-xs shadow-sm hidden space-y-2 min-w-[210px]">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-1.5 mb-1.5">
+          <span class="font-semibold text-slate-800 truncate max-w-[120px]" id="statFileName">piece.stl</span>
+          <span class="text-[10px] font-mono font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100" id="statTriangleCount">0 tri</span>
         </div>
         <div class="grid grid-cols-3 gap-2 text-center font-mono">
-          <div class="bg-[#f4f4f0] p-1.5 border border-[#e0e0da]">
-            <span class="text-[10px] text-[#5e6573] block font-sans font-bold">X</span>
-            <span class="text-[#191c21] font-bold" id="statDimX">0.0</span> <span class="text-[9px] text-[#888e99]">mm</span>
+          <div class="bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+            <span class="text-[10px] text-slate-400 block font-sans font-medium">X</span>
+            <span class="text-slate-800 font-bold" id="statDimX">0.0</span> <span class="text-[9px] text-slate-400">mm</span>
           </div>
-          <div class="bg-[#f4f4f0] p-1.5 border border-[#e0e0da]">
-            <span class="text-[10px] text-[#5e6573] block font-sans font-bold">Y</span>
-            <span class="text-[#191c21] font-bold" id="statDimY">0.0</span> <span class="text-[9px] text-[#888e99]">mm</span>
+          <div class="bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+            <span class="text-[10px] text-slate-400 block font-sans font-medium">Y</span>
+            <span class="text-slate-800 font-bold" id="statDimY">0.0</span> <span class="text-[9px] text-slate-400">mm</span>
           </div>
-          <div class="bg-[#f4f4f0] p-1.5 border border-[#e0e0da]">
-            <span class="text-[10px] text-[#5e6573] block font-sans font-bold">Z</span>
-            <span class="text-[#191c21] font-bold" id="statDimZ">0.0</span> <span class="text-[9px] text-[#888e99]">mm</span>
+          <div class="bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+            <span class="text-[10px] text-slate-400 block font-sans font-medium">Z</span>
+            <span class="text-slate-800 font-bold" id="statDimZ">0.0</span> <span class="text-[9px] text-slate-400">mm</span>
           </div>
         </div>
       </div>
 
       <!-- 3D VIEWCUBE WIDGET (ORIENTATION) -->
-      <div id="viewCubeWrapper" class="absolute top-4 right-4 z-10 flex flex-col items-center select-none bg-white/90 p-1 border border-[#cfd1ca] shadow-sm">
+      <div id="viewCubeWrapper" class="absolute top-4 right-4 z-10 flex flex-col items-center select-none bg-white/80 backdrop-blur-md p-1.5 rounded-xl border border-slate-200/80 shadow-sm">
         <div class="cube-scene w-20 h-20 flex items-center justify-center">
           <div id="viewCube" class="w-full h-full relative">
             <div class="cube-face cube-front" data-view="front" title="Front View (Z+)">FRONT</div>
@@ -405,116 +351,118 @@
       </div>
 
       <!-- Viewport Interaction Notice -->
-      <div id="pickingNotice" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-white/95 border border-[#cfd1ca] px-4 py-2 text-xs shadow-sm flex items-center gap-2.5 text-[#191c21]">
-        <span id="pickingPulseDot" class="w-2 h-2 bg-[#3d6e4c]"></span>
+      <div id="pickingNotice" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-full px-4 py-2 text-xs shadow-md flex items-center gap-2.5 text-slate-700">
+        <span id="pickingPulseDot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
         <span id="pickingStatusText" class="font-medium">Click on model to place attachment gate</span>
       </div>
     </div>
 
     <!-- 2. PANNEAU LATÉRAL (SIDEBAR CONFIGURATION SIMPLIFIÉE) -->
-    <aside class="w-96 h-full bg-[#f4f4f0] border-l border-[#d4d6ce] flex flex-col z-20 shrink-0">
+    <aside class="w-96 h-full bg-slate-50/70 border-l border-slate-200 flex flex-col z-20 shrink-0">
       
       <!-- Work Mode Switcher Tabs -->
-      <div class="p-3 bg-[#eaeae5] border-b border-[#d4d6ce] flex gap-2">
-        <button id="tabModeFocus" class="flex-1 py-2 px-3 bg-[#3d6e4c] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition cursor-pointer border border-[#31573c]">
-          <svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-          <span>1. Part Focus</span>
-        </button>
-        <button id="tabModeSprue" class="flex-1 py-2 px-3 bg-[#ffffff] hover:bg-[#f9f9f7] text-[#5e6573] hover:text-[#191c21] font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition border border-[#d4d6ce] cursor-pointer">
-          <svg class="w-4 h-4 text-[#3d6e4c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-          <span>2. Batch Sprue</span>
-        </button>
+      <div class="p-3 bg-slate-100/70 border-b border-slate-200">
+        <div class="flex bg-slate-200/70 p-1 rounded-xl gap-1">
+          <button id="tabModeFocus" class="flex-1 py-1.5 px-3 rounded-lg bg-white text-indigo-600 font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm border border-slate-200/80 cursor-pointer transition">
+            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+            <span>1. Part Focus</span>
+          </button>
+          <button id="tabModeSprue" class="flex-1 py-1.5 px-3 rounded-lg text-slate-500 hover:text-slate-800 font-medium text-xs flex items-center justify-center gap-1.5 hover:bg-white/50 cursor-pointer transition">
+            <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            <span>2. Batch Sprue</span>
+          </button>
+        </div>
       </div>
 
       <!-- Scrollable Settings Container -->
       <div class="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
 
         <!-- AUTO-OPTIMIZATION STATUS BANNER -->
-        <div class="p-3 bg-white border border-[#d4d6ce] flex items-center justify-between text-xs">
+        <div class="p-3 bg-white rounded-xl border border-slate-200/90 shadow-sm flex items-center justify-between text-xs">
           <div class="flex items-center gap-2">
-            <span class="w-2 h-2 bg-[#3d6e4c]"></span>
-            <span class="text-[#191c21] font-bold uppercase tracking-wider text-[10px]">Auto-Optimization Active</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span class="text-slate-800 font-semibold text-xs">Auto-Optimization</span>
           </div>
-          <span class="text-[10px] font-mono font-semibold px-2 py-0.5 bg-[#e2ede4] text-[#31573c] border border-[#c5dcca]">Flat on Bed (Z=0)</span>
+          <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Flat on Bed (Z=0)</span>
         </div>
 
         <!-- SECTION 1 : PART GATE POINTS (PART FOCUS MODE ONLY) -->
-        <div id="sectionPoints" class="bg-white p-4 border border-[#d4d6ce] space-y-3">
+        <div id="sectionPoints" class="bg-white rounded-xl p-4 border border-slate-200/90 shadow-sm space-y-3">
           <div class="flex items-center justify-between">
-            <span class="font-black text-[#191c21] uppercase tracking-widest text-[11px] flex items-center gap-2">
-              <span class="w-2 h-2 bg-[#3d6e4c]"></span>
+            <span class="font-bold text-slate-800 text-xs flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
               1. Attachment Gate Points
             </span>
-            <button id="btnToggleSymmetry" type="button" class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider border flex items-center gap-1 bg-[#f4f4f0] text-[#5e6573] border-[#cfd1ca] hover:text-[#191c21] cursor-pointer" title="Automatically mirrors Gate 1 to Gate 2 across the central axis">
-              <span id="dotSymmetry" class="w-1.5 h-1.5 bg-[#888e99]"></span>
+            <button id="btnToggleSymmetry" type="button" class="px-2 py-0.5 rounded text-[10px] font-medium transition border flex items-center gap-1 bg-slate-50 text-slate-500 border-slate-200 hover:text-slate-800 cursor-pointer" title="Automatically mirrors Gate 1 to Gate 2 across the central axis">
+              <span id="dotSymmetry" class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
               <span id="labelSymmetry">Mirror: Off</span>
             </button>
           </div>
-          <p class="text-[11px] text-[#5e6573]">Click on the 3D model to place gate points. With mirror mode enabled, placing Gate 1 instantly generates its symmetric counterpart.</p>
+          <p class="text-[11px] text-slate-500">Click on the 3D model to place gate points. With mirror mode enabled, placing Gate 1 instantly generates its symmetric counterpart.</p>
 
           <!-- Active Gate Selection Buttons -->
-          <div class="grid grid-cols-2 gap-2 bg-[#f4f4f0] p-1 border border-[#e0e0da]">
-            <button id="btnSelectGate1" class="py-1.5 px-2 font-bold text-center transition bg-[#3d6e4c] text-white flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider cursor-pointer border border-[#31573c]">
-              <span class="w-1.5 h-1.5 bg-white"></span>
+          <div class="grid grid-cols-2 gap-2 bg-slate-100/70 p-1 rounded-xl">
+            <button id="btnSelectGate1" class="py-1.5 px-2 rounded-lg font-semibold text-center transition bg-emerald-600 text-white flex items-center justify-center gap-1.5 text-xs shadow-sm cursor-pointer">
+              <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
               <span>Gate 1</span>
             </button>
-            <button id="btnSelectGate2" class="py-1.5 px-2 font-semibold text-center transition bg-[#f4f4f0] text-[#5e6573] hover:text-[#191c21] flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider cursor-pointer border border-[#cfd1ca]">
-              <span class="w-1.5 h-1.5 bg-[#99473b]"></span>
+            <button id="btnSelectGate2" class="py-1.5 px-2 rounded-lg font-medium text-center transition bg-slate-50 text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-1.5 text-xs border border-slate-200 cursor-pointer">
+              <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
               <span>Gate 2</span>
             </button>
           </div>
 
           <!-- Part Orientation (Z-axis only) -->
-          <div class="pt-2 border-t border-[#e0e0da] flex items-center justify-between">
-            <span class="text-[10px] text-[#5e6573] font-bold uppercase tracking-wider">Part Orientation:</span>
-            <button id="btnRotZPlus" title="Rotate 90° horizontally around vertical Z axis (keeps flat bed alignment)" class="px-3 py-1 bg-[#ffffff] hover:bg-[#f4f4f0] text-[#191c21] border border-[#cfd1ca] font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer">
-              <svg class="w-3 h-3 text-[#3d6e4c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+          <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-xs text-slate-500 font-medium">Part Orientation:</span>
+            <button id="btnRotZPlus" title="Rotate 90° horizontally around vertical Z axis (keeps flat bed alignment)" class="px-3 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-medium text-xs flex items-center gap-1.5 transition cursor-pointer border border-indigo-100">
+              <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
               <span>Rotate 90° (Z)</span>
             </button>
           </div>
         </div>
 
         <!-- SECTION 2 : ARRAY & QUANTITY (BATCH SPRUE MODE ONLY) -->
-        <div id="sectionGrid" class="bg-white p-4 border border-[#d4d6ce] space-y-3 hidden">
+        <div id="sectionGrid" class="bg-white rounded-xl p-4 border border-slate-200/90 shadow-sm space-y-3 hidden">
           <div class="flex items-center justify-between">
-            <span class="font-black text-[#191c21] uppercase tracking-widest text-[11px] flex items-center gap-2">
-              <span class="w-2 h-2 bg-[#3d6e4c]"></span>
+            <span class="font-bold text-slate-800 text-xs flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
               <span id="titleGridSection">1. Array &amp; Quantity</span>
             </span>
-            <span id="badgeTotalPieces" class="text-[10px] font-mono font-bold px-2 py-0.5 bg-[#e2ede4] text-[#31573c] border border-[#c5dcca]">
+            <span id="badgeTotalPieces" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100">
               10 parts (2 × 5)
             </span>
           </div>
 
           <!-- Rows & Columns with - / + step buttons -->
           <div class="grid grid-cols-2 gap-3">
-            <div class="bg-[#f4f4f0] p-3 border border-[#e0e0da] space-y-1.5">
-              <span class="text-[10px] text-[#5e6573] font-bold uppercase tracking-wider block">Rows (Y)</span>
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 space-y-1.5">
+              <span class="text-xs text-slate-500 font-medium block">Rows (Y)</span>
               <div class="flex items-center justify-between">
-                <button id="btnDecRows" class="w-6 h-6 bg-[#ffffff] hover:bg-[#eaeae5] text-[#191c21] font-black border border-[#cfd1ca] flex items-center justify-center cursor-pointer select-none">-</button>
-                <input id="inputRows" type="number" min="1" max="10" value="2" class="w-12 bg-[#ffffff] text-center text-[#191c21] font-mono font-bold border border-[#cfd1ca] py-0.5 text-xs focus:outline-none">
-                <button id="btnIncRows" class="w-6 h-6 bg-[#ffffff] hover:bg-[#eaeae5] text-[#191c21] font-black border border-[#cfd1ca] flex items-center justify-center cursor-pointer select-none">+</button>
+                <button id="btnDecRows" class="w-7 h-7 rounded-lg bg-white hover:bg-slate-100 text-slate-700 font-bold border border-slate-200 flex items-center justify-center cursor-pointer select-none shadow-sm">-</button>
+                <input id="inputRows" type="number" min="1" max="10" value="2" class="w-12 bg-white text-center text-indigo-600 font-bold border border-slate-200 rounded-lg py-1 text-xs focus:outline-none">
+                <button id="btnIncRows" class="w-7 h-7 rounded-lg bg-white hover:bg-slate-100 text-slate-700 font-bold border border-slate-200 flex items-center justify-center cursor-pointer select-none shadow-sm">+</button>
               </div>
             </div>
-            <div class="bg-[#f4f4f0] p-3 border border-[#e0e0da] space-y-1.5">
-              <span class="text-[10px] text-[#5e6573] font-bold uppercase tracking-wider block">Columns (X)</span>
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 space-y-1.5">
+              <span class="text-xs text-slate-500 font-medium block">Columns (X)</span>
               <div class="flex items-center justify-between">
-                <button id="btnDecCols" class="w-6 h-6 bg-[#ffffff] hover:bg-[#eaeae5] text-[#191c21] font-black border border-[#cfd1ca] flex items-center justify-center cursor-pointer select-none">-</button>
-                <input id="inputCols" type="number" min="1" max="25" value="5" class="w-12 bg-[#ffffff] text-center text-[#191c21] font-mono font-bold border border-[#cfd1ca] py-0.5 text-xs focus:outline-none">
-                <button id="btnIncCols" class="w-6 h-6 bg-[#ffffff] hover:bg-[#eaeae5] text-[#191c21] font-black border border-[#cfd1ca] flex items-center justify-center cursor-pointer select-none">+</button>
+                <button id="btnDecCols" class="w-7 h-7 rounded-lg bg-white hover:bg-slate-100 text-slate-700 font-bold border border-slate-200 flex items-center justify-center cursor-pointer select-none shadow-sm">-</button>
+                <input id="inputCols" type="number" min="1" max="25" value="5" class="w-12 bg-white text-center text-indigo-600 font-bold border border-slate-200 rounded-lg py-1 text-xs focus:outline-none">
+                <button id="btnIncCols" class="w-7 h-7 rounded-lg bg-white hover:bg-slate-100 text-slate-700 font-bold border border-slate-200 flex items-center justify-center cursor-pointer select-none shadow-sm">+</button>
               </div>
             </div>
           </div>
-          <p class="text-[10px] text-[#31573c] font-medium flex items-center gap-1">
-            <span>✓</span> Auto-spaced with compact safety clearance (2.0 mm gap, zero collision).
+          <p class="text-[11px] text-emerald-600 font-medium flex items-center gap-1.5">
+            <span>✓</span> Auto-spaced with 2.0 mm compact safety gap.
           </p>
         </div>
 
         <!-- SECTION 3 : RUNNER & TAB DIMENSIONS -->
-        <div id="sectionDimensions" class="bg-white p-4 border border-[#d4d6ce] space-y-3.5">
+        <div id="sectionDimensions" class="bg-white rounded-xl p-4 border border-slate-200/90 shadow-sm space-y-3.5">
           <div class="flex items-center justify-between">
-            <span class="font-black text-[#191c21] uppercase tracking-widest text-[11px] flex items-center gap-2">
-              <span class="w-2 h-2 bg-[#3d6e4c]"></span>
+            <span class="font-bold text-slate-800 text-xs flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-violet-500"></span>
               <span id="titleDimensionsSection">2. Tab &amp; Runner Dimensions</span>
             </span>
           </div>
@@ -522,60 +470,60 @@
           <!-- Runner & Frame Diameter -->
           <div class="space-y-1.5">
             <div class="flex justify-between items-center">
-              <label for="rangeFrameWidth" class="text-[#191c21] font-medium text-[11px]">Runner &amp; Frame Width (Ø)</label>
-              <span class="font-mono text-[#31573c] font-bold text-[11px]">Ø <span id="valFrameWidth">3.0</span> mm</span>
+              <label for="rangeFrameWidth" class="text-slate-700 font-medium text-xs">Runner &amp; Frame Width (Ø)</label>
+              <span class="font-mono text-indigo-600 font-bold text-xs">Ø <span id="valFrameWidth">3.0</span> mm</span>
             </div>
-            <input id="rangeFrameWidth" type="range" min="1.5" max="6.0" step="0.1" value="3.0" class="w-full h-1 bg-[#e0e0da] cursor-pointer">
-            <span class="text-[10px] text-[#888e99] block">Rigidity of outer perimeter frame and structural rails.</span>
+            <input id="rangeFrameWidth" type="range" min="1.5" max="6.0" step="0.1" value="3.0" class="w-full h-1.5 bg-slate-200 rounded-lg cursor-pointer">
+            <span class="text-[10px] text-slate-400 block">Rigidity of outer perimeter frame and structural rails.</span>
           </div>
 
           <!-- Breakaway Neck Diameter -->
-          <div class="space-y-1.5 pt-2.5 border-t border-[#e0e0da]">
+          <div class="space-y-1.5 pt-2.5 border-t border-slate-100">
             <div class="flex justify-between items-center">
-              <label for="rangeNeckDiameter" class="text-[#191c21] font-medium text-[11px]">Breakaway Neck Diameter (Ø)</label>
-              <span class="font-mono text-[#99473b] font-bold text-[11px]">Ø <span id="valNeckDiameter">1.20</span> mm</span>
+              <label for="rangeNeckDiameter" class="text-slate-700 font-medium text-xs">Breakaway Neck Diameter (Ø)</label>
+              <span class="font-mono text-rose-500 font-bold text-xs">Ø <span id="valNeckDiameter">1.20</span> mm</span>
             </div>
-            <input id="rangeNeckDiameter" type="range" min="0.3" max="2.5" step="0.05" value="1.2" class="w-full h-1 bg-[#e0e0da] cursor-pointer">
-            <span class="text-[10px] text-[#888e99] block">Break-off contact point for easy snap removal (min 0.30 mm).</span>
+            <input id="rangeNeckDiameter" type="range" min="0.3" max="2.5" step="0.05" value="1.2" class="w-full h-1.5 bg-slate-200 rounded-lg cursor-pointer">
+            <span class="text-[10px] text-slate-400 block">Break-off contact point for easy snap removal (min 0.30 mm).</span>
           </div>
 
           <!-- Breakaway Neck Length -->
-          <div class="space-y-1.5 pt-2.5 border-t border-[#e0e0da]">
+          <div class="space-y-1.5 pt-2.5 border-t border-slate-100">
             <div class="flex justify-between items-center">
-              <label for="rangeNeckLength" class="text-[#191c21] font-medium text-[11px]">Breakaway Neck Length</label>
-              <span class="font-mono text-[#31573c] font-bold text-[11px]"><span id="valNeckLength">1.0</span> mm</span>
+              <label for="rangeNeckLength" class="text-slate-700 font-medium text-xs">Breakaway Neck Length</label>
+              <span class="font-mono text-emerald-600 font-bold text-xs"><span id="valNeckLength">1.0</span> mm</span>
             </div>
-            <input id="rangeNeckLength" type="range" min="0.3" max="3.0" step="0.1" value="1.0" class="w-full h-1 bg-[#e0e0da] cursor-pointer">
+            <input id="rangeNeckLength" type="range" min="0.3" max="3.0" step="0.1" value="1.0" class="w-full h-1.5 bg-slate-200 rounded-lg cursor-pointer">
           </div>
         </div>
 
         <!-- SECTION 4 : FOOTPRINT & VOLUME METRICS (BATCH SPRUE MODE ONLY) -->
-        <div id="costSavingsWidget" class="bg-white p-4 border border-[#d4d6ce] space-y-3 hidden">
+        <div id="costSavingsWidget" class="bg-white rounded-xl p-4 border border-slate-200/90 shadow-sm space-y-3 hidden">
           <div class="flex items-center justify-between">
-            <span class="font-black text-[#191c21] uppercase tracking-widest text-[11px] flex items-center gap-2">
-              <svg class="w-3.5 h-3.5 text-[#3d6e4c]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            <span class="font-bold text-slate-800 text-xs flex items-center gap-2">
+              <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
               Sprue Footprint &amp; Volume
             </span>
-            <span id="badgeSavingRate" class="text-[10px] font-mono font-semibold px-2 py-0.5 bg-[#e2ede4] text-[#31573c] border border-[#c5dcca]">
+            <span id="badgeSavingRate" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
               Optimal Z Minimal ✓
             </span>
           </div>
 
           <div class="grid grid-cols-3 gap-2 text-center font-mono">
-            <div class="bg-[#f4f4f0] p-2 border border-[#e0e0da]">
-              <span class="text-[10px] text-[#5e6573] block font-sans font-bold">Bounding Box</span>
-              <span id="valSprueBBoxDim" class="text-[#191c21] font-bold text-[11px] block truncate">0 × 0 × 0</span>
-              <span class="text-[9px] text-[#888e99] block font-sans">mm</span>
+            <div class="bg-slate-50 p-2 rounded-xl border border-slate-100">
+              <span class="text-[10px] text-slate-400 block font-sans font-medium">Bounding Box</span>
+              <span id="valSprueBBoxDim" class="text-slate-800 font-bold text-xs block truncate">0 × 0 × 0</span>
+              <span class="text-[9px] text-slate-400 block font-sans">mm</span>
             </div>
-            <div class="bg-[#f4f4f0] p-2 border border-[#e0e0da]">
-              <span class="text-[10px] text-[#5e6573] block font-sans font-bold">BBox Volume</span>
-              <span id="valSprueVolume" class="text-[#31573c] font-bold text-[11px] block">0.0</span>
-              <span class="text-[9px] text-[#888e99] block font-sans">cm³</span>
+            <div class="bg-slate-50 p-2 rounded-xl border border-slate-100">
+              <span class="text-[10px] text-slate-400 block font-sans font-medium">BBox Volume</span>
+              <span id="valSprueVolume" class="text-indigo-600 font-bold text-xs block">0.0</span>
+              <span class="text-[9px] text-slate-400 block font-sans">cm³</span>
             </div>
-            <div class="bg-[#f4f4f0] p-2 border border-[#e0e0da]">
-              <span class="text-[10px] text-[#5e6573] block font-sans font-bold">Z Height</span>
-              <span id="valSprueHeightZ" class="text-[#191c21] font-bold text-[11px] block">0.0</span>
-              <span class="text-[9px] text-[#888e99] block font-sans">mm</span>
+            <div class="bg-slate-50 p-2 rounded-xl border border-slate-100">
+              <span class="text-[10px] text-slate-400 block font-sans font-medium">Z Height</span>
+              <span id="valSprueHeightZ" class="text-slate-800 font-bold text-xs block">0.0</span>
+              <span class="text-[9px] text-slate-400 block font-sans">mm</span>
             </div>
           </div>
         </div>
@@ -613,15 +561,15 @@
       </div>
 
       <!-- SIDEBAR FOOTER (EXPORT ACTION) -->
-      <div class="p-4 bg-[#eaeae5] border-t border-[#d4d6ce] space-y-2 shrink-0">
+      <div class="p-4 bg-white border-t border-slate-200 space-y-2 shrink-0">
         
         <!-- Primary STL Download Button -->
-        <button id="btnExportSTL" disabled class="w-full py-3.5 px-4 bg-[#3d6e4c] hover:bg-[#31573c] disabled:bg-[#dcded7] disabled:text-[#888e99] text-white font-extrabold text-xs uppercase tracking-widest transition flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed shadow-none border border-[#31573c] disabled:border-[#cfd1ca]">
+        <button id="btnExportSTL" disabled class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 disabled:from-slate-200 disabled:to-slate-200 disabled:text-slate-400 text-white font-bold text-xs tracking-wide shadow-md shadow-indigo-600/20 disabled:shadow-none transition flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
           <span id="btnExportText">Download Batch Sprue STL</span>
         </button>
 
-        <div id="exportStatus" class="hidden text-center text-[11px] text-[#31573c] font-medium">
+        <div id="exportStatus" class="hidden text-center text-[11px] text-indigo-600 font-medium">
           Generating merged binary STL...
         </div>
       </div>
